@@ -622,7 +622,7 @@ export class F2aSupabaseApi {
   async updateAdvancedMatchingConfig(
     config: Pick<
       AdvancedMatchingConfig,
-      "chatgpt_prompt" | "blacklisted_companies"
+      "ai_prompt" | "blacklisted_companies"
     >
   ) {
     const [updatedConfig] = await this._supabaseApiCall(
