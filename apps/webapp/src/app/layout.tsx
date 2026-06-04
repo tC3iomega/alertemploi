@@ -16,7 +16,7 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   title: 'Alertemploi',
-  description: 'Get notified of new job postings from 10+ popular job boards before anyone else.',
+  description: 'Soyez alerté en temps réel des nouvelles offres d'\''emploi françaises.',
   icons: {
     icon: [
       { url: '/favicons/favicon-32x32.png', sizes: '32x32', type: 'image/png' },
@@ -45,7 +45,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" suppressHydrationWarning>
+    <html lang="fr" suppressHydrationWarning>
       <body className={`${geistSans.variable} ${geistMono.variable} min-h-screen min-w-screen antialiased`}>
         <ThemeProvider>{children}</ThemeProvider>
       </body>
