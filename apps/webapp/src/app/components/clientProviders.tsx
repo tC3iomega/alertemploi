@@ -1,7 +1,7 @@
 'use client';
 
-import { JobSite, Link } from '@first2apply/core';
-import { LinksProvider, SdkProvider, SitesProvider, Toaster } from '@first2apply/ui';
+import { JobSite, Link } from '@alertemploi/core';
+import { LinksProvider, SdkProvider, SitesProvider, Toaster } from '@alertemploi/ui';
 
 import { WebappApiSdk } from '../../lib/sdk';
 

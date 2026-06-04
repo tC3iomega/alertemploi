@@ -1,8 +1,8 @@
 'use server';
 
 import { createClient } from '@/lib/supabase/server';
-import { JobLabel, JobStatus, ListJobsParams, getExceptionMessage } from '@first2apply/core';
-import { F2aSupabaseApi } from '@first2apply/ui';
+import { JobLabel, JobStatus, ListJobsParams, getExceptionMessage } from '@alertemploi/core';
+import { F2aSupabaseApi } from '@alertemploi/ui';
 import { redirect } from 'next/navigation';
 
 export async function login(formData: FormData) {

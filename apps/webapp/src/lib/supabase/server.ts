@@ -1,4 +1,4 @@
-import { DbSchema } from '@first2apply/core';
+import { DbSchema } from '@alertemploi/core';
 import { type CookieMethodsServer, createServerClient } from '@supabase/ssr';
 import { cookies } from 'next/headers';
 

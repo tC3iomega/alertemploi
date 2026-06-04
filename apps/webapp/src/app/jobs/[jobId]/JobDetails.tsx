@@ -2,8 +2,8 @@
 
 import { useState } from 'react';
 
-import { Job, JobLabel, JobStatus } from '@first2apply/core';
-import { JobDescription, JobSummary, toast, useError, useSdk } from '@first2apply/ui';
+import { Job, JobLabel, JobStatus } from '@alertemploi/core';
+import { JobDescription, JobSummary, toast, useError, useSdk } from '@alertemploi/ui';
 
 export type JobDetailsProps = {
   job: Job;

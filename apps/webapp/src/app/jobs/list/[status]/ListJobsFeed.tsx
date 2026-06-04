@@ -2,8 +2,8 @@
 
 import React from 'react';
 
-import { Job, JobStatus, ListJobsResult, throwError } from '@first2apply/core';
-import { JobsList, useError, useSdk, useToast } from '@first2apply/ui';
+import { Job, JobStatus, ListJobsResult, throwError } from '@alertemploi/core';
+import { JobsList, useError, useSdk, useToast } from '@alertemploi/ui';
 import { useRouter, useSearchParams } from 'next/navigation';
 
 import { listJobs } from '../../../actions';

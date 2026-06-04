@@ -15,7 +15,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: 'First 2 Apply',
+  title: 'Alertemploi',
   description: 'Get notified of new job postings from 10+ popular job boards before anyone else.',
   icons: {
     icon: [

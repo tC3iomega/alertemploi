@@ -6,7 +6,7 @@ import {
   JobStatus,
   Link,
   WebPageRuntimeData,
-} from "@first2apply/core"
+} from "@alertemploi/core"
 import {
   FunctionsHttpError,
   PostgrestError,
@@ -63,7 +63,7 @@ export class F2aSupabaseApi {
   sendPasswordResetEmail({ email }: { email: string }) {
     return this._supabaseApiCall(() =>
       this._supabase.auth.resetPasswordForEmail(email, {
-        redirectTo: "first2apply://reset-password",
+        redirectTo: "alertemploi://reset-password",
       })
     )
   }

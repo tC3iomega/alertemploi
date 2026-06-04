@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 
-import { LoginCard } from '@first2apply/ui';
+import { LoginCard } from '@alertemploi/ui';
 import { useRouter } from 'next/navigation';
 
 import { login } from './actions';
@@ -39,7 +39,7 @@ export default function LoginPage() {
           isSubmitting={isSubmitting}
           signUpLink={
             <a
-              href="https://first2apply.com"
+              href="https://alertemploi.com"
               target="_blank"
               rel="noopener noreferrer"
               className="text-primary hover:underline"

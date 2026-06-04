@@ -1,7 +1,7 @@
 "use client"
 
 import { createContext, useContext } from "react"
-import type { First2ApplyApiSdk } from "@first2apply/core"
+import type { First2ApplyApiSdk } from "@alertemploi/core"
 
 const SdkContext = createContext<First2ApplyApiSdk | null>(null)
 

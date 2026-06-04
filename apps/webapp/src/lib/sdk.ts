@@ -13,8 +13,8 @@ import type {
   Profile,
   Review,
   StripeConfig,
-} from '@first2apply/core';
-import { throwError } from '@first2apply/core';
+} from '@alertemploi/core';
+import { throwError } from '@alertemploi/core';
 import type { User } from '@supabase/supabase-js';
 
 import { getJobById, listJobs, listLinks, listSites, updateJobLabels, updateJobStatus } from '../app/actions';

@@ -3,7 +3,7 @@
 import { LogOutIcon, MoonIcon, SunIcon } from 'lucide-react';
 import { useEffect, useState } from 'react';
 
-import { Separator, useError } from '@first2apply/ui';
+import { Separator, useError } from '@alertemploi/ui';
 import { useTheme } from 'next-themes';
 import Link from 'next/link';
 
