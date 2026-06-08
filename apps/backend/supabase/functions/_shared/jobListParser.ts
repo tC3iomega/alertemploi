@@ -11,6 +11,7 @@ import { EdgeFunctionAuthorizedContext } from './edgeFunctions.ts';
 import { ILogger } from './logger.ts';
 import { parseDiceJobs } from './parsers/dice.ts';
 import { parseFranceTravailJobs } from './parsers/francetravail.ts';
+import { parseWTTJJobs } from './parsers/wttj.ts';
 import { parseHiringCafeJobs } from './parsers/hiringCafe.ts';
 import { parseLinkedInJobs } from './parsers/linkedin.ts';
 import { JobSiteParseResult, ParsedJob } from './parsers/parserTypes.ts';
@@ -238,6 +239,7 @@ async function parseSiteJobsList({
     case SiteProvider.francetravail:
       return parseFranceTravailJobs({ siteId: site.id, url, ...context });
     case SiteProvider.wttj:
+      return parseWTTJJobs({ siteId: site.id, html, ...context });
     case SiteProvider.cadremploi:
     case SiteProvider.hellowork:
     case SiteProvider.apec:
