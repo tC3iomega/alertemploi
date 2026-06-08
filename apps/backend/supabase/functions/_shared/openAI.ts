@@ -1,6 +1,6 @@
 import { parseEnv } from './env.ts';
 
-import { getExceptionMessage } from '@first2apply/core';
+import { getExceptionMessage } from '@alertemploi/core';
 import { SupabaseClient } from '@supabase/supabasefork';
 import { AzureOpenAI } from 'openai';
 

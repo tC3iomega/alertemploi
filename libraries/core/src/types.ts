@@ -55,7 +55,7 @@ export type Job = {
   description?: string; status: JobStatus; labels: JobLabel[];
   created_at: Date; updated_at: Date; link_id?: number; exclude_reason?: string;
 };
-export type Note = { id: number; created_at: Date; user_id: string; job_id: number; text: string; };
+export type Note = { id: number; created_at: Date; user_id: string; job_id: number; text: string; files: string[]; };
 export type SubscriptionTier = 'free' | 'pro';
 export type Profile = {
   id: number; user_id: string; stripe_customer_id?: string; stripe_subscription_id?: string;
@@ -77,7 +77,8 @@ export type DbSchema = {
       links: { Row: Link; Insert: Pick<Link, 'url' | 'title' | 'site_id'>; Update: { title?: string; url?: string; scrape_failure_count?: number; last_scraped_at?: Date; scrape_failure_email_sent?: boolean; is_active?: boolean; }; Relationships: []; };
       jobs: { Row: Job; Insert: Pick<Job, 'siteId' | 'externalId' | 'externalUrl' | 'title' | 'companyName' | 'companyLogo' | 'location' | 'salary' | 'tags' | 'jobType' | 'status' | 'link_id'>; Update: Pick<Job, 'status'> | Pick<Job, 'description'> | Pick<Job, 'labels'>; Relationships: []; };
       profiles: { Row: Profile; Insert: never; Update: Partial<Pick<Profile, 'stripe_customer_id' | 'stripe_subscription_id' | 'plan' | 'subscription_ends_at' | 'email_alerts_enabled' | 'alert_frequency'>>; Relationships: []; };
-      notes: { Row: Note; Insert: Pick<Note, 'job_id' | 'text'>; Update: Partial<Pick<Note, 'text'>>; Relationships: []; };
+      notes: { Row: Note; Insert: Pick<Note, 'job_id' | 'text' | 'files'>; Update: Partial<Pick<Note, 'text' | 'files'>>; Relationships: []; };
+reviews: { Row: Review; Insert: Pick<Review, 'title' | 'description' | 'rating'>; Update: Pick<Review, 'title' | 'description' | 'rating'>; Relationships: []; };
       advanced_matching: { Row: AdvancedMatchingConfig; Insert: Pick<AdvancedMatchingConfig, 'blacklisted_companies' | 'ai_prompt'>; Update: Partial<Pick<AdvancedMatchingConfig, 'blacklisted_companies' | 'ai_prompt'>>; Relationships: []; };
     };
     Views: {};

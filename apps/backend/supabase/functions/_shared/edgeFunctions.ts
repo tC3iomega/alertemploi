@@ -1,6 +1,6 @@
 import { First2ApplyBackendEnv, parseEnv } from './env.ts';
 
-import { DbSchema, User } from '@first2apply/core';
+import { DbSchema, User } from '@alertemploi/core';
 import { createClient } from '@supabase/supabasefork';
 
 import { ILogger } from './logger.ts';

@@ -1,5 +1,5 @@
 {
-  "name": "@first2apply/ui",
+  "name": "@alertemploi/ui",
   "version": "1.0.0",
   "description": "Shared UI components for First2Apply applications",
   "main": "build/index.js",
@@ -15,7 +15,7 @@
     "build/**/*"
   ],
   "dependencies": {
-    "@first2apply/core": "workspace:*",
+    "@alertemploi/core": "workspace:*",
     "@hookform/resolvers": "^3.10.0",
     "@radix-ui/react-accordion": "^1.2.12",
     "@radix-ui/react-alert-dialog": "^1.1.15",

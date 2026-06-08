@@ -1,4 +1,4 @@
-import { throwError } from '@first2apply/core';
+import { throwError } from '@alertemploi/core';
 
 import { AzureFoundryConfig } from './openAI.ts';
 

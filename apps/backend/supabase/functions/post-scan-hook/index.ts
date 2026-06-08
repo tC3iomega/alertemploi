@@ -2,8 +2,8 @@
  * This function is always triggered by the app after it finishes scanning all job links
  * and the descriptions for each processing jobs.
  */
-import { JobSite } from '@first2apply/core';
-import { getExceptionMessage, throwError } from '@first2apply/core';
+import { JobSite } from '@alertemploi/core';
+import { getExceptionMessage, throwError } from '@alertemploi/core';
 
 import { CORS_HEADERS } from '../_shared/cors.ts';
 import { EdgeFunctionAuthorizedContext, getEdgeFunctionContext } from '../_shared/edgeFunctions.ts';

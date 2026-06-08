@@ -1,5 +1,5 @@
-import { DbSchema, SubscriptionTier } from '@first2apply/core';
-import { getExceptionMessage } from '@first2apply/core';
+import { DbSchema, SubscriptionTier } from '@alertemploi/core';
+import { getExceptionMessage } from '@alertemploi/core';
 import { createClient } from '@supabase/supabasefork';
 import Stripe from 'npm:stripe';
 

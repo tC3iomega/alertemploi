@@ -1,5 +1,5 @@
-import { Job } from '@first2apply/core';
-import { getExceptionMessage } from '@first2apply/core';
+import { Job } from '@alertemploi/core';
+import { getExceptionMessage } from '@alertemploi/core';
 
 import { applyAdvancedMatchingFilters } from '../_shared/advancedMatching.ts';
 import { CORS_HEADERS } from '../_shared/cors.ts';

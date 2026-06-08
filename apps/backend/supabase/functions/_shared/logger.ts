@@ -1,4 +1,4 @@
-import { throwError } from '@first2apply/core';
+import { throwError } from '@alertemploi/core';
 import { Logger as MezmoLogger, createLogger } from 'npm:@logdna/logger';
 
 export interface ILogger {

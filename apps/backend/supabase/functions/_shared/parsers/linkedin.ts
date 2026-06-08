@@ -1,4 +1,4 @@
-import { WebPageRuntimeData } from '@first2apply/core';
+import { WebPageRuntimeData } from '@alertemploi/core';
 import { DOMParser, Element, NodeType } from 'deno-dom-wasm';
 
 import { ILogger } from '../logger.ts';

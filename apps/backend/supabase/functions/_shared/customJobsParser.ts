@@ -1,5 +1,5 @@
-import { Job, throwError } from '@first2apply/core';
-import { DbSchema, User } from '@first2apply/core';
+import { Job, throwError } from '@alertemploi/core';
+import { DbSchema, User } from '@alertemploi/core';
 import { SupabaseClient } from '@supabase/supabasefork';
 import { DOMParser, Element } from 'deno-dom-wasm';
 import { zodResponseFormat } from 'openai/helpers/zod';

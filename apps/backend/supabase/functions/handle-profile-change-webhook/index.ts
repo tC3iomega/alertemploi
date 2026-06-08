@@ -1,5 +1,5 @@
-import { DbSchema, Profile } from '@first2apply/core';
-import { getExceptionMessage, throwError } from '@first2apply/core';
+import { DbSchema, Profile } from '@alertemploi/core';
+import { getExceptionMessage, throwError } from '@alertemploi/core';
 import { SupabaseClient } from '@supabase/supabasefork';
 
 import { CORS_HEADERS } from '../_shared/cors.ts';

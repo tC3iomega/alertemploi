@@ -1,4 +1,4 @@
-import { DbSchema, Profile } from '@first2apply/core';
+import { DbSchema, Profile } from '@alertemploi/core';
 import { SupabaseClient } from '@supabase/supabasefork';
 
 /**

@@ -16,7 +16,7 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   title: 'Alertemploi',
-  description: 'Soyez alerté en temps réel des nouvelles offres d'\''emploi françaises.',
+  description: "Soyez alerté en temps réel des nouvelles offres d'emploi françaises.",
   icons: {
     icon: [
       { url: '/favicons/favicon-32x32.png', sizes: '32x32', type: 'image/png' },
