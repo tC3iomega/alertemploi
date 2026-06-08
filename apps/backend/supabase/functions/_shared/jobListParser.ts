@@ -12,6 +12,7 @@ import { ILogger } from './logger.ts';
 import { parseDiceJobs } from './parsers/dice.ts';
 import { parseFranceTravailJobs } from './parsers/francetravail.ts';
 import { parseWTTJJobs } from './parsers/wttj.ts';
+import { parseHelloWorkJobs } from './parsers/hellowork.ts';
 import { parseHiringCafeJobs } from './parsers/hiringCafe.ts';
 import { parseLinkedInJobs } from './parsers/linkedin.ts';
 import { JobSiteParseResult, ParsedJob } from './parsers/parserTypes.ts';
@@ -241,9 +242,10 @@ async function parseSiteJobsList({
     case SiteProvider.wttj:
       return parseWTTJJobs({ siteId: site.id, html, ...context });
     case SiteProvider.cadremploi:
-    case SiteProvider.hellowork:
     case SiteProvider.apec:
       return { jobs: [], listFound: false, elementsCount: 0 };
+    case SiteProvider.hellowork:
+      return parseHelloWorkJobs({ siteId: site.id, html, ...context });
     case SiteProvider.custom:
       return parseCustomJobs({ siteId: site.id, html, url, ...context });
   }
