@@ -14,6 +14,7 @@ import { parseFranceTravailJobs } from './parsers/francetravail.ts';
 import { parseWTTJJobs } from './parsers/wttj.ts';
 import { parseHelloWorkJobs } from './parsers/hellowork.ts';
 import { parseCadremploiJobs } from './parsers/cadremploi.ts';
+import { parseApecJobs } from './parsers/apec.ts';
 import { parseHiringCafeJobs } from './parsers/hiringCafe.ts';
 import { parseLinkedInJobs } from './parsers/linkedin.ts';
 import { JobSiteParseResult, ParsedJob } from './parsers/parserTypes.ts';
@@ -245,7 +246,7 @@ async function parseSiteJobsList({
     case SiteProvider.cadremploi:
       return parseCadremploiJobs({ siteId: site.id, html, ...context });
     case SiteProvider.apec:
-      return { jobs: [], listFound: false, elementsCount: 0 };
+      return parseApecJobs({ siteId: site.id, url, ...context });
     case SiteProvider.hellowork:
       return parseHelloWorkJobs({ siteId: site.id, html, ...context });
     case SiteProvider.custom:
