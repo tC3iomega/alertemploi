@@ -104,6 +104,19 @@ export async function updateJobLabels(formData: FormData) {
   }
 }
 
+export async function createLink(formData: FormData) {
+  try {
+    const url = formData.get('url') as string;
+    const title = formData.get('title') as string;
+    if (!url) throw new Error('URL is required');
+
+    const api = await buildApi();
+    const link = await api.createLink({ title: title || url, url, html: '', webPageRuntimeData: {} as any, force: false });
+    return { link };
+  } catch (error) {
+    return { error: getExceptionMessage(error, true) };
+  }
+}
 async function buildApi() {
   const supabase = await createClient();
   const api = new F2aSupabaseApi(supabase);
