@@ -48,8 +48,12 @@ class Logger implements ILogger {
   }
 }
 
-export const createLoggerWithMeta = (meta: Record<string, string>) => {
-  const mezmoLogger = createLogger(Deno.env.get('MEZMO_API_KEY') ?? throwError(''), {
+export const createLoggerWithMeta = (meta: Record<string, string>): ILogger => {
+  const mezmoApiKey = Deno.env.get('MEZMO_API_KEY');
+  if (!mezmoApiKey) {
+    return new TestLogger();
+  }
+  const mezmoLogger = createLogger(mezmoApiKey, {
     level: 'info',
     app: 'first2apply',
     env: 'all',
@@ -57,24 +61,5 @@ export const createLoggerWithMeta = (meta: Record<string, string>) => {
     meta,
     indexMeta: true,
   });
-
   return new Logger(mezmoLogger);
 };
-
-export class TestLogger implements ILogger {
-  debug(message: string, data?: Record<string, any>) {
-    console.debug(message, data);
-  }
-  info(message: string, data?: Record<string, any>) {
-    console.info(message, data);
-  }
-  error(message: string, data?: Record<string, any>) {
-    console.error(message, data);
-  }
-  addMeta() {
-    // No-op for test logger
-  }
-  flush() {
-    // No-op for test logger
-  }
-}
