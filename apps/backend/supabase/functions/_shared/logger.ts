@@ -51,7 +51,13 @@ class Logger implements ILogger {
 export const createLoggerWithMeta = (meta: Record<string, string>): ILogger => {
   const mezmoApiKey = Deno.env.get('MEZMO_API_KEY');
   if (!mezmoApiKey) {
-    return new TestLogger();
+    return {
+      debug: (msg: string) => console.debug(msg),
+      info: (msg: string) => console.info(msg),
+      error: (msg: string) => console.error(msg),
+      addMeta: () => {},
+      flush: () => {},
+    };
   }
   const mezmoLogger = createLogger(mezmoApiKey, {
     level: 'info',
