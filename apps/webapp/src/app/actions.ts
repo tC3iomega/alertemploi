@@ -135,6 +135,10 @@ export async function scanLinks() {
       body: { htmls },
     });
     if (error) throw error;
+    if (data?.newJobs?.length > 0) {
+      const jobIds = data.newJobs.map((j: any) => j.id);
+      await supabase.from('jobs').update({ status: 'new' }).in('id', jobIds);
+    }
     return data;
   } catch (error) {
     throw new Error(`failed to scan links: ${getExceptionMessage(error, true)}`);
