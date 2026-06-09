@@ -117,6 +117,25 @@ export async function createLink(formData: FormData) {
     return { error: getExceptionMessage(error, true) };
   }
 }
+export async function scanLinks() {
+  try {
+    const api = await buildApi();
+    const links = await api.listLinks();
+    if (!links.length) return { newJobs: [] };
+
+    const htmls = links.map((link) => ({
+      linkId: link.id,
+      content: '',
+      webPageRuntimeData: {} as any,
+      maxRetries: 0,
+      retryCount: 0,
+    }));
+
+    return await api.scanHtmls(htmls);
+  } catch (error) {
+    return { error: getExceptionMessage(error, true) };
+  }
+}
 async function buildApi() {
   const supabase = await createClient();
   const api = new F2aSupabaseApi(supabase);
