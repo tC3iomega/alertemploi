@@ -119,21 +119,25 @@ export async function createLink(formData: FormData) {
 }
 export async function scanLinks() {
   try {
-    const api = await buildApi();
-    const links = await api.listLinks();
+    const supabase = await createClient();
+    const links = await listLinks();
     if (!links.length) return { newJobs: [] };
 
     const htmls = links.map((link) => ({
       linkId: link.id,
       content: '',
-      webPageRuntimeData: {} as any,
+      webPageRuntimeData: {},
       maxRetries: 0,
       retryCount: 0,
     }));
 
-    return await api.scanHtmls(htmls);
+    const { data, error } = await supabase.functions.invoke('scan-urls', {
+      body: { htmls },
+    });
+    if (error) throw error;
+    return data;
   } catch (error) {
-    return { error: getExceptionMessage(error, true) };
+    throw new Error(`failed to scan links: ${getExceptionMessage(error, true)}`);
   }
 }
 async function buildApi() {
