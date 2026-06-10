@@ -67,14 +67,14 @@ export default function UpgradePage() {
           </ul>
 {/* Boutons */}
           <div className="flex flex-col gap-3">
-            
-              href={monthlyLink}
+            <a
+              href={monthlyLink} target="_blank" rel="noopener noreferrer"
               className="w-full rounded-lg bg-primary text-primary-foreground py-3 font-medium text-sm text-center hover:opacity-90 transition-opacity"
             >
               Commencer l&apos;essai gratuit — 9,99€/mois
             </a>
-            
-              href={yearlyLink}
+            <a
+              href={yearlyLink} target="_blank" rel="noopener noreferrer"
               className="w-full rounded-lg border border-primary text-primary py-3 font-medium text-sm text-center hover:bg-primary/5 transition-colors"
             >
               Abonnement annuel — 79€/an
