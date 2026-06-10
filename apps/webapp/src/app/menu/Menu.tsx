@@ -52,6 +52,14 @@ export function MenuItems() {
       <Separator />
 
       <li className="px-6">
+        <Link href="/upgrade" className="flex items-center justify-center">
+          <span className="text-2xl">⭐</span>
+          <span className="ml-4">Passer à Pro</span>
+        </Link>
+      </li>
+      <Separator />
+
+      <li className="px-6">
         <Link
           href="#"
           onClick={(evt) => {
