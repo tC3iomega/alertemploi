@@ -13,14 +13,14 @@ export enum EmailTemplateType {
 
 export type SearchParsingFailureEmailTemplate = EmailTemplateBase & {
   type: EmailTemplateType.searchParsingFailure;
-  templateId: '3z0vklorkzpl7qrx';
+  templateId: 'ynrw7gy813j42k8e';
   payload: {
     links: Array<{ title: string; site_name: string }>;
   };
 };
 export type NewJobAlertEmailTemplate = EmailTemplateBase & {
   type: EmailTemplateType.newJobAlert;
-  templateId: 'pr9084z32r8lw63d';
+  templateId: 'v69oxl53z5kg785k';
   payload: {
     new_jobs_count: number;
     new_jobs: Array<{
