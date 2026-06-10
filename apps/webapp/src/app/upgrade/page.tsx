@@ -16,7 +16,7 @@ export default function UpgradePage() {
     const formData = new FormData();
     formData.set('priceId', priceId);
     const { url } = await createCheckoutSession(formData);
-    window.open(url, '_blank');
+    window.location.href = url;
     setLoading(null);
   }
 
