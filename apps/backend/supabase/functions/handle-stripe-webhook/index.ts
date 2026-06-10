@@ -44,6 +44,36 @@ Deno.serve(async (req) => {
       undefined,
     );
 
+    if (event.type === 'checkout.session.completed') {
+      const session = event.data.object;
+      if (session.mode === 'subscription' && session.customer_email) {
+        const subscription = await stripe.subscriptions.retrieve(session.subscription as string);
+        const { data, error: getUserIdError } = await supabaseClient.rpc('get_user_id_by_email', {
+          email: session.customer_email.toLowerCase(),
+        });
+        if (getUserIdError) throw getUserIdError;
+        const userId = (data as unknown as any)?.[0]?.id;
+        if (!userId) throw new Error(`No user found for email ${session.customer_email}`);
+
+        const trialEnd = subscription.trial_end
+          ? new Date(subscription.trial_end * 1000)
+          : new Date(subscription.current_period_end * 1000);
+
+        const { error: updateProfileError } = await supabaseClient
+          .from('profiles')
+          .update({
+            stripe_customer_id: session.customer as string,
+            stripe_subscription_id: session.subscription as string,
+            subscription_end_date: trialEnd,
+            subscription_tier: 'pro',
+            is_trial: !!subscription.trial_end,
+          })
+          .eq('user_id', userId);
+        if (updateProfileError) throw updateProfileError;
+        logger.info(`checkout completed: upgraded user ${session.customer_email} to pro`);
+      }
+    }
+
     if (event.type === 'customer.subscription.updated') {
       const subscription = event.data.object;
 
