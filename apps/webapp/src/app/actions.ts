@@ -144,6 +144,34 @@ export async function scanLinks() {
     throw new Error(`failed to scan links: ${getExceptionMessage(error, true)}`);
   }
 }
+export async function createCheckoutSession(formData: FormData) {
+  const priceId = formData.get('priceId') as string;
+  const supabase = await createClient();
+  const { data: { user } } = await supabase.auth.getUser();
+  if (!user) throw new Error('Not authenticated');
+
+  const res = await fetch('https://api.stripe.com/v1/checkout/sessions', {
+    method: 'POST',
+    headers: {
+      'Authorization': `Bearer ${process.env.STRIPE_SECRET_KEY}`,
+      'Content-Type': 'application/x-www-form-urlencoded',
+    },
+    body: new URLSearchParams({
+      'mode': 'subscription',
+      'customer_email': user.email!,
+      'client_reference_id': user.id,
+      'line_items[0][price]': priceId,
+      'line_items[0][quantity]': '1',
+      'subscription_data[trial_period_days]': '14',
+      'success_url': `${process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3002'}/jobs/list/new`,
+      'cancel_url': `${process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3002'}/upgrade`,
+    }).toString(),
+  });
+
+  const session = await res.json();
+  if (session.error) throw new Error(session.error.message);
+  return { url: session.url };
+}
 async function buildApi() {
   const supabase = await createClient();
   const api = new F2aSupabaseApi(supabase);

@@ -1,12 +1,24 @@
 'use client';
 
+import { createCheckoutSession } from '@/app/actions';
 import { useRouter } from 'next/navigation';
+import { useState } from 'react';
 
 export default function UpgradePage() {
   const router = useRouter();
+  const [loading, setLoading] = useState<string | null>(null);
 
-  const monthlyLink = process.env.NEXT_PUBLIC_STRIPE_MONTHLY_LINK!;
-  const yearlyLink = process.env.NEXT_PUBLIC_STRIPE_YEARLY_LINK!;
+  const monthlyPriceId = process.env.NEXT_PUBLIC_STRIPE_MONTHLY_PRICE_ID!;
+  const yearlyPriceId = process.env.NEXT_PUBLIC_STRIPE_YEARLY_PRICE_ID!;
+
+  async function handleCheckout(priceId: string) {
+    setLoading(priceId);
+    const formData = new FormData();
+    formData.set('priceId', priceId);
+    const { url } = await createCheckoutSession(formData);
+    window.open(url, '_blank');
+    setLoading(null);
+  }
 
   return (
     <div className="flex flex-col min-h-screen bg-background text-foreground">
@@ -67,18 +79,20 @@ export default function UpgradePage() {
           </ul>
 {/* Boutons */}
           <div className="flex flex-col gap-3">
-            <a
-              href={monthlyLink} target="_blank" rel="noopener noreferrer"
-              className="w-full rounded-lg bg-primary text-primary-foreground py-3 font-medium text-sm text-center hover:opacity-90 transition-opacity"
+            <button
+              onClick={() => handleCheckout(monthlyPriceId)}
+              disabled={!!loading}
+              className="w-full rounded-lg bg-primary text-primary-foreground py-3 font-medium text-sm text-center hover:opacity-90 transition-opacity disabled:opacity-50"
             >
-              Commencer l&apos;essai gratuit — 9,99€/mois
-            </a>
-            <a
-              href={yearlyLink} target="_blank" rel="noopener noreferrer"
-              className="w-full rounded-lg border border-primary text-primary py-3 font-medium text-sm text-center hover:bg-primary/5 transition-colors"
+              {loading === monthlyPriceId ? 'Chargement...' : "Commencer l'essai gratuit — 9,99€/mois"}
+            </button>
+            <button
+              onClick={() => handleCheckout(yearlyPriceId)}
+              disabled={!!loading}
+              className="w-full rounded-lg border border-primary text-primary py-3 font-medium text-sm text-center hover:bg-primary/5 transition-colors disabled:opacity-50"
             >
-              Abonnement annuel — 79€/an
-            </a>
+              {loading === yearlyPriceId ? 'Chargement...' : 'Abonnement annuel — 79€/an'}
+            </button>
           </div>
         </div>
 
