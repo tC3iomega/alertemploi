@@ -147,7 +147,7 @@ export class WebappApiSdk implements First2ApplyApiSdk {
     return throwError('getAdvancedMatchingConfig not implemented');
   }
   async updateAdvancedMatchingConfig(
-    _: Pick<AdvancedMatchingConfig, 'chatgpt_prompt' | 'blacklisted_companies'>,
+    _: Pick<AdvancedMatchingConfig, 'ai_prompt' | 'blacklisted_companies'>,
   ): Promise<AdvancedMatchingConfig> {
     return throwError('updateAdvancedMatchingConfig not implemented');
   }

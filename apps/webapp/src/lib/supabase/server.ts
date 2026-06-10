@@ -19,7 +19,7 @@ export async function createClient() {
     },
   };
 
-  return createServerClient<DbSchema>(process.env.NEXT_PUBLIC_SUPABASE_URL!, process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY, {
+  return createServerClient<DbSchema>(process.env.NEXT_PUBLIC_SUPABASE_URL!, process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!, {
     cookies: cookieMethods,
   });
 }

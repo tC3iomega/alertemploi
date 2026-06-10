@@ -137,7 +137,7 @@ export async function scanLinks() {
     if (error) throw error;
     if (data?.newJobs?.length > 0) {
       const jobIds = data.newJobs.map((j: any) => j.id);
-      await supabase.from('jobs').update({ status: 'new' }).in('id', jobIds);
+      await (supabase.from('jobs') as any).update({ status: 'new' }).in('id', jobIds);
     }
     return data;
   } catch (error) {
