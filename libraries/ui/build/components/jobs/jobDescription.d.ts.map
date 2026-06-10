@@ -1,0 +1,1 @@
+{"version":3,"file":"jobDescription.d.ts","sourceRoot":"","sources":["../../../src/components/jobs/jobDescription.tsx"],"names":[],"mappings":"AAGA,OAAO,EAAE,GAAG,EAAE,MAAM,mBAAmB,CAAA;AAEvC,MAAM,MAAM,mBAAmB,GAAG;IAChC,GAAG,EAAE,GAAG,CAAA;CACT,CAAA;AACD,wBAAgB,cAAc,CAAC,EAAE,GAAG,EAAE,EAAE,mBAAmB,2CAkd1D"}

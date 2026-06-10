@@ -1,0 +1,1 @@
+{"version":3,"file":"useSdk.d.ts","sourceRoot":"","sources":["../../src/hooks/useSdk.tsx"],"names":[],"mappings":"AAGA,OAAO,KAAK,EAAE,iBAAiB,EAAE,MAAM,mBAAmB,CAAA;AAI1D;;;;GAIG;AACH,wBAAgB,WAAW,CAAC,EAC1B,GAAG,EACH,QAAQ,GACT,EAAE;IACD,GAAG,EAAE,iBAAiB,CAAA;IACtB,QAAQ,EAAE,KAAK,CAAC,SAAS,CAAA;CAC1B,2CAEA;AAED;;;GAGG;AACH,wBAAgB,MAAM,IAAI,iBAAiB,CAM1C"}
