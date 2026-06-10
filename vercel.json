@@ -1,6 +1,6 @@
 {
-  "buildCommand": "cd apps/webapp && pnpm build",
-  "outputDirectory": "apps/webapp/.next",
+  "buildCommand": "pnpm --filter @alertemploi/webapp build",
   "installCommand": "pnpm install",
-  "framework": "nextjs"
+  "framework": "nextjs",
+  "outputDirectory": "apps/webapp/.next"
 }

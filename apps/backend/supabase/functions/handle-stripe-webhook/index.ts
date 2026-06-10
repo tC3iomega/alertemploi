@@ -44,7 +44,54 @@ Deno.serve(async (req) => {
       undefined,
     );
 
-    if (event.type === 'checkout.session.completed') {
+    if (event.type === 'customer.subscription.created' || event.type === 'checkout.session.completed') {
+      // Pour subscription.created, on récupère le customer directement
+      let customerEmail: string | null = null;
+      let customerId: string | null = null;
+      let subscriptionId: string | null = null;
+
+      if (event.type === 'customer.subscription.created') {
+        const subscription = event.data.object;
+        customerId = subscription.customer as string;
+        subscriptionId = subscription.id;
+        const customer = await stripe.customers.retrieve(customerId);
+        if (!customer.deleted) customerEmail = customer.email;
+      } else {
+        const session = event.data.object;
+        customerEmail = session.customer_email;
+        customerId = session.customer as string;
+        subscriptionId = session.subscription as string;
+      }
+
+      if (customerEmail && customerId && subscriptionId) {
+        const subscription = await stripe.subscriptions.retrieve(subscriptionId);
+        const { data, error: getUserIdError } = await supabaseClient.rpc('get_user_id_by_email', {
+          email: customerEmail.toLowerCase(),
+        });
+        if (getUserIdError) throw getUserIdError;
+        const userId = (data as unknown as any)?.[0]?.id;
+        if (!userId) throw new Error(`No user found for email ${customerEmail}`);
+
+        const trialEnd = subscription.trial_end
+          ? new Date(subscription.trial_end * 1000)
+          : new Date(subscription.current_period_end * 1000);
+
+        const { error: updateProfileError } = await supabaseClient
+          .from('profiles')
+          .update({
+            stripe_customer_id: customerId,
+            stripe_subscription_id: subscriptionId,
+            subscription_ends_at: trialEnd,
+            plan: 'pro',
+            trial_ends_at: subscription.trial_end ? new Date(subscription.trial_end * 1000) : null,
+          })
+          .eq('user_id', userId);
+        if (updateProfileError) throw updateProfileError;
+        logger.info(`upgraded user ${customerEmail} to pro`);
+      }
+    }
+
+    if (event.type === 'DISABLED_checkout.session.completed') {
       const session = event.data.object;
       if (session.mode === 'subscription' && session.customer_email) {
         const subscription = await stripe.subscriptions.retrieve(session.subscription as string);
@@ -64,9 +111,9 @@ Deno.serve(async (req) => {
           .update({
             stripe_customer_id: session.customer as string,
             stripe_subscription_id: session.subscription as string,
-            subscription_end_date: trialEnd,
-            subscription_tier: 'pro',
-            is_trial: !!subscription.trial_end,
+            subscription_ends_at: trialEnd,
+            plan: 'pro',
+            trial_ends_at: subscription.trial_end ? new Date(subscription.trial_end * 1000) : null,
           })
           .eq('user_id', userId);
         if (updateProfileError) throw updateProfileError;
@@ -110,10 +157,9 @@ Deno.serve(async (req) => {
         .update({
           stripe_customer_id: customer.id,
           stripe_subscription_id: subscription.id,
-          // @ts-expect-error: type is actually Date, but the front end get's it as a string
-          subscription_end_date: new Date(subscription.current_period_end * 1000),
-          subscription_tier: tier,
-          is_trial: false,
+          subscription_ends_at: new Date(subscription.current_period_end * 1000),
+          plan: tier,
+          trial_ends_at: null,
         })
         .eq('user_id', user.id);
       if (updateProfileError) {
