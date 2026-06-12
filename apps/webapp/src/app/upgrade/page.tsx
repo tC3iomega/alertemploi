@@ -1,12 +1,47 @@
 'use client';
 
-import { createCheckoutSession } from '@/app/actions';
-import { useRouter } from 'next/navigation';
 import { useState } from 'react';
+import Link from 'next/link';
+import { useRouter } from 'next/navigation';
+import { createCheckoutSession } from '@/app/actions';
+
+function Logo() {
+  return (
+    <svg width="160" height="36" viewBox="0 0 160 36" xmlns="http://www.w3.org/2000/svg">
+      <circle cx="16" cy="18" r="13" fill="none" stroke="#2563EB" strokeWidth="2.5" />
+      <circle cx="16" cy="18" r="4.5" fill="#2563EB" />
+      <line x1="25" y1="9" x2="31" y2="4" stroke="#2563EB" strokeWidth="2.5" strokeLinecap="round" />
+      <circle cx="32.5" cy="3" r="4" fill="#F59E0B" />
+      <text x="44" y="23" fontFamily="Arial, sans-serif" fontSize="19" fontWeight="700" fill="#1E293B" letterSpacing="-0.5">
+        alert<tspan fill="#2563EB">emploi</tspan>
+      </text>
+      <text x="45" y="33" fontFamily="Arial, sans-serif" fontSize="8" fontWeight="400" fill="#94A3B8" letterSpacing="1.2">
+        TROUVEZ EN PREMIER
+      </text>
+    </svg>
+  );
+}
+
+const FREE_FEATURES = [
+  { label: '2 alertes maximum', included: true },
+  { label: 'France Travail, WTTJ', included: true },
+  { label: 'Scan toutes les heures', included: true },
+  { label: 'Cadremploi, HelloWork, APEC', included: false },
+  { label: 'Alertes email', included: false },
+];
+
+const PRO_FEATURES = [
+  { label: 'Alertes illimitées', included: true },
+  { label: 'Tous les job boards', included: true },
+  { label: 'Scan toutes les heures', included: true },
+  { label: 'Alertes email', included: true },
+  { label: 'Essai 14 jours gratuit', included: true },
+];
 
 export default function UpgradePage() {
   const router = useRouter();
   const [loading, setLoading] = useState<string | null>(null);
+  const [isAnnual, setIsAnnual] = useState(false);
 
   const monthlyPriceId = process.env.NEXT_PUBLIC_STRIPE_MONTHLY_PRICE_ID!;
   const yearlyPriceId = process.env.NEXT_PUBLIC_STRIPE_YEARLY_PRICE_ID!;
@@ -21,86 +56,180 @@ export default function UpgradePage() {
   }
 
   return (
-    <div className="flex flex-col min-h-screen bg-background text-foreground">
-      {/* Header */}
-      <div className="flex items-center gap-3 px-4 py-4 border-b border-border">
-        <button onClick={() => router.back()} className="text-muted-foreground hover:text-foreground">
-          ←
-        </button>
-        <h1 className="text-lg font-semibold">Passer à Pro</h1>
-      </div>
+    <div style={{ minHeight: '100vh', background: '#F1EFE8', fontFamily: 'Arial, Helvetica, sans-serif' }}>
 
-      <div className="flex flex-col gap-6 p-4 max-w-lg mx-auto w-full mt-4">
+      {/* Nav */}
+      <nav style={{
+        display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+        padding: '14px 48px', borderBottom: '0.5px solid #E2E8F0',
+        background: '#F1EFE8',
+      }}>
+        <Link href="/" style={{ textDecoration: 'none' }}>
+          <Logo />
+        </Link>
+        <button
+          onClick={() => router.back()}
+          style={{
+            fontSize: 13, color: '#64748B', background: 'none',
+            border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 6,
+          }}
+        >
+          ← Retour
+        </button>
+      </nav>
+
+      <div style={{ maxWidth: 640, margin: '0 auto', padding: '56px 24px' }}>
+
         {/* Hero */}
-        <div className="text-center">
-          <h2 className="text-2xl font-bold mb-2">Trouvez votre emploi plus vite</h2>
-          <p className="text-muted-foreground text-sm">
-            Essai gratuit 14 jours — annulez à tout moment
+        <div style={{ textAlign: 'center', marginBottom: 44 }}>
+          <div style={{
+            display: 'inline-block', background: '#FFFBEB', color: '#B45309',
+            fontSize: 12, fontWeight: 500, padding: '5px 16px', borderRadius: 20,
+            border: '1px solid #FCD34D', marginBottom: 20,
+          }}>
+            Essai gratuit 14 jours
+          </div>
+          <h1 style={{
+            fontSize: 34, fontWeight: 700, color: '#1E293B',
+            letterSpacing: -0.8, marginBottom: 12,
+          }}>
+            Trouvez votre emploi plus vite
+          </h1>
+          <p style={{ fontSize: 15, color: '#64748B', lineHeight: 1.6 }}>
+            Annulez à tout moment, sans engagement.
           </p>
         </div>
-{/* Plan Free */}
-        <div className="rounded-xl border border-border bg-card p-5">
-          <div className="flex justify-between items-start mb-4">
-            <div>
-              <h3 className="font-semibold text-base">Gratuit</h3>
-              <p className="text-2xl font-bold mt-1">0€</p>
-            </div>
-            <span className="text-xs bg-muted text-muted-foreground px-2 py-1 rounded-full">Actuel</span>
+
+        {/* Toggle */}
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 14, marginBottom: 32 }}>
+          <span style={{ fontSize: 14, fontWeight: isAnnual ? 400 : 500, color: isAnnual ? '#64748B' : '#1E293B' }}>
+            Mensuel
+          </span>
+          <div
+            onClick={() => setIsAnnual(!isAnnual)}
+            style={{
+              width: 48, height: 26, background: '#2563EB',
+              borderRadius: 13, position: 'relative', cursor: 'pointer', flexShrink: 0,
+            }}
+          >
+            <div style={{
+              width: 20, height: 20, background: 'white', borderRadius: '50%',
+              position: 'absolute', top: 3,
+              left: isAnnual ? 25 : 3, transition: 'left 0.2s',
+            }} />
           </div>
-          <ul className="flex flex-col gap-2 text-sm text-muted-foreground">
-            <li>✓ 3 alertes maximum</li>
-            <li>✓ France Travail, WTTJ</li>
-            <li>✓ Scan toutes les heures</li>
-            <li className="text-muted-foreground/50">✗ Cadremploi, HelloWork, APEC</li>
-            <li className="text-muted-foreground/50">✗ Filtrage IA avancé</li>
-          </ul>
+          <span style={{ fontSize: 14, fontWeight: isAnnual ? 500 : 400, color: isAnnual ? '#1E293B' : '#64748B' }}>
+            Annuel
+          </span>
+          <span style={{
+            background: '#DCFCE7', color: '#166534',
+            fontSize: 11, fontWeight: 500, padding: '3px 10px', borderRadius: 10,
+          }}>-34%</span>
         </div>
 
-        {/* Plan Pro */}
-        <div className="rounded-xl border-2 border-primary bg-card p-5 relative">
-          <div className="absolute -top-3 left-1/2 -translate-x-1/2">
-            <span className="bg-primary text-primary-foreground text-xs font-semibold px-3 py-1 rounded-full">
-              Recommandé
-            </span>
-          </div>
-          <div className="flex justify-between items-start mb-4">
-            <div>
-              <h3 className="font-semibold text-base">Pro</h3>
-              <p className="text-2xl font-bold mt-1">9,99€<span className="text-sm font-normal text-muted-foreground">/mois</span></p>
-              <p className="text-xs text-green-500 mt-1">ou 79€/an — économisez 41%</p>
+        {/* Plans */}
+        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 20, marginBottom: 28 }}>
+
+          {/* Free */}
+          <div style={{
+            background: 'white', border: '0.5px solid #E2E8F0',
+            borderRadius: 14, padding: 28,
+          }}>
+            <div style={{ marginBottom: 20 }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 10 }}>
+                <span style={{ fontSize: 13, fontWeight: 500, color: '#64748B' }}>Gratuit</span>
+                <span style={{
+                  background: '#F1F5F9', color: '#64748B',
+                  fontSize: 10, fontWeight: 500, padding: '3px 9px', borderRadius: 10,
+                }}>Actuel</span>
+              </div>
+              <div style={{ fontSize: 34, fontWeight: 700, color: '#1E293B' }}>
+                0€ <span style={{ fontSize: 14, fontWeight: 400, color: '#64748B' }}>/&nbsp;mois</span>
+              </div>
             </div>
+            {FREE_FEATURES.map((f) => (
+              <div key={f.label} style={{
+                fontSize: 13, color: f.included ? '#374151' : '#CBD5E1',
+                padding: '6px 0', borderBottom: '0.5px solid #F1F5F9',
+                display: 'flex', gap: 8, alignItems: 'center',
+              }}>
+                <span style={{ color: f.included ? '#2563EB' : '#CBD5E1', fontWeight: 700 }}>
+                  {f.included ? '✓' : '✗'}
+                </span>
+                {f.label}
+              </div>
+            ))}
+            <div style={{
+              display: 'block', textAlign: 'center', marginTop: 22,
+              padding: '11px 0', borderRadius: 9, fontSize: 13, fontWeight: 500,
+              border: '1px solid #E2E8F0', color: '#94A3B8',
+            }}>Plan actuel</div>
           </div>
-          <ul className="flex flex-col gap-2 text-sm mb-5">
-            <li>✓ Alertes illimitées</li>
-            <li>✓ Tous les sites (France Travail, WTTJ, Cadremploi, HelloWork, APEC)</li>
-            <li>✓ Scan toutes les 30 minutes</li>
-            <li>✓ Filtrage IA avancé</li>
-            <li>✓ Alertes email</li>
-          </ul>
-{/* Boutons */}
-          <div className="flex flex-col gap-3">
-            <button
-              onClick={() => handleCheckout(monthlyPriceId)}
-              disabled={!!loading}
-              className="w-full rounded-lg bg-primary text-primary-foreground py-3 font-medium text-sm text-center hover:opacity-90 transition-opacity disabled:opacity-50"
-            >
-              {loading === monthlyPriceId ? 'Chargement...' : "Commencer l'essai gratuit — 9,99€/mois"}
-            </button>
-            <button
-              onClick={() => handleCheckout(yearlyPriceId)}
-              disabled={!!loading}
-              className="w-full rounded-lg border border-primary text-primary py-3 font-medium text-sm text-center hover:bg-primary/5 transition-colors disabled:opacity-50"
-            >
-              {loading === yearlyPriceId ? 'Chargement...' : 'Abonnement annuel — 79€/an'}
-            </button>
+
+          {/* Pro */}
+          <div style={{
+            background: 'white', border: '2px solid #2563EB',
+            borderRadius: 14, padding: 28, position: 'relative',
+          }}>
+            <div style={{
+              position: 'absolute', top: -13, left: '50%', transform: 'translateX(-50%)',
+              background: '#2563EB', color: 'white',
+              fontSize: 11, fontWeight: 600, padding: '4px 14px', borderRadius: 20,
+              whiteSpace: 'nowrap',
+            }}>Recommandé</div>
+            <div style={{ marginBottom: 20 }}>
+              <div style={{ fontSize: 13, fontWeight: 500, color: '#64748B', marginBottom: 10 }}>Pro</div>
+              <div style={{ fontSize: 34, fontWeight: 700, color: '#1E293B' }}>
+                {isAnnual ? '79€' : '9,99€'}{' '}
+                <span style={{ fontSize: 14, fontWeight: 400, color: '#64748B' }}>
+                  /{isAnnual ? ' an' : ' mois'}
+                </span>
+              </div>
+              {isAnnual && (
+                <div style={{ fontSize: 12, color: '#16A34A', marginTop: 4 }}>
+                  Soit 6,58€/mois — 2 mois offerts
+                </div>
+              )}
+            </div>
+            {PRO_FEATURES.map((f) => (
+              <div key={f.label} style={{
+                fontSize: 13, color: '#374151',
+                padding: '6px 0', borderBottom: '0.5px solid #F1F5F9',
+                display: 'flex', gap: 8, alignItems: 'center',
+              }}>
+                <span style={{ color: '#2563EB', fontWeight: 700 }}>✓</span>
+                {f.label}
+              </div>
+            ))}
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 10, marginTop: 22 }}>
+              <button
+                onClick={() => handleCheckout(isAnnual ? yearlyPriceId : monthlyPriceId)}
+                disabled={!!loading}
+                style={{
+                  width: '100%', padding: '12px 0',
+                  background: loading ? '#93C5FD' : '#2563EB',
+                  color: 'white', fontSize: 14, fontWeight: 600,
+                  border: 'none', borderRadius: 9,
+                  cursor: loading ? 'not-allowed' : 'pointer',
+                }}
+              >
+                {loading
+                  ? 'Chargement...'
+                  : isAnnual
+                  ? "Démarrer l'essai — 79€/an"
+                  : "Démarrer l'essai — 9,99€/mois"}
+              </button>
+            </div>
           </div>
         </div>
 
         {/* Garantie */}
-        <p className="text-center text-xs text-muted-foreground">
+        <p style={{ textAlign: 'center', fontSize: 12, color: '#94A3B8' }}>
           🔒 Paiement sécurisé par Stripe · Annulation à tout moment · Pas de frais cachés
         </p>
+
       </div>
     </div>
   );
 }
+
