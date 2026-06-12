@@ -149,7 +149,7 @@ export function JobSummary({
         <div className="mt-6 rounded-md bg-destructive/10 p-4">
           <div className="flex items-center gap-2">
             <InfoCircledIcon className="h-auto w-5" />
-            <p className="font-medium">Why was this job excluded?</p>
+            <p className="font-medium">Pourquoi cette offre a-t-elle été exclue ?</p>
           </div>
           <p className="mt-1">{job.exclude_reason}</p>
         </div>
@@ -168,7 +168,7 @@ export function JobSummary({
               onView(job)
             }}
           >
-            Open
+            Voir
           </Button>
 
           {/* Apply button */}
@@ -187,7 +187,7 @@ export function JobSummary({
                 </TooltipTrigger>
 
                 <TooltipContent side="bottom" className="text-base">
-                  Mark job as Applied
+                  Marquer comme postulée
                 </TooltipContent>
               </Tooltip>
             </TooltipProvider>
@@ -209,7 +209,7 @@ export function JobSummary({
                 </TooltipTrigger>
 
                 <TooltipContent side="bottom" className="text-base">
-                  Move job back to New
+                  Remettre dans Nouvelles
                 </TooltipContent>
               </Tooltip>
             </TooltipProvider>
@@ -231,7 +231,7 @@ export function JobSummary({
                 </TooltipTrigger>
 
                 <TooltipContent side="bottom" className="text-base">
-                  Archive
+                  Archiver
                 </TooltipContent>
               </Tooltip>
             </TooltipProvider>
@@ -249,8 +249,8 @@ export function JobSummary({
                     evt.stopPropagation()
                     navigator.clipboard.writeText(job.externalUrl)
                     toast({
-                      title: "Job URL copied to clipboard",
-                      description: "You can now paste it anywhere.",
+                      title: "Lien copié",
+                      description: "Vous pouvez maintenant le coller.",
                       variant: "success",
                     })
                   }}
@@ -260,7 +260,7 @@ export function JobSummary({
               </TooltipTrigger>
 
               <TooltipContent side="bottom" className="text-base">
-                Copy URL
+                Copier le lien
               </TooltipContent>
             </Tooltip>
           </TooltipProvider>
@@ -280,7 +280,7 @@ export function JobSummary({
               </TooltipTrigger>
 
               <TooltipContent side="bottom" className="text-base">
-                Delete
+                Supprimer
               </TooltipContent>
             </Tooltip>
           </TooltipProvider>
@@ -303,7 +303,7 @@ export function JobSummary({
 
       {/* Timestamp */}
       <p className="mt-2 text-xs text-foreground/80">
-        detected {getRelativeTimeString(new Date(job.created_at))}
+        détectée {getRelativeTimeString(new Date(job.created_at))}
       </p>
     </div>
   )
@@ -347,11 +347,11 @@ function JobLabelSelector({
       }}
     >
       <SelectTrigger className={clsx("h-10 w-[148px] focus:ring-0", className)}>
-        <SelectValue placeholder="Add Label" />
+        <SelectValue placeholder="Étiquette" />
       </SelectTrigger>
       <SelectContent>
         {/* no label */}
-        <LabelOptionWithColor jobLabel="None" colorClass="bg-background" />
+        <LabelOptionWithColor jobLabel="Aucune" colorClass="bg-background" />
 
         {/* labels with colors */}
         {Object.values(JOB_LABELS).map((jobLabel) => (
