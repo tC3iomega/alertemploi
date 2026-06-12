@@ -46,7 +46,7 @@ export function MenuItems() {
           className="flex items-center justify-center"
         >
           {currentTheme === 'dark' ? <SunIcon className="h-7 w-7" /> : <MoonIcon className="h-7 w-7" />}
-          <span className="ml-4">Turn the lights {currentTheme === 'dark' ? 'on' : 'off'}</span>
+          <span className="ml-4">Mode {currentTheme === 'dark' ? 'clair' : 'sombre'}</span>
         </Link>
       </li>
       <Separator />
@@ -69,7 +69,7 @@ export function MenuItems() {
           className="flex items-center justify-center"
         >
           <LogOutIcon className="h-7 w-7" />
-          <span className="ml-4">Logout</span>
+          <span className="ml-4">Déconnexion</span>
         </Link>
       </li>
     </ul>

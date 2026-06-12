@@ -10,10 +10,10 @@ export function SmallNavbar() {
   const pathname = usePathname();
 
   const navItems = [
-    { name: 'New', path: '/jobs/list/new', Icon: SparklesIcon },
-    { name: 'Applied', path: '/jobs/list/applied', Icon: CheckCircleIcon },
-    { name: 'Archived', path: '/jobs/list/archived', Icon: ArchiveIcon },
-    { name: 'Excluded', path: '/jobs/list/excluded_by_advanced_matching', Icon: BanIcon },
+    { name: 'Nouvelles', path: '/jobs/list/new', Icon: SparklesIcon },
+    { name: 'Postulées', path: '/jobs/list/applied', Icon: CheckCircleIcon },
+    { name: 'Archivées', path: '/jobs/list/archived', Icon: ArchiveIcon },
+    { name: 'Exclues', path: '/jobs/list/excluded_by_advanced_matching', Icon: BanIcon },
     { name: 'Ajouter', path: '/links/new', Icon: PlusIcon },
     { name: 'Menu', path: '/menu', Icon: MenuIcon },
   ];
