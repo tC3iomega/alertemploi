@@ -20,7 +20,7 @@ const FEATURES = [
   },
   {
     title: 'Alertes par email',
-    desc: 'Recevez un récapitulatif des nouvelles offres directement dans votre bo&icirc;te mail, sans vous connecter.',
+    desc: 'Recevez un récapitulatif des nouvelles offres directement dans votre boîte mail, sans vous connecter.',
     icon: (
       <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
         <rect x="2" y="4" width="16" height="12" rx="2" stroke="#2563EB" strokeWidth="1.5" />
@@ -30,7 +30,7 @@ const FEATURES = [
   },
   {
     title: '5 job boards français',
-    desc: 'France Travail, APEC, Cadremploi, HelloWork et Welcome to the Jungle. D&apos;autres arrivent bientôt.',
+    desc: 'France Travail, APEC, Cadremploi, HelloWork et Welcome to the Jungle. D'autres arrivent bientôt.',
     icon: (
       <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
         <rect x="2" y="2" width="16" height="16" rx="3" stroke="#2563EB" strokeWidth="1.5" />
@@ -42,7 +42,7 @@ const FEATURES = [
   },
   {
     title: 'Vos critères exacts',
-    desc: 'Collez l&apos;URL de votre recherche sur chaque site. Alertemploi surveille exactement ce que vous cherchez.',
+    desc: 'Collez l'URL de votre recherche sur chaque site. Alertemploi surveille exactement ce que vous cherchez.',
     icon: (
       <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
         <circle cx="9" cy="9" r="6" stroke="#2563EB" strokeWidth="1.5" />
@@ -77,10 +77,10 @@ const FEATURES = [
 const FAQS = [
   {
     q: "Comment fonctionne Alertemploi ?",
-    a: "Vous ajoutez l'URL de votre recherche sur un job board. Alertemploi la scanne toutes les heures et vous envoie un email dès qu&apos;une nouvelle offre apparaît.",
+    a: "Vous ajoutez l'URL de votre recherche sur un job board. Alertemploi la scanne toutes les heures et vous envoie un email dès qu'une nouvelle offre apparaît.",
   },
   {
-    q: "Faut-il une carte bancaire pour l&apos;essai gratuit ?",
+    q: "Faut-il une carte bancaire pour l'essai gratuit ?",
     a: "Une carte bancaire est demandée à l'inscription au plan Pro. Vous ne serez pas débité pendant les 14 jours d'essai, et vous pouvez annuler à tout moment.",
   },
   {
@@ -165,15 +165,15 @@ export default function LandingPage() {
           maxWidth: 700, margin: '0 auto 20px',
         }}>
           Soyez alerté en premier<br />
-          <span style={{ color: '#2563EB' }}>dès qu&apos;une offre apparaît</span>
+          <span style={{ color: '#2563EB' }}>dès qu'une offre apparaît</span>
         </h1>
 
         <p style={{
           fontSize: 18, color: '#64748B', lineHeight: 1.65,
           maxWidth: 540, margin: '0 auto 36px',
         }}>
-          Alertemploi surveille France Travail, APEC, Cadremploi et d&apos;autres en continu.
-          Recevez un email dès qu&apos;une offre correspond à vos critères.
+          Alertemploi surveille France Travail, APEC, Cadremploi et d'autres en continu.
+          Recevez un email dès qu'une offre correspond à vos critères.
         </p>
 
         <div style={{ display: 'flex', gap: 14, justifyContent: 'center', flexWrap: 'wrap', marginBottom: 52 }}>
@@ -246,7 +246,7 @@ export default function LandingPage() {
           Pourquoi Alertemploi ?
         </h2>
         <p style={{ fontSize: 16, color: '#64748B', textAlign: 'center', marginBottom: 48, maxWidth: 480, margin: '0 auto 48px' }}>
-          Arrêtez de vérifier manuellement les sites d&apos;emploi. On s&apos;en occupe.
+          Arrêtez de vérifier manuellement les sites d'emploi. On s'en occupe.
         </p>
         <div style={{
           display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)',
@@ -275,7 +275,7 @@ export default function LandingPage() {
           Les sites surveillés
         </h2>
         <p style={{ fontSize: 15, color: '#64748B', marginBottom: 32 }}>
-          5 job boards français — d&apos;autres arrivent bientôt.
+          5 job boards français — d'autres arrivent bientôt.
         </p>
         <div style={{ display: 'flex', gap: 12, justifyContent: 'center', flexWrap: 'wrap' }}>
           {JOB_BOARDS.map((board) => (
@@ -376,7 +376,7 @@ export default function LandingPage() {
               display: 'block', textAlign: 'center', marginTop: 22,
               padding: '11px 0', borderRadius: 9, fontSize: 13, fontWeight: 600,
               background: '#2563EB', color: 'white', textDecoration: 'none',
-            }}>Démarrer l&apos;essai gratuit</Link>
+            }}>Démarrer l'essai gratuit</Link>
           </div>
         </div>
       </section>
