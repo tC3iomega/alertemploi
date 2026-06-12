@@ -148,7 +148,7 @@ export async function createCheckoutSession(formData: FormData) {
   const priceId = formData.get('priceId') as string;
   const supabase = await createClient();
   const { data: { user } } = await supabase.auth.getUser();
-  if (!user) throw new Error('Not authenticated');
+  if (!user) redirect('/auth/login');
 
   const res = await fetch('https://api.stripe.com/v1/checkout/sessions', {
     method: 'POST',
