@@ -131,7 +131,7 @@ export default function LandingPage() {
         padding: '14px 48px', borderBottom: '0.5px solid #E2E8F0',
         background: '#F1EFE8', position: 'sticky', top: 0, zIndex: 100,
       }}>
-        <Logo />
+        <Link href="/" style={{ textDecoration: "none" }}><Logo /></Link>
         <div style={{ display: 'flex', gap: '28px', alignItems: 'center' }}>
           <a href="#features" style={{ fontSize: 14, color: '#64748B', textDecoration: 'none' }}>Fonctionnalités</a>
           <a href="#pricing" style={{ fontSize: 14, color: '#64748B', textDecoration: 'none' }}>Tarifs</a>
