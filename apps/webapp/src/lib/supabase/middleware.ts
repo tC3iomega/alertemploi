@@ -24,7 +24,7 @@ export async function updateSession(request: NextRequest) {
     data: { user },
   } = await supabase.auth.getUser();
 
-  const isAuthPage = request.nextUrl.pathname === '/';
+  const isAuthPage = request.nextUrl.pathname === '/' || request.nextUrl.pathname === '/upgrade';
   const isAuthCallback = request.nextUrl.pathname.startsWith('/auth/');
 
   // Unauthenticated → redirect to login
@@ -35,7 +35,7 @@ export async function updateSession(request: NextRequest) {
   }
 
   // Already logged in on login page → redirect to jobs
-  if (user && isAuthPage) {
+  if (user && request.nextUrl.pathname === '/') {
     const url = request.nextUrl.clone();
     url.pathname = '/jobs/list/new';
     return NextResponse.redirect(url);
