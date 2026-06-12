@@ -30,7 +30,7 @@ const FEATURES = [
   },
   {
     title: '5 job boards français',
-    desc: 'France Travail, APEC, Cadremploi, HelloWork et Welcome to the Jungle. D'autres arrivent bientôt.',
+    desc: `France Travail, APEC, Cadremploi, HelloWork et Welcome to the Jungle. D'autres arrivent bientôt.`,
     icon: (
       <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
         <rect x="2" y="2" width="16" height="16" rx="3" stroke="#2563EB" strokeWidth="1.5" />
@@ -42,7 +42,7 @@ const FEATURES = [
   },
   {
     title: 'Vos critères exacts',
-    desc: 'Collez l'URL de votre recherche sur chaque site. Alertemploi surveille exactement ce que vous cherchez.',
+    desc: `Collez l'URL de votre recherche sur chaque site. Alertemploi surveille exactement ce que vous cherchez.`,
     icon: (
       <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
         <circle cx="9" cy="9" r="6" stroke="#2563EB" strokeWidth="1.5" />
