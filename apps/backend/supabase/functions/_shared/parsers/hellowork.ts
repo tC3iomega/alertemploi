@@ -28,7 +28,8 @@ export function parseHelloWorkJobs({
     logger.info('HelloWork: no results page detected');
     return { jobs: [], listFound: true, elementsCount: 0 };
   }
-// Job cards are <li> elements with data-cy="job-card" or inside a job list
+
+  // Job cards are <li> elements with data-cy="job-card" or inside a job list
   let jobElements = Array.from(
     document.querySelectorAll('[data-cy="job-card"]')
   ) as Element[];
@@ -43,11 +44,11 @@ export function parseHelloWorkJobs({
     }
   }
 
-  // Second fallback: article tags with job links
+  // Second fallback: filter li elements that contain a job link
   if (!jobElements.length) {
     jobElements = Array.from(
-      document.querySelectorAll('li:has(a[href*="/fr-fr/emplois/"])')
-    ) as Element[];
+      document.querySelectorAll('li')
+    ).filter((el) => (el as Element).querySelector('a[href*="/fr-fr/emplois/"]')) as Element[];
   }
 
   if (!jobElements.length) {
@@ -56,7 +57,8 @@ export function parseHelloWorkJobs({
   }
 
   logger.info(`HelloWork: found ${jobElements.length} job cards`);
-const jobs = jobElements.map((el): ParsedJob | null => {
+
+  const jobs = jobElements.map((el): ParsedJob | null => {
     // External URL and ID
     const linkEl = el.querySelector('a[href*="/fr-fr/emplois/"]') as Element | null;
     if (!linkEl) return null;
@@ -126,3 +128,4 @@ const jobs = jobElements.map((el): ParsedJob | null => {
     elementsCount: jobElements.length,
   };
 }
+
