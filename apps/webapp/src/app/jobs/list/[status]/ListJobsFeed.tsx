@@ -88,7 +88,7 @@ export function ListJobsFeed({ listJobsResult, status, batchSize }: ListJobsFeed
   const onArchive = async (job: Job) => {
     try {
       await updateListedJobStatus(job.id, 'archived');
-      toast({ title: 'Job archived', description: `Job ${job.title} has been archived.`, variant: 'success' });
+      toast({ title: 'Offre archivée', description: `Job ${job.title} has been archived.`, variant: 'success' });
     } catch (error) {
       handleError({ error, title: 'Failed to archive job' });
     }
@@ -97,7 +97,7 @@ export function ListJobsFeed({ listJobsResult, status, batchSize }: ListJobsFeed
   const onDelete = async (job: Job) => {
     try {
       await updateListedJobStatus(job.id, 'deleted');
-      toast({ title: 'Job deleted', description: `Job ${job.title} has been deleted.`, variant: 'success' });
+      toast({ title: 'Offre supprimée', description: `Job ${job.title} has been deleted.`, variant: 'success' });
     } catch (error) {
       handleError({ error, title: 'Failed to delete job' });
     }
@@ -121,10 +121,10 @@ export function ListJobsFeed({ listJobsResult, status, batchSize }: ListJobsFeed
 }
 
 const PageHeaderNameMap: Record<JobStatus, string> = {
-  new: 'New Jobs',
-  applied: 'Applied Jobs',
-  archived: 'Archived Jobs',
-  excluded_by_advanced_matching: 'Excluded by Advanced Matching',
-  deleted: 'Deleted Jobs',
-  processing: 'Processing Jobs',
+  new: 'Nouvelles offres',
+  applied: 'Offres postulées',
+  archived: 'Offres archivées',
+  excluded_by_advanced_matching: 'Offres exclues',
+  deleted: 'Offres supprimées',
+  processing: 'Offres en cours',
 };
