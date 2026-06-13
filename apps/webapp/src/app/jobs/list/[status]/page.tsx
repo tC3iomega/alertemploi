@@ -1,8 +1,9 @@
-import { listJobs, listLinks, listSites, scanLinks } from '@/app/actions';
+import { listJobs, listLinks, listSites } from '@/app/actions';
 import { JobStatus, throwError } from '@alertemploi/core';
 
 import { WithClientProviders } from '../../../components/clientProviders';
 import { ListJobsFeed } from './ListJobsFeed';
+import { ScanButton } from './ScanButton';
 
 export default async function JobsPage({
   params,
@@ -39,16 +40,8 @@ export default async function JobsPage({
   return (
     <WithClientProviders sites={sites} links={links}>
       <ListJobsFeed listJobsResult={listJobsResult} batchSize={limit} status={currentStatus} />
-      {currentStatus === 'new' && links.length > 0 && (
-        <form action={scanLinks}>
-          <button
-            type="submit"
-            className="fixed bottom-20 right-4 z-50 rounded-full bg-primary text-primary-foreground px-4 py-2 text-sm font-medium shadow-lg hover:opacity-90"
-          >
-            🔄 Scanner
-          </button>
-        </form>
-      )}
+      {currentStatus === 'new' && links.length > 0 && <ScanButton />}
     </WithClientProviders>
   );
 }
+
