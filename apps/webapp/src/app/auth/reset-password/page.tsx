@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { login } from '../../actions';
+import { createClient } from '@/lib/supabase/client';
 
 function Logo() {
   return (
@@ -22,27 +22,37 @@ function Logo() {
   );
 }
 
-export default function LoginPage() {
+export default function ResetPasswordPage() {
   const router = useRouter();
+  const [password, setPassword] = useState('');
+  const [confirm, setConfirm] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
+    if (password !== confirm) {
+      setError('Les mots de passe ne correspondent pas.');
+      return;
+    }
+    if (password.length < 8) {
+      setError('Le mot de passe doit contenir au moins 8 caractères.');
+      return;
+    }
+
     setIsSubmitting(true);
     setError(null);
-    const formData = new FormData();
-    formData.set('email', email);
-    formData.set('password', password);
-    const result = await login(formData);
-    if (result?.error) {
-      setError(result.error);
+
+    const supabase = createClient();
+    const { error } = await supabase.auth.updateUser({ password });
+
+    if (error) {
+      setError(error.message);
       setIsSubmitting(false);
       return;
     }
-    router.refresh();
+
+    router.push('/jobs/list/new');
   }
 
   return (
@@ -65,22 +75,22 @@ export default function LoginPage() {
         boxShadow: '0 4px 24px rgba(0,0,0,0.06)',
       }}>
         <h1 style={{ fontSize: 22, fontWeight: 700, color: '#1E293B', marginBottom: 6, letterSpacing: -0.5 }}>
-          Connexion
+          Nouveau mot de passe
         </h1>
         <p style={{ fontSize: 14, color: '#64748B', marginBottom: 28 }}>
-          Bon retour parmi nous.
+          Choisissez un mot de passe d'au moins 8 caractères.
         </p>
 
         <form onSubmit={handleSubmit}>
           <div style={{ marginBottom: 16 }}>
             <label style={{ fontSize: 13, fontWeight: 500, color: '#374151', display: 'block', marginBottom: 6 }}>
-              Email
+              Nouveau mot de passe
             </label>
             <input
-              type="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              placeholder="vous@exemple.com"
+              type="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              placeholder="••••••••"
               required
               style={{
                 width: '100%', padding: '11px 14px',
@@ -92,18 +102,13 @@ export default function LoginPage() {
           </div>
 
           <div style={{ marginBottom: 24 }}>
-            <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 6 }}>
-              <label style={{ fontSize: 13, fontWeight: 500, color: '#374151' }}>
-                Mot de passe
-              </label>
-              <Link href="/auth/forgot-password" style={{ fontSize: 12, color: '#2563EB', textDecoration: 'none' }}>
-                Mot de passe oublie ?
-              </Link>
-            </div>
+            <label style={{ fontSize: 13, fontWeight: 500, color: '#374151', display: 'block', marginBottom: 6 }}>
+              Confirmer le mot de passe
+            </label>
             <input
               type="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
+              value={confirm}
+              onChange={(e) => setConfirm(e.target.value)}
               placeholder="••••••••"
               required
               style={{
@@ -132,20 +137,14 @@ export default function LoginPage() {
               width: '100%', padding: '12px 0',
               background: isSubmitting ? '#93C5FD' : '#2563EB',
               color: 'white', fontSize: 15, fontWeight: 600,
-              border: 'none', borderRadius: 9, cursor: isSubmitting ? 'not-allowed' : 'pointer',
+              border: 'none', borderRadius: 9,
+              cursor: isSubmitting ? 'not-allowed' : 'pointer',
             }}
           >
-            {isSubmitting ? 'Connexion...' : 'Se connecter'}
+            {isSubmitting ? 'Enregistrement...' : 'Enregistrer le mot de passe'}
           </button>
         </form>
       </div>
-
-      <p style={{ fontSize: 12, color: '#94A3B8', marginTop: 24, textAlign: 'center' }}>
-        Pas encore de compte ?{' '}
-        <Link href="/upgrade" style={{ color: '#2563EB', textDecoration: 'none', fontWeight: 500 }}>
-          Essayer gratuitement
-        </Link>
-      </p>
     </main>
   );
 }
