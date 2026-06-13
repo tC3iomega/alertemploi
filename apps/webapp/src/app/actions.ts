@@ -179,3 +179,13 @@ async function buildApi() {
   const api = new F2aSupabaseApi(supabase);
   return api;
 }
+
+export async function deleteLink(linkId: number) {
+  try {
+    const api = await buildApi();
+    await api.deleteLink(linkId);
+    revalidatePath('/links');
+  } catch (error) {
+    throw new Error(`failed to delete link: ${getExceptionMessage(error, true)}`);
+  }
+}
