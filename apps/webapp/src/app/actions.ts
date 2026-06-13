@@ -3,7 +3,8 @@
 import { createClient } from '@/lib/supabase/server';
 import { JobLabel, JobStatus, ListJobsParams, getExceptionMessage } from '@alertemploi/core';
 import { F2aSupabaseApi } from '@alertemploi/ui';
-import { redirect, revalidatePath } from 'next/navigation';
+import { redirect } from 'next/navigation';
+import { revalidatePath } from 'next/cache';
 
 export async function login(formData: FormData) {
   try {
