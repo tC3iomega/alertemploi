@@ -54,11 +54,11 @@ export function DeleteJobDialog({
       <AlertDialogContent>
         <AlertDialogHeader>
           <AlertDialogTitle>
-            Are you sure you want to delete this job?
+            Supprimer cette offre ?
           </AlertDialogTitle>
           <AlertDialogDescription>
-            This action cannot be undone. This will permanently delete this job
-            and you won't be able to see it again.
+            Cette action est irréversible. Cette offre sera définitivement supprimée
+            et vous ne pourrez plus la consulter.
           </AlertDialogDescription>
           <AlertDialogDescription className="flex items-center">
             <Checkbox
@@ -71,12 +71,12 @@ export function DeleteJobDialog({
               htmlFor="disable-delete-warning"
               className="ml-2 space-y-1 leading-none"
             >
-              Do not show this warning again.
+              Ne plus afficher cet avertissement.
             </label>
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>
-          <AlertDialogCancel>Cancel</AlertDialogCancel>
+          <AlertDialogCancel>Annuler</AlertDialogCancel>
           <AlertDialogAction
             className="bg-destructive hover:bg-destructive/90"
             onClick={() => onDelete(job)}
