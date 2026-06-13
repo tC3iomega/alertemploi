@@ -11,7 +11,8 @@ export function ScanButton() {
   async function handleScan() {
     setScanning(true);
     await scanLinks();
-    router.refresh();
+    await new Promise(resolve => setTimeout(resolve, 2000));
+router.refresh();
     setScanning(false);
   }
 

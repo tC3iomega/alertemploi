@@ -19,6 +19,7 @@ export function parseHelloWorkJobs({
 }): JobSiteParseResult {
   const document = new DOMParser().parseFromString(html, 'text/html');
   if (!document) throw new Error('Could not parse HelloWork HTML');
+  logger.info(`HelloWork HTML preview: ${html.slice(0, 500)}`);
 
   // Check for no results
   const noResults = document.querySelector('[data-cy="no-result"]') ||
