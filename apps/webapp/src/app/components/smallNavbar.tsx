@@ -14,7 +14,7 @@ export function SmallNavbar() {
     { name: 'Postulées', path: '/jobs/list/applied', Icon: CheckCircleIcon },
     { name: 'Archivées', path: '/jobs/list/archived', Icon: ArchiveIcon },
     { name: 'Exclues', path: '/jobs/list/excluded_by_advanced_matching', Icon: BanIcon },
-    { name: 'Ajouter', path: '/links/new', Icon: PlusIcon },
+    { name: 'Alertes', path: '/links', Icon: PlusIcon },
     { name: 'Menu', path: '/menu', Icon: MenuIcon },
   ];
 
