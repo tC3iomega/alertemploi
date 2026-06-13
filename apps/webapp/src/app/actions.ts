@@ -3,7 +3,7 @@
 import { createClient } from '@/lib/supabase/server';
 import { JobLabel, JobStatus, ListJobsParams, getExceptionMessage } from '@alertemploi/core';
 import { F2aSupabaseApi } from '@alertemploi/ui';
-import { redirect } from 'next/navigation';
+import { redirect, revalidatePath } from 'next/navigation';
 
 export async function login(formData: FormData) {
   try {
@@ -139,6 +139,7 @@ export async function scanLinks() {
       const jobIds = data.newJobs.map((j: any) => j.id);
       await (supabase.from('jobs') as any).update({ status: 'new' }).in('id', jobIds);
     }
+    revalidatePath('/jobs/list/new');
     return data;
   } catch (error) {
     throw new Error(`failed to scan links: ${getExceptionMessage(error, true)}`);
