@@ -1,7 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.getRelativeTimeString = getRelativeTimeString;
-function getRelativeTimeString(date, locale = 'en') {
+function getRelativeTimeString(date, locale = 'fr') {
     const rtf = new Intl.RelativeTimeFormat(locale, { numeric: 'auto' });
     const now = new Date();
     const diffInSeconds = (now.getTime() - date.getTime()) / 1000;
