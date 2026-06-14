@@ -6,7 +6,7 @@
 /* shadcn/ui design tokens — matches desktopProbe theme */
 @layer base {
   :root {
-    --background: 0 0% 100%;
+    --background: 36 14% 93%;
     --foreground: 240 10% 3.9%;
     --card: 0 0% 100%;
     --card-foreground: 240 10% 3.9%;
