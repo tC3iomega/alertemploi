@@ -152,7 +152,7 @@ export function JobCard({
 
         {/* Timestamp */}
         <p className="ml-auto w-fit shrink-0 text-xs text-foreground/80">
-          detected {getRelativeTimeString(new Date(job.created_at))}
+          détectée {getRelativeTimeString(new Date(job.created_at))}
         </p>
       </div>
     </>
