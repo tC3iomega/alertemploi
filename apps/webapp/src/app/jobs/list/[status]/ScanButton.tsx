@@ -12,7 +12,7 @@ export function ScanButton() {
     setScanning(true);
     await scanLinks();
     await new Promise(resolve => setTimeout(resolve, 2000));
-router.refresh();
+    window.location.reload();
     setScanning(false);
   }
 
