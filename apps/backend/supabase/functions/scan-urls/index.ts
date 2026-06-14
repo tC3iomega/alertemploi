@@ -148,19 +148,35 @@ async function parseHtmlToJobsList({
     return { jobs: [], currentUrlParseFailed: false };
   }
 
-logger.info(`html.content length: ${html.content?.length ?? 0}`);
-let htmlContent = html.content;
-  if (!htmlContent) {
-    logger.info(`fetching URL: ${link.url}`);
-    const response = await fetch(link.url, {
-      headers: {
-        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
-        'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
-        'Accept-Language': 'fr-FR,fr;q=0.9,en;q=0.8',
-      },
-    });
-    htmlContent = await response.text();
-    logger.info(`fetched ${htmlContent.length} bytes`);
+  logger.info(`html.content length: ${html.content?.length ?? 0}`);
+  let htmlContent = html.content;
+  const needsBrowser = ['hellowork', 'wttj', 'cadremploi'].includes(targetSite?.provider ?? '');
+  if ((!htmlContent || htmlContent.trim().length === 0) && needsBrowser) {
+    const browserlessApiKey = context.env.browserlessApiKey;
+    if (browserlessApiKey) {
+      logger.info(`fetching via Browserless: ${link.url}`);
+      const response = await fetch(`https://production-sfo.browserless.io/content?token=${browserlessApiKey}`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          url: link.url,
+          waitForTimeout: 3000,
+        }),
+      });
+      htmlContent = await response.text();
+      logger.info(`fetched ${htmlContent.length} bytes via Browserless`);
+    } else {
+      logger.info(`fetching URL directly: ${link.url}`);
+      const response = await fetch(link.url, {
+        headers: {
+          'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36',
+          'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
+          'Accept-Language': 'fr-FR,fr;q=0.9,en;q=0.8',
+        },
+      });
+      htmlContent = await response.text();
+      logger.info(`fetched ${htmlContent.length} bytes directly`);
+    }
   }
 
   const {

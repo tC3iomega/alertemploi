@@ -13,6 +13,7 @@ export type First2ApplyBackendEnv = {
   stripeSecretKey: string;
   stripeWebhookSigningSecret: string;
   webappUrl: string;
+  browserlessApiKey?: string;
 };
 
 export function parseEnv(): First2ApplyBackendEnv {
@@ -30,5 +31,6 @@ export function parseEnv(): First2ApplyBackendEnv {
     stripeSecretKey: Deno.env.get('STRIPE_SECRET_KEY') ?? '',
     stripeWebhookSigningSecret: Deno.env.get('STRIPE_WEBHOOK_SIGNING_SECRET') ?? '',
     webappUrl: Deno.env.get('WEBAPP_URL') ?? '',
+    browserlessApiKey: Deno.env.get('BROWSERLESS_API_KEY'),
   };
 }
