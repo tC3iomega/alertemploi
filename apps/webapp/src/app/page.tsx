@@ -131,9 +131,9 @@ export default function LandingPage() {
           <Logo />
         </Link>
         <div className={styles.navLinks}>
-          <a href="#features" style={{ fontSize: 14, color: '#64748B', textDecoration: 'none' }}>Fonctionnalités</a>
-          <a href="#pricing" style={{ fontSize: 14, color: '#64748B', textDecoration: 'none' }}>Tarifs</a>
-          <a href="#faq" style={{ fontSize: 14, color: '#64748B', textDecoration: 'none' }}>FAQ</a>
+          <a href="#features" className={styles.navLink} style={{ fontSize: 14, color: '#64748B', textDecoration: 'none' }}>Fonctionnalités</a>
+          <a href="#pricing" className={styles.navLink} style={{ fontSize: 14, color: '#64748B', textDecoration: 'none' }}>Tarifs</a>
+          <a href="#faq" className={styles.navLink} style={{ fontSize: 14, color: '#64748B', textDecoration: 'none' }}>FAQ</a>
           <Link href="/auth/login" style={{
             fontSize: 14, fontWeight: 500, color: '#2563EB',
             padding: '8px 18px', borderRadius: 8, border: '1.5px solid #2563EB',
@@ -176,7 +176,7 @@ export default function LandingPage() {
             padding: '14px 32px', borderRadius: 10, background: '#2563EB',
             textDecoration: 'none',
           }}>Créer mon alerte gratuite</Link>
-          <a href="#features" style={{
+          <a href="#features" className={styles.navLink} style={{
             fontSize: 16, fontWeight: 500, color: '#2563EB',
             padding: '14px 32px', borderRadius: 10, background: 'white',
             border: '1.5px solid #2563EB', textDecoration: 'none',

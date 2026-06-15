@@ -149,3 +149,13 @@
     align-items: flex-start;
   }
 }
+
+.navLinksHidden {
+  display: none;
+}
+
+@media (max-width: 768px) {
+  .navLink {
+    display: none;
+  }
+}
