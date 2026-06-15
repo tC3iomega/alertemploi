@@ -175,3 +175,10 @@
     padding: 6px 10px;
   }
 }
+
+@media (max-width: 480px) {
+  .nav {
+    padding: 10px 12px;
+    gap: 6px;
+  }
+}
