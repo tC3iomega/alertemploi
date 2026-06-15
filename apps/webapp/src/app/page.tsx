@@ -136,12 +136,12 @@ export default function LandingPage() {
           <a href="#faq" className={styles.navLink} style={{ fontSize: 14, color: '#64748B', textDecoration: 'none' }}>FAQ</a>
           <Link href="/auth/login" style={{
             fontSize: 14, fontWeight: 500, color: '#2563EB',
-            padding: '8px 18px', borderRadius: 8, border: '1.5px solid #2563EB',
+            padding: '6px 10px', borderRadius: 8, border: '1.5px solid #2563EB',
             textDecoration: 'none', background: 'transparent', whiteSpace: 'nowrap',
           }} className={styles.navBtn}>Se connecter</Link>
           <Link href="/auth/login" style={{
             fontSize: 14, fontWeight: 500, color: 'white',
-            padding: '8px 18px', borderRadius: 8, background: '#2563EB',
+            padding: '6px 10px', borderRadius: 8, background: '#2563EB',
             textDecoration: 'none', whiteSpace: 'nowrap',
           }} className={styles.navBtn}>Commencer</Link>
         </div>
