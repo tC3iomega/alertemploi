@@ -2,13 +2,14 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
+import styles from './page.module.css';
 
 const JOB_BOARDS = ['France Travail', 'APEC', 'Cadremploi', 'HelloWork', 'Welcome to the Jungle'];
 
 const FEATURES = [
   {
     title: 'Scan toutes les heures',
-    desc: 'Vos alertes sont analysées 24h/24, 7j/7. Les nouvelles offres sont détectées dès leur publication.',
+    desc: `Vos alertes sont analysées 24h/24, 7j/7. Les nouvelles offres sont détectées dès leur publication.`,
     icon: (
       <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
         <circle cx="10" cy="10" r="8" stroke="#2563EB" strokeWidth="1.5" />
@@ -36,7 +37,6 @@ const FEATURES = [
         <rect x="2" y="2" width="16" height="16" rx="3" stroke="#2563EB" strokeWidth="1.5" />
         <line x1="6" y1="7" x2="14" y2="7" stroke="#2563EB" strokeWidth="1.5" />
         <line x1="6" y1="10" x2="11" y2="10" stroke="#2563EB" strokeWidth="1.5" />
-        <line x1="6" y1="13" x2="9" y2="13" stroke="#2563EB" strokeWidth="1.5" />
       </svg>
     ),
   },
@@ -52,7 +52,7 @@ const FEATURES = [
   },
   {
     title: 'Aucune offre manquée',
-    desc: 'Les offres publiées tôt le matin sont détectées avant même votre réveil. Postulez en premier.',
+    desc: 'Les offres publiées le matin sont détectées avant même votre réveil. Postulez en premier.',
     icon: (
       <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
         <circle cx="10" cy="10" r="8" stroke="#2563EB" strokeWidth="1.5" />
@@ -126,31 +126,29 @@ export default function LandingPage() {
     <div style={{ fontFamily: 'Arial, Helvetica, sans-serif', color: '#1E293B', background: '#F1EFE8' }}>
 
       {/* NAV */}
-      <nav style={{
-        display: 'flex', alignItems: 'center', justifyContent: 'space-between',
-        padding: '14px 48px', borderBottom: '0.5px solid #E2E8F0',
-        background: '#F1EFE8', position: 'sticky', top: 0, zIndex: 100,
-      }}>
-        <Link href="/" style={{ textDecoration: "none" }}><Logo /></Link>
-        <div style={{ display: 'flex', gap: '28px', alignItems: 'center' }}>
+      <nav className={styles.nav}>
+        <Link href="/" style={{ textDecoration: 'none' }}>
+          <Logo />
+        </Link>
+        <div className={styles.navLinks}>
           <a href="#features" style={{ fontSize: 14, color: '#64748B', textDecoration: 'none' }}>Fonctionnalités</a>
           <a href="#pricing" style={{ fontSize: 14, color: '#64748B', textDecoration: 'none' }}>Tarifs</a>
           <a href="#faq" style={{ fontSize: 14, color: '#64748B', textDecoration: 'none' }}>FAQ</a>
           <Link href="/auth/login" style={{
             fontSize: 14, fontWeight: 500, color: '#2563EB',
             padding: '8px 18px', borderRadius: 8, border: '1.5px solid #2563EB',
-            textDecoration: 'none', background: 'transparent',
+            textDecoration: 'none', background: 'transparent', whiteSpace: 'nowrap',
           }}>Se connecter</Link>
           <Link href="/auth/login" style={{
             fontSize: 14, fontWeight: 500, color: 'white',
             padding: '8px 18px', borderRadius: 8, background: '#2563EB',
-            textDecoration: 'none',
+            textDecoration: 'none', whiteSpace: 'nowrap',
           }}>Commencer</Link>
         </div>
       </nav>
 
       {/* HERO */}
-      <section style={{ background: '#F1EFE8', padding: '80px 48px 64px', textAlign: 'center' }}>
+      <section className={styles.hero}>
         <div style={{
           display: 'inline-block', background: '#FFFBEB', color: '#B45309',
           fontSize: 12, fontWeight: 500, padding: '5px 16px', borderRadius: 20,
@@ -159,11 +157,7 @@ export default function LandingPage() {
           Essai gratuit 14 jours
         </div>
 
-        <h1 style={{
-          fontSize: 52, fontWeight: 700, color: '#1E293B',
-          lineHeight: 1.1, letterSpacing: -1.5, marginBottom: 20,
-          maxWidth: 700, margin: '0 auto 20px',
-        }}>
+        <h1 className={styles.heroTitle}>
           Soyez alerté en premier<br />
           <span style={{ color: '#2563EB' }}>dès qu'une offre apparaît</span>
         </h1>
@@ -176,7 +170,7 @@ export default function LandingPage() {
           Recevez un email dès qu'une offre correspond à vos critères.
         </p>
 
-        <div style={{ display: 'flex', gap: 14, justifyContent: 'center', flexWrap: 'wrap', marginBottom: 52 }}>
+        <div className={styles.heroCta}>
           <Link href="/auth/login" style={{
             fontSize: 16, fontWeight: 600, color: 'white',
             padding: '14px 32px', borderRadius: 10, background: '#2563EB',
@@ -202,7 +196,7 @@ export default function LandingPage() {
       </section>
 
       {/* APP PREVIEW */}
-      <section style={{ background: '#F1EFE8', padding: '0 48px 72px', display: 'flex', justifyContent: 'center' }}>
+      <section className={styles.preview}>
         <div style={{
           width: '100%', maxWidth: 780, background: 'white',
           borderRadius: 14, border: '0.5px solid #E2E8F0',
@@ -218,7 +212,7 @@ export default function LandingPage() {
               maxWidth: 280, margin: '0 auto', textAlign: 'center',
             }}>alertemploi.com/jobs/list/new</div>
           </div>
-          <div style={{ padding: 24, display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 12 }}>
+          <div style={{ padding: 24, display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: 12 }}>
             {[
               { title: 'Développeur React — Paris', company: 'Société Générale', type: 'CDI' },
               { title: 'Product Manager Senior', company: 'BNP Paribas', type: 'CDI' },
@@ -241,17 +235,14 @@ export default function LandingPage() {
       </section>
 
       {/* FEATURES */}
-      <section id="features" style={{ padding: '80px 48px', background: 'white' }}>
+      <section id="features" className={styles.section} style={{ background: 'white' }}>
         <h2 style={{ fontSize: 30, fontWeight: 700, textAlign: 'center', marginBottom: 10, letterSpacing: -0.5 }}>
           Pourquoi Alertemploi ?
         </h2>
         <p style={{ fontSize: 16, color: '#64748B', textAlign: 'center', marginBottom: 48, maxWidth: 480, margin: '0 auto 48px' }}>
           Arrêtez de vérifier manuellement les sites d'emploi. On s'en occupe.
         </p>
-        <div style={{
-          display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)',
-          gap: 20, maxWidth: 960, margin: '0 auto',
-        }}>
+        <div className={styles.featuresGrid}>
           {FEATURES.map((f, i) => (
             <div key={i} style={{
               background: '#F8FAFC', borderRadius: 12, padding: 24,
@@ -270,7 +261,7 @@ export default function LandingPage() {
       </section>
 
       {/* JOB BOARDS */}
-      <section style={{ padding: '64px 48px', background: '#F1EFE8', textAlign: 'center' }}>
+      <section className={styles.sectionBeige} style={{ textAlign: 'center' }}>
         <h2 style={{ fontSize: 26, fontWeight: 700, marginBottom: 10, letterSpacing: -0.3 }}>
           Les sites surveillés
         </h2>
@@ -289,7 +280,7 @@ export default function LandingPage() {
       </section>
 
       {/* PRICING */}
-      <section id="pricing" style={{ padding: '80px 48px', background: 'white' }}>
+      <section id="pricing" className={styles.section} style={{ background: 'white' }}>
         <h2 style={{ fontSize: 30, fontWeight: 700, textAlign: 'center', marginBottom: 10, letterSpacing: -0.5 }}>
           Tarifs simples
         </h2>
@@ -297,7 +288,6 @@ export default function LandingPage() {
           Commencez gratuitement, passez Pro quand vous êtes prêt.
         </p>
 
-        {/* Toggle */}
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 14, marginBottom: 44 }}>
           <span style={{ fontSize: 14, fontWeight: isAnnual ? 400 : 500, color: isAnnual ? '#64748B' : '#1E293B' }}>
             Mensuel
@@ -324,11 +314,7 @@ export default function LandingPage() {
           }}>-34%</span>
         </div>
 
-        <div style={{
-          display: 'grid', gridTemplateColumns: '1fr 1fr',
-          gap: 24, maxWidth: 580, margin: '0 auto',
-        }}>
-          {/* Free */}
+        <div className={styles.pricingGrid}>
           <div style={{ border: '0.5px solid #E2E8F0', borderRadius: 14, padding: 28 }}>
             <div style={{ fontSize: 13, fontWeight: 500, color: '#64748B', marginBottom: 10 }}>Gratuit</div>
             <div style={{ fontSize: 36, fontWeight: 700, marginBottom: 6 }}>
@@ -349,7 +335,6 @@ export default function LandingPage() {
             }}>Commencer gratuitement</Link>
           </div>
 
-          {/* Pro */}
           <div style={{ border: '2px solid #2563EB', borderRadius: 14, padding: 28 }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 10 }}>
               <div style={{ fontSize: 13, fontWeight: 500, color: '#64748B' }}>Pro</div>
@@ -382,16 +367,13 @@ export default function LandingPage() {
       </section>
 
       {/* FAQ */}
-      <section id="faq" style={{ padding: '80px 48px', background: '#F1EFE8' }}>
+      <section id="faq" className={styles.faqSection}>
         <div style={{ maxWidth: 640, margin: '0 auto' }}>
           <h2 style={{ fontSize: 30, fontWeight: 700, marginBottom: 36, letterSpacing: -0.5 }}>
             Questions fréquentes
           </h2>
           {FAQS.map((item, i) => (
-            <div
-              key={i}
-              style={{ borderBottom: '0.5px solid #CBD5E1', paddingBottom: 4 }}
-            >
+            <div key={i} style={{ borderBottom: '0.5px solid #CBD5E1', paddingBottom: 4 }}>
               <button
                 onClick={() => setOpenFaq(openFaq === i ? null : i)}
                 style={{
@@ -433,11 +415,7 @@ export default function LandingPage() {
       </section>
 
       {/* FOOTER */}
-      <footer style={{
-        background: '#1E293B', padding: '28px 48px',
-        display: 'flex', justifyContent: 'space-between',
-        alignItems: 'center', flexWrap: 'wrap', gap: 12,
-      }}>
+      <footer className={styles.footer}>
         <Logo theme="dark" size="sm" />
         <div style={{ fontSize: 12, color: '#475569' }}>
           © 2025 Alertemploi —{' '}
@@ -450,3 +428,4 @@ export default function LandingPage() {
     </div>
   );
 }
+
