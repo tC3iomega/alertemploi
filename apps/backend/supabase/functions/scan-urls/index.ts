@@ -150,6 +150,40 @@ async function parseHtmlToJobsList({
 
   logger.info(`html.content length: ${html.content?.length ?? 0}`);
   let htmlContent = html.content;
+// JobSpy worker pour LinkedIn et Indeed
+  const needsJobSpy = ['linkedin', 'indeed'].includes(targetSite?.provider ?? '');
+  if (needsJobSpy && context.env.jobspyWorkerUrl && context.env.jobspyWorkerSecret) {
+    logger.info(`fetching via JobSpy worker: ${link.url}`);
+    const siteProvider = targetSite?.provider ?? 'indeed';
+    const urlParams = new URL(link.url);
+    const searchTerm = urlParams.searchParams.get('q') || urlParams.searchParams.get('keywords') || 'emploi';
+    const location = urlParams.searchParams.get('l') || urlParams.searchParams.get('location') || 'France';
+    const response = await fetch(`${context.env.jobspyWorkerUrl}/scrape`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${context.env.jobspyWorkerSecret}`,
+      },
+      body: JSON.stringify({ url: link.url, site: siteProvider, search_term: searchTerm, location, results_wanted: 25 }),
+    });
+    const data = await response.json();
+    logger.info(`JobSpy returned ${data.jobs?.length ?? 0} jobs`);
+    const jobspyJobs = (data.jobs ?? []).map((j: any) => ({
+      siteId: targetSite!.id,
+      externalId: j.externalId,
+      externalUrl: j.externalUrl,
+      title: j.title,
+      companyName: j.companyName || 'N/A',
+      location: j.location,
+      jobType: j.jobType !== 'nan' && j.jobType !== 'None' ? j.jobType : undefined,
+      description: j.description,
+      salary: j.salary || undefined,
+      tags: [],
+      labels: [],
+      link_id: link.id,
+    }));
+    return { jobs: jobspyJobs, currentUrlParseFailed: false };
+  }  
   const needsBrowser = ['hellowork', 'wttj', 'cadremploi'].includes(targetSite?.provider ?? '');
   if ((!htmlContent || htmlContent.trim().length === 0) && needsBrowser) {
     const browserlessApiKey = context.env.browserlessApiKey;

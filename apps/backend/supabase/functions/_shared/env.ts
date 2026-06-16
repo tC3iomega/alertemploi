@@ -14,6 +14,8 @@ export type First2ApplyBackendEnv = {
   stripeWebhookSigningSecret: string;
   webappUrl: string;
   browserlessApiKey?: string;
+  jobspyWorkerUrl?: string;
+  jobspyWorkerSecret?: string;
 };
 
 export function parseEnv(): First2ApplyBackendEnv {
@@ -32,5 +34,7 @@ export function parseEnv(): First2ApplyBackendEnv {
     stripeWebhookSigningSecret: Deno.env.get('STRIPE_WEBHOOK_SIGNING_SECRET') ?? '',
     webappUrl: Deno.env.get('WEBAPP_URL') ?? '',
     browserlessApiKey: Deno.env.get('BROWSERLESS_API_KEY'),
+    jobspyWorkerUrl: Deno.env.get('JOBSPY_WORKER_URL'),
+    jobspyWorkerSecret: Deno.env.get('JOBSPY_WORKER_SECRET'),
   };
 }
