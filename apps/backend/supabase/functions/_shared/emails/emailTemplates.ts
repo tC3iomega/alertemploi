@@ -7,6 +7,7 @@ export type EmailTemplateBase = {
 };
 
 export enum EmailTemplateType {
+  welcome = 'welcome',
   searchParsingFailure = 'searchParsingFailure',
   newJobAlert = 'newJobAlert',
 }
@@ -34,4 +35,10 @@ export type NewJobAlertEmailTemplate = EmailTemplateBase & {
   };
 };
 
-export type EmailTemplate = SearchParsingFailureEmailTemplate | NewJobAlertEmailTemplate;
+export type WelcomeEmailTemplate = EmailTemplateBase & {
+  type: EmailTemplateType.welcome;
+  templateId: '351ndgw5w2rgzqx8';
+  payload: Record<string, never>;
+};
+
+export type EmailTemplate = SearchParsingFailureEmailTemplate | NewJobAlertEmailTemplate | WelcomeEmailTemplate;
