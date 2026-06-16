@@ -139,7 +139,7 @@ export default function LandingPage() {
             padding: '6px 10px', borderRadius: 8, border: '1.5px solid #2563EB',
             textDecoration: 'none', background: 'transparent', whiteSpace: 'nowrap',
           }} className={styles.navBtn}>Se connecter</Link>
-          <Link href="/auth/login" style={{
+          <Link href="/auth/register" style={{
             fontSize: 14, fontWeight: 500, color: 'white',
             padding: '6px 10px', borderRadius: 8, background: '#2563EB',
             textDecoration: 'none', whiteSpace: 'nowrap',
@@ -171,7 +171,7 @@ export default function LandingPage() {
         </p>
 
         <div className={styles.heroCta}>
-          <Link href="/auth/login" style={{
+          <Link href="/auth/register" style={{
             fontSize: 16, fontWeight: 600, color: 'white',
             padding: '14px 32px', borderRadius: 10, background: '#2563EB',
             textDecoration: 'none',
@@ -328,7 +328,7 @@ export default function LandingPage() {
                 <span style={{ color: '#2563EB', fontWeight: 700 }}>✓</span> {f}
               </div>
             ))}
-            <Link href="/auth/login" style={{
+            <Link href="/auth/register" style={{
               display: 'block', textAlign: 'center', marginTop: 22,
               padding: '11px 0', borderRadius: 9, fontSize: 13, fontWeight: 500,
               border: '1px solid #E2E8F0', color: '#475569', textDecoration: 'none',
@@ -407,7 +407,7 @@ export default function LandingPage() {
         <p style={{ fontSize: 16, color: '#BFDBFE', marginBottom: 32 }}>
           Rejoignez les candidats qui reçoivent les offres en premier.
         </p>
-        <Link href="/auth/login" style={{
+        <Link href="/auth/register" style={{
           display: 'inline-block', background: 'white', color: '#2563EB',
           fontSize: 16, fontWeight: 600, padding: '14px 36px',
           borderRadius: 10, textDecoration: 'none',

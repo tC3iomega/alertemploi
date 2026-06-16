@@ -24,7 +24,7 @@ export async function updateSession(request: NextRequest) {
     data: { user },
   } = await supabase.auth.getUser();
 
-  const isAuthPage = request.nextUrl.pathname === '/' || request.nextUrl.pathname === '/upgrade' || request.nextUrl.pathname === '/legal' || request.nextUrl.pathname === '/privacy';
+  const isAuthPage = request.nextUrl.pathname === '/' || request.nextUrl.pathname === '/upgrade' || request.nextUrl.pathname === '/legal' || request.nextUrl.pathname === '/privacy' || request.nextUrl.pathname === '/auth/register';
   const isAuthCallback = request.nextUrl.pathname.startsWith('/auth/');
 
   // Unauthenticated → redirect to login
