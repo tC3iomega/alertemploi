@@ -40,9 +40,21 @@ function EyeIcon({ visible }: { visible: boolean }) {
   );
 }
 
+function GoogleIcon() {
+  return (
+    <svg width="18" height="18" viewBox="0 0 18 18" xmlns="http://www.w3.org/2000/svg">
+      <path d="M17.64 9.2c0-.64-.06-1.25-.16-1.84H9v3.48h4.84c-.21 1.13-.84 2.08-1.8 2.72v2.26h2.91c1.7-1.57 2.69-3.88 2.69-6.62z" fill="#4285F4"/>
+      <path d="M9 18c2.43 0 4.47-.8 5.96-2.18l-2.91-2.26c-.81.54-1.84.86-3.05.86-2.34 0-4.32-1.58-5.03-3.71H.96v2.33C2.44 15.98 5.48 18 9 18z" fill="#34A853"/>
+      <path d="M3.97 10.71A5.41 5.41 0 0 1 3.68 9c0-.59.1-1.17.29-1.71V4.96H.96A8.99 8.99 0 0 0 0 9c0 1.45.35 2.83.96 4.04l3.01-2.33z" fill="#FBBC05"/>
+      <path d="M9 3.58c1.32 0 2.51.45 3.44 1.35l2.58-2.58C13.46.89 11.43 0 9 0 5.48 0 2.44 2.02.96 4.96l3.01 2.33C4.68 5.16 6.66 3.58 9 3.58z" fill="#EA4335"/>
+    </svg>
+  );
+}
+
 export default function RegisterPage() {
   const router = useRouter();
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isGoogleLoading, setIsGoogleLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -69,6 +81,17 @@ export default function RegisterPage() {
     }
 
     router.push('/jobs/list/new');
+  }
+
+  async function handleGoogleSignup() {
+    setIsGoogleLoading(true);
+    const supabase = createClient();
+    await supabase.auth.signInWithOAuth({
+      provider: 'google',
+      options: {
+        redirectTo: `${window.location.origin}/auth/callback`,
+      },
+    });
   }
 
   return (
@@ -101,9 +124,33 @@ export default function RegisterPage() {
         <h1 style={{ fontSize: 22, fontWeight: 700, color: '#1E293B', marginBottom: 6, letterSpacing: -0.5 }}>
           Créer un compte
         </h1>
-        <p style={{ fontSize: 14, color: '#64748B', marginBottom: 28 }}>
+        <p style={{ fontSize: 14, color: '#64748B', marginBottom: 24 }}>
           Commencez à recevoir vos alertes emploi.
         </p>
+
+        <button
+          type="button"
+          onClick={handleGoogleSignup}
+          disabled={isGoogleLoading}
+          style={{
+            width: '100%', display: 'flex', alignItems: 'center',
+            justifyContent: 'center', gap: 10,
+            padding: '11px 0', marginBottom: 20,
+            background: 'white', border: '1px solid #E2E8F0',
+            borderRadius: 9, fontSize: 14, fontWeight: 500,
+            color: '#374151', cursor: isGoogleLoading ? 'not-allowed' : 'pointer',
+            opacity: isGoogleLoading ? 0.6 : 1,
+          }}
+        >
+          <GoogleIcon />
+          {isGoogleLoading ? 'Redirection...' : 'Continuer avec Google'}
+        </button>
+
+        <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 20 }}>
+          <div style={{ flex: 1, height: 1, background: '#E2E8F0' }} />
+          <span style={{ fontSize: 12, color: '#94A3B8' }}>ou</span>
+          <div style={{ flex: 1, height: 1, background: '#E2E8F0' }} />
+        </div>
 
         <form onSubmit={handleSubmit}>
           <div style={{ marginBottom: 16 }}>
