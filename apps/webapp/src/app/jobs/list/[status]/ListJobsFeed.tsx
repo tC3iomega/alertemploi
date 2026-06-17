@@ -7,6 +7,7 @@ import { JobsList, useError, useSdk, useToast } from '@alertemploi/ui';
 import { useRouter, useSearchParams } from 'next/navigation';
 
 import { listJobs } from '../../../actions';
+import { EmptyState } from './EmptyState';
 
 export type JobListing = {
   isLoading: boolean;
@@ -16,11 +17,12 @@ export type JobListing = {
 };
 
 export type ListJobsFeedProps = {
+  hasLinks?: boolean;
   listJobsResult: ListJobsResult;
   status: JobStatus;
   batchSize: number;
 };
-export function ListJobsFeed({ listJobsResult, status, batchSize }: ListJobsFeedProps) {
+export function ListJobsFeed({ listJobsResult, status, batchSize, hasLinks = false }: ListJobsFeedProps) {
   const [jobListing, setJobListing] = React.useState<JobListing>({
     isLoading: false,
     hasMore: listJobsResult.jobs.length >= batchSize,
@@ -103,19 +105,23 @@ export function ListJobsFeed({ listJobsResult, status, batchSize }: ListJobsFeed
     }
   };
 
-  return (
+      return (
     <div>
       <h1 className="m-4 text-2xl">{PageHeaderNameMap[status]}</h1>
-      <JobsList
-        jobs={jobListing.jobs}
-        selectedJobId={undefined}
-        parentContainerId="jobs-feed"
-        hasMore={jobListing.hasMore}
-        onSelect={onSelectJob}
-        onArchive={onArchive}
-        onDelete={onDelete}
-        onLoadMore={onLoadMore}
-      />
+      {jobListing.jobs.length === 0 ? (
+        <EmptyState hasLinks={hasLinks} />
+      ) : (
+        <JobsList
+          jobs={jobListing.jobs}
+          selectedJobId={undefined}
+          parentContainerId="jobs-feed"
+          hasMore={jobListing.hasMore}
+          onSelect={onSelectJob}
+          onArchive={onArchive}
+          onDelete={onDelete}
+          onLoadMore={onLoadMore}
+        />
+      )}
     </div>
   );
 }

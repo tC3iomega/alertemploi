@@ -39,7 +39,7 @@ export default async function JobsPage({
 
   return (
     <WithClientProviders sites={sites} links={links}>
-      <ListJobsFeed listJobsResult={listJobsResult} batchSize={limit} status={currentStatus} />
+      <ListJobsFeed listJobsResult={listJobsResult} batchSize={limit} status={currentStatus} hasLinks={links.length > 0} />
       {currentStatus === 'new' && links.length > 0 && <ScanButton />}
     </WithClientProviders>
   );
