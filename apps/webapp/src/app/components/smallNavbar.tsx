@@ -1,6 +1,6 @@
 'use client';
 
-import { ArchiveIcon, BanIcon, CheckCircleIcon, MenuIcon, PlusIcon, SparklesIcon } from 'lucide-react';
+import { ArchiveIcon, BanIcon, CheckCircleIcon, MenuIcon, PlusCircleIcon, SparklesIcon } from 'lucide-react';
 
 import clsx from 'clsx';
 import Link from 'next/link';
@@ -14,26 +14,34 @@ export function SmallNavbar() {
     { name: 'Postulées', path: '/jobs/list/applied', Icon: CheckCircleIcon },
     { name: 'Archivées', path: '/jobs/list/archived', Icon: ArchiveIcon },
     { name: 'Exclues', path: '/jobs/list/excluded_by_advanced_matching', Icon: BanIcon },
-    { name: 'Alertes', path: '/links', Icon: PlusIcon },
+    { name: 'Alertes', path: '/links', Icon: PlusCircleIcon },
     { name: 'Menu', path: '/menu', Icon: MenuIcon },
   ];
 
   return (
     <nav className="h-16 w-screen">
-      <div className="border-muted-foreground/20 bg-background fixed bottom-0 z-50 flex h-16 w-screen border-t">
-        {navItems.map(({ name, path, Icon }) => (
-          <Link key={name} href={path} className="flex h-full flex-1 items-center justify-center">
-            <div
-              className={clsx(
-                'border-b-2 p-1',
-                pathname === path ? 'text-primary border-primary' : 'border-transparent',
-              )}
-            >
-              <Icon className="h-5 w-5" />
-            </div>
-          </Link>
-        ))}
+      <div className="border-border bg-background fixed bottom-0 z-50 flex h-16 w-screen border-t shadow-[0_-2px_8px_rgba(0,0,0,0.04)]">
+        {navItems.map(({ name, path, Icon }) => {
+          const isActive = pathname === path;
+          return (
+            <Link key={name} href={path} className="flex h-full flex-1 flex-col items-center justify-center gap-1">
+              <Icon
+                className={clsx('h-[21px] w-[21px] transition-colors', isActive ? 'text-primary' : 'text-muted-foreground')}
+                strokeWidth={isActive ? 2.3 : 1.8}
+              />
+              <span
+                className={clsx(
+                  'text-[10px] font-medium transition-colors',
+                  isActive ? 'text-primary' : 'text-muted-foreground',
+                )}
+              >
+                {name}
+              </span>
+            </Link>
+          );
+        })}
       </div>
     </nav>
   );
 }
+
