@@ -189,3 +189,12 @@ export async function deleteLink(linkId: number) {
     throw new Error(`failed to delete link: ${getExceptionMessage(error, true)}`);
   }
 }
+
+export async function getProfile() {
+  try {
+    const api = await buildApi();
+    return await api.getProfile();
+  } catch (error) {
+    throw new Error(`failed to get profile: ${getExceptionMessage(error, true)}`);
+  }
+}

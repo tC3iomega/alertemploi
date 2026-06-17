@@ -1,6 +1,6 @@
 'use client';
 
-import { ArchiveIcon, BanIcon, CheckCircleIcon, MenuIcon, PlusCircleIcon, SparklesIcon } from 'lucide-react';
+import { ArchiveIcon, CheckCircleIcon, HomeIcon, MenuIcon, PlusCircleIcon, SparklesIcon } from 'lucide-react';
 
 import clsx from 'clsx';
 import Link from 'next/link';
@@ -10,10 +10,10 @@ export function SmallNavbar() {
   const pathname = usePathname();
 
   const navItems = [
+    { name: 'Accueil', path: '/dashboard', Icon: HomeIcon },
     { name: 'Nouvelles', path: '/jobs/list/new', Icon: SparklesIcon },
     { name: 'Postulées', path: '/jobs/list/applied', Icon: CheckCircleIcon },
     { name: 'Archivées', path: '/jobs/list/archived', Icon: ArchiveIcon },
-    { name: 'Exclues', path: '/jobs/list/excluded_by_advanced_matching', Icon: BanIcon },
     { name: 'Alertes', path: '/links', Icon: PlusCircleIcon },
     { name: 'Menu', path: '/menu', Icon: MenuIcon },
   ];
