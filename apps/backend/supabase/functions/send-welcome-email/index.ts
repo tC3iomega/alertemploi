@@ -18,7 +18,7 @@ Deno.serve(async (req) => {
     const { env, supabaseAdminClient } = context;
 
     const body = await req.json();
-    const { email } = body;
+    const { email } = body.record ?? body;
 
     if (!email) throw new Error('Missing email');
 
@@ -34,7 +34,7 @@ Deno.serve(async (req) => {
       template: {
         type: EmailTemplateType.welcome,
         templateId: '351ndgw5w2rgzqx8',
-        payload: {},
+        payload: { name: email.split('@')[0] },
       },
     });
 

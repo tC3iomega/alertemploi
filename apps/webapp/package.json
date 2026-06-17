@@ -12,7 +12,8 @@
   },
   "dependencies": {
     "@alertemploi/core": "workspace:*",
-    "@alertemploi/ui": "workspace:*"
+    "@alertemploi/ui": "workspace:*",
+    "@vercel/analytics": "^2.0.1"
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4",

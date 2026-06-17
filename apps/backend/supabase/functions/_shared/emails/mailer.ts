@@ -64,6 +64,7 @@ export class MailersendMailer implements IMailer {
         .setFrom(sentFrom)
         .setTo(recipients)
         .setReplyTo(sentFrom)
+        .setSubject('Bienvenue sur Alertemploi')
         .setTemplateId(template.templateId) // Use the template ID (templateAlias)
         .setPersonalization(personalization);
 
