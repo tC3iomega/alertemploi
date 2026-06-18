@@ -72,7 +72,7 @@ export function DashboardClient({
 
   return (
     <div style={{ padding: "20px 16px 32px" }}>
-      <h1 style={{ fontSize: 22, fontWeight: 600, color: #1E293B, margin: 16px }}>
+      <h1 style={{ fontSize: 22, fontWeight: 600, color: '#1E293B', margin: '16px' }}>
         Tableau de bord
       </h1>
       <p style={{ fontSize: 14, color: '#64748B', marginBottom: 24 }}>
