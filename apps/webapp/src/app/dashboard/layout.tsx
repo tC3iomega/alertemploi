@@ -1,4 +1,5 @@
 import { SmallNavbar } from '../components/smallNavbar';
+import { AppHeader } from '../components/appHeader';
 export default function Layout({
   children,
 }: Readonly<{
@@ -7,7 +8,8 @@ export default function Layout({
   return (
     <>
       <section className="min-h-screen w-screen">
-        <div className="mx-auto max-w-5xl">{children}</div>
+        <div className="mx-auto max-w-5xl"><AppHeader />
+        {children}</div>
         <SmallNavbar />
       </section>
     </>

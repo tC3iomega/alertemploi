@@ -1,14 +1,13 @@
-import { AppHeader } from '../components/appHeader';
-import { SmallNavbar } from '../components/smallNavbar';
+import Link from 'next/link';
 
-// AppHeader moved to components/appHeader.tsx
+export function AppHeader() {
   return (
     <header style={{
       display: 'flex', alignItems: 'center', justifyContent: 'space-between',
       padding: '12px 20px', borderBottom: '0.5px solid #E2E8F0',
       background: '#F1EFE8', position: 'sticky', top: 0, zIndex: 50,
     }}>
-      <Link href="/jobs/list/new" style={{ textDecoration: 'none' }}>
+      <Link href="/dashboard" style={{ textDecoration: 'none' }}>
         <svg width="130" height="28" viewBox="0 0 130 28" xmlns="http://www.w3.org/2000/svg">
           <circle cx="12" cy="14" r="10" fill="none" stroke="#2563EB" strokeWidth="2"/>
           <circle cx="12" cy="14" r="3.5" fill="#2563EB"/>
@@ -23,15 +22,5 @@ import { SmallNavbar } from '../components/smallNavbar';
         textDecoration: 'none',
       }}>Passer Pro</Link>
     </header>
-  );
-}
-
-export default function Layout({ children }: Readonly<{ children: React.ReactNode }>) {
-  return (
-    <section className="min-h-screen w-screen">
-      <AppHeader />
-      <div className="mx-auto max-w-5xl">{children}</div>
-      <SmallNavbar />
-    </section>
   );
 }
