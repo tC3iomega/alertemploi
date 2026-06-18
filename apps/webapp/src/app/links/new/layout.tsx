@@ -7,7 +7,7 @@ export default function Layout({
   return (
     <>
       <section className="min-h-screen w-screen">
-        <div className="mx-auto max-w-5xl">{children}</div>
+        {children}
         <SmallNavbar />
       </section>
     </>
