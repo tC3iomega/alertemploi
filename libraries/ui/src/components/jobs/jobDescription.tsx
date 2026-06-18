@@ -24,10 +24,10 @@ export function JobDescription({ job }: JobDescriptionProps) {
     // Description failed to fetch
     <div className="mt-20 text-center">
       <p className="">
-        Looks like we have failed to fetch the job description and for that we
-        are sorry {":("}
+        La description de cette offre n'a pas pu être récupérée.
+        
       </p>
-      <p>You can read it directly on the job board though.</p>
+      <p>Vous pouvez la consulter directement sur le site du job board.</p>
 
       {/* Light mode svg */}
       <svg
