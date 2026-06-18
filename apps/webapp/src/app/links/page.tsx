@@ -19,7 +19,6 @@ export default async function LinksPage() {
 
   return (
     <>
-    <AppHeader />
     <div style={{ minHeight: '100vh', background: '#F1EFE8', fontFamily: 'Arial, Helvetica, sans-serif', paddingBottom: 80 }}>
 
       {/* Header */}
