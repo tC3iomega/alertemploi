@@ -60,7 +60,7 @@ async function handleSubmit(e: React.FormEvent) {
   }
 
   return (
-    <div className="flex flex-col h-screen bg-background text-foreground">
+    <div className="flex flex-col min-h-screen bg-background text-foreground">
       <div className="flex items-center gap-3 px-4 py-4 border-b border-border">
         <button onClick={() => router.back()} className="text-muted-foreground hover:text-foreground">
           ←
@@ -123,11 +123,11 @@ async function handleSubmit(e: React.FormEvent) {
           </div>
         )}
 
-        <div className="mt-auto">
+        <div className="mt-2 max-w-xs">
           <button
             type="submit"
             disabled={loading || !url}
-            className="w-full rounded-lg bg-primary text-primary-foreground py-3 font-medium text-sm disabled:opacity-50 disabled:cursor-not-allowed hover:opacity-90 transition-opacity"
+            className="w-full rounded-lg bg-primary text-primary-foreground py-2.5 font-medium text-sm disabled:opacity-50 disabled:cursor-not-allowed hover:opacity-90 transition-opacity"
           >
             {loading ? 'Création en cours…' : "Créer l'alerte"}
           </button>
