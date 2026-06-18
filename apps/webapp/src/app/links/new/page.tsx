@@ -62,9 +62,6 @@ async function handleSubmit(e: React.FormEvent) {
   return (
     <div className="flex flex-col min-h-screen bg-background text-foreground">
       <div className="flex items-center gap-3 px-4 py-4 border-b border-border">
-        <button onClick={() => router.back()} className="text-muted-foreground hover:text-foreground">
-          ←
-        </button>
         <h1 className="text-lg font-semibold">Nouvelle alerte emploi</h1>
       </div>
 
@@ -123,7 +120,7 @@ async function handleSubmit(e: React.FormEvent) {
           </div>
         )}
 
-        <div className="mt-2 max-w-xs">
+        <div className="mt-2">
           <button
             type="submit"
             disabled={loading || !url}
