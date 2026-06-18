@@ -60,12 +60,12 @@ async function handleSubmit(e: React.FormEvent) {
   }
 
   return (
-    <div className="flex flex-col min-h-screen bg-background text-foreground px-4 pt-6 max-w-lg mx-auto">
+    <div className="flex flex-col min-h-screen bg-background text-foreground">
       <div className="flex items-center gap-3 px-4 py-4 border-b border-border">
         <h1 className="text-lg font-semibold">Nouvelle alerte emploi</h1>
       </div>
 
-      <form onSubmit={handleSubmit} className="flex flex-col gap-6 p-4 flex-1">
+      <form onSubmit={handleSubmit} className="flex flex-col gap-6 p-4 flex-1 max-w-lg">
         <div className="flex flex-col gap-2">
           <label className="text-sm font-medium">URL de recherche</label>
           <input
