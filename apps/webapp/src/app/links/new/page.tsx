@@ -60,7 +60,7 @@ async function handleSubmit(e: React.FormEvent) {
   }
 
   return (
-    <div className="flex flex-col min-h-screen bg-background text-foreground">
+    <div className="flex flex-col min-h-screen bg-background text-foreground px-4 pt-6 max-w-lg mx-auto">
       <div className="flex items-center gap-3 px-4 py-4 border-b border-border">
         <h1 className="text-lg font-semibold">Nouvelle alerte emploi</h1>
       </div>
