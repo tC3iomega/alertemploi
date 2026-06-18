@@ -24,6 +24,7 @@ export default async function LinksPage() {
 
 
       <div style={{ padding: '20px 16px' }}>
+        <h1 className="m-4 text-2xl">Mes alertes</h1>
         {links.length === 0 ? (
           <div style={{ textAlign: 'center', padding: '48px 0' }}>
             <div style={{ fontSize: 40, marginBottom: 16 }}>🔔</div>
