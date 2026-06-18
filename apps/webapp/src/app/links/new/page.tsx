@@ -1,6 +1,7 @@
 'use client';
 
 import { createLink, listSites } from '@/app/actions';
+import { SmallNavbar } from '../../components/smallNavbar';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 
@@ -60,6 +61,7 @@ async function handleSubmit(e: React.FormEvent) {
   }
 
   return (
+    <>
     <div className="flex flex-col min-h-screen bg-background text-foreground items-center">
       <div className="flex items-center gap-3 px-4 py-4 border-b border-border max-w-lg mx-auto w-full">
         <h1 className="text-lg font-semibold">Nouvelle alerte emploi</h1>
@@ -131,5 +133,7 @@ async function handleSubmit(e: React.FormEvent) {
         </div>
       </form>
     </div>
+    <SmallNavbar />
+    </>
   );
 }

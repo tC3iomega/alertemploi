@@ -2,6 +2,7 @@ import { listLinks, listSites, deleteLink } from '@/app/actions';
 export const dynamic = 'force-dynamic';
 import { revalidatePath } from 'next/cache';
 import Link from 'next/link';
+import { SmallNavbar } from '../components/smallNavbar';
 
 export default async function LinksPage() {
   const [links, sites] = await Promise.all([listLinks(), listSites()]);
@@ -16,6 +17,7 @@ export default async function LinksPage() {
   }
 
   return (
+    <>
     <div style={{ minHeight: '100vh', background: '#F1EFE8', fontFamily: 'Arial, Helvetica, sans-serif', paddingBottom: 80 }}>
 
       {/* Header */}
@@ -109,6 +111,8 @@ export default async function LinksPage() {
         )}
       </div>
     </div>
+    <SmallNavbar />
+    </>
   );
 }
 
