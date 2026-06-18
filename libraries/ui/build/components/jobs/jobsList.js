@@ -91,7 +91,7 @@ function JobsList({ jobs, selectedJobId, hasMore, parentContainerId, onLoadMore,
         return null;
     }
     return ((0, jsx_runtime_1.jsxs)(jsx_runtime_1.Fragment, { children: [(0, jsx_runtime_1.jsx)(react_infinite_scroll_component_1.default, { dataLength: jobs.length, next: onLoadMore, hasMore: hasMore, loader: (0, jsx_runtime_1.jsx)(icons_1.Icons.spinner2, {}), scrollThreshold: 0.8, scrollableTarget: parentContainerId, children: (0, jsx_runtime_1.jsx)("ul", { children: jobs.map((job, index) => {
-                        return ((0, jsx_runtime_1.jsxs)("li", { className: (0, utils_1.cn)("rounded-lg px-5 pt-6", selectedJobId === job.id && "bg-muted"), ref: itemRefs[index], onClick: () => onSelect(job), children: [(0, jsx_runtime_1.jsx)(jobCard_1.JobCard, { job: job, siteMap: siteMap, siteLogos: siteLogos, onArchive: onArchive, onDelete: onDelete }), (0, jsx_runtime_1.jsx)("hr", { className: "mt-6 w-full border-muted" })] }, job.id));
+                        return ((0, jsx_runtime_1.jsxs)("li", { className: (0, utils_1.cn)("rounded-lg px-5 pt-6 cursor-pointer", selectedJobId === job.id && "bg-muted"), ref: itemRefs[index], onClick: () => onSelect(job), children: [(0, jsx_runtime_1.jsx)(jobCard_1.JobCard, { job: job, siteMap: siteMap, siteLogos: siteLogos, onArchive: onArchive, onDelete: onDelete }), (0, jsx_runtime_1.jsx)("hr", { className: "mt-6 w-full border-muted" })] }, job.id));
                     }) }) }), jobToDelete && ((0, jsx_runtime_1.jsx)(deleteJobDialog_1.DeleteJobDialog, { isOpen: !!jobToDelete, job: jobToDelete, onClose: () => setJobToDelete(undefined), onDelete: onDelete }))] }));
 }
 //# sourceMappingURL=jobsList.js.map

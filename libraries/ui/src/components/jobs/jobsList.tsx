@@ -136,7 +136,7 @@ export function JobsList({
               <li
                 key={job.id}
                 className={cn(
-                  "rounded-lg px-5 pt-6",
+                  "rounded-lg px-5 pt-6 cursor-pointer",
                   selectedJobId === job.id && "bg-muted"
                 )}
                 ref={itemRefs[index]}
