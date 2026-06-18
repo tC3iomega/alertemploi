@@ -71,7 +71,7 @@ export function DashboardClient({
   const isPro = profile?.plan === 'pro';
 
   return (
-    <div style={{ padding: '20px 16px 32px', maxWidth: 720, margin: '0 auto' }}>
+    <div style={{ padding: "20px 16px 32px" }}>
       <h1 style={{ fontSize: 24, fontWeight: 700, color: '#1E293B', marginBottom: 4, letterSpacing: -0.5 }}>
         Tableau de bord
       </h1>

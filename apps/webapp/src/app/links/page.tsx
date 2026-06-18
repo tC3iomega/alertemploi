@@ -21,15 +21,7 @@ export default async function LinksPage() {
     <>
     <div style={{ minHeight: '100vh', background: '#F1EFE8', fontFamily: 'Arial, Helvetica, sans-serif', paddingBottom: 80 }}>
 
-      {/* Header */}
-      <div style={{
-        display: 'flex', alignItems: 'center', gap: 12,
-        padding: '14px 20px', borderBottom: '0.5px solid #E2E8F0',
-        background: '#F1EFE8', position: 'sticky', top: 0, zIndex: 50,
-      }}>
-        <Link href="/jobs/list/new" style={{ color: '#64748B', textDecoration: 'none', fontSize: 18 }}>←</Link>
-        <h1 style={{ fontSize: 17, fontWeight: 600, color: '#1E293B', margin: 0 }}>Mes alertes</h1>
-      </div>
+
 
       <div style={{ padding: '20px 16px' }}>
         {links.length === 0 ? (
