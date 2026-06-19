@@ -5,18 +5,26 @@ export type EmailTemplateBase = {
   type: EmailTemplateType;
   templateId: string; // This will store the template ID
 };
-
 export enum EmailTemplateType {
   welcome = 'welcome',
-  searchParsingFailure = 'searchParsingFailure',
+  trialReminder = 'trialReminder',
   newJobAlert = 'newJobAlert',
 }
-
-export type SearchParsingFailureEmailTemplate = EmailTemplateBase & {
-  type: EmailTemplateType.searchParsingFailure;
-  templateId: 'ynrw7gy813j42k8e';
+export type TrialReminderEmailTemplate = EmailTemplateBase & {
+  type: EmailTemplateType.trialReminder;
+  templateId: 'yzkq3403x034d796';
   payload: {
-    links: Array<{ title: string; site_name: string }>;
+    badge_text: string;
+    title: string;
+    subtitle: string;
+    intro_text: string;
+    show_benefits: boolean;
+    show_warning: boolean;
+    cta_text: string;
+    hero_bg: string;
+    hero_border: string;
+    badge_bg: string;
+    badge_color: string;
   };
 };
 export type NewJobAlertEmailTemplate = EmailTemplateBase & {
@@ -34,11 +42,9 @@ export type NewJobAlertEmailTemplate = EmailTemplateBase & {
     }>;
   };
 };
-
 export type WelcomeEmailTemplate = EmailTemplateBase & {
   type: EmailTemplateType.welcome;
   templateId: '351ndgw5w2rgzqx8';
   payload: Record<string, never>;
 };
-
-export type EmailTemplate = SearchParsingFailureEmailTemplate | NewJobAlertEmailTemplate | WelcomeEmailTemplate;
+export type EmailTemplate = TrialReminderEmailTemplate | NewJobAlertEmailTemplate | WelcomeEmailTemplate;

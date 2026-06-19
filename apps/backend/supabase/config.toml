@@ -166,3 +166,8 @@ verify_jwt = false
 
 [functions.handle-profile-change-webhook]
 verify_jwt = false
+[functions.cron-scan]
+verify_jwt = false
+
+[functions.send-trial-reminder]
+verify_jwt = false
