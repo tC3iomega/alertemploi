@@ -81,7 +81,7 @@ const FAQS = [
   },
   {
     q: "Faut-il une carte bancaire pour l'essai gratuit ?",
-    a: "Une carte bancaire est demandée à l'inscription au plan Pro. Vous ne serez pas débité pendant les 14 jours d'essai, et vous pouvez annuler à tout moment.",
+    a: "Aucune carte bancaire n'est demandée à l'inscription. Profitez de 7 jours d'essai gratuit, sans engagement.",
   },
   {
     q: "Quels job boards sont supportés ?",
@@ -154,7 +154,7 @@ export default function LandingPage() {
           fontSize: 12, fontWeight: 500, padding: '5px 16px', borderRadius: 20,
           border: '1px solid #FCD34D', marginBottom: 28,
         }}>
-          Essai gratuit 14 jours
+          Essai gratuit 7 jours — sans CB
         </div>
 
         <h1 className={styles.heroTitle}>
@@ -313,56 +313,77 @@ export default function LandingPage() {
             fontSize: 11, fontWeight: 500, padding: '3px 10px', borderRadius: 10,
           }}>-34%</span>
         </div>
-
         <div className={styles.pricingGrid}>
-          <div style={{ border: '0.5px solid #E2E8F0', borderRadius: 14, padding: 28 }}>
+          <div style={{ border: '0.5px solid #E2E8F0', borderRadius: 14, padding: 24 }}>
             <div style={{ fontSize: 13, fontWeight: 500, color: '#64748B', marginBottom: 10 }}>Gratuit</div>
-            <div style={{ fontSize: 36, fontWeight: 700, marginBottom: 6 }}>
-              0€ <span style={{ fontSize: 14, fontWeight: 400, color: '#64748B' }}>/&nbsp;mois</span>
+            <div style={{ fontSize: 32, fontWeight: 700, marginBottom: 6 }}>
+              0€ <span style={{ fontSize: 13, fontWeight: 400, color: '#64748B' }}>/&nbsp;mois</span>
             </div>
-            <div style={{ fontSize: 12, color: '#64748B', marginBottom: 20, lineHeight: 1.5 }}>
+            <div style={{ fontSize: 12, color: '#64748B', marginBottom: 18, lineHeight: 1.5 }}>
               Pour tester et commencer votre recherche.
             </div>
             {['2 alertes', 'Scan toutes les heures', '3 job boards'].map((f) => (
-              <div key={f} style={{ fontSize: 13, color: '#64748B', padding: '6px 0', borderBottom: '0.5px solid #F1F5F9', display: 'flex', gap: 8 }}>
+              <div key={f} style={{ fontSize: 12.5, color: '#64748B', padding: '6px 0', borderBottom: '0.5px solid #F1F5F9', display: 'flex', gap: 8 }}>
                 <span style={{ color: '#2563EB', fontWeight: 700 }}>✓</span> {f}
               </div>
             ))}
             <Link href="/auth/register" style={{
-              display: 'block', textAlign: 'center', marginTop: 22,
-              padding: '11px 0', borderRadius: 9, fontSize: 13, fontWeight: 500,
+              display: 'block', textAlign: 'center', marginTop: 20,
+              padding: '10px 0', borderRadius: 9, fontSize: 13, fontWeight: 500,
               border: '1px solid #E2E8F0', color: '#475569', textDecoration: 'none',
             }}>Commencer gratuitement</Link>
           </div>
-
-          <div style={{ border: '2px solid #2563EB', borderRadius: 14, padding: 28 }}>
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 10 }}>
-              <div style={{ fontSize: 13, fontWeight: 500, color: '#64748B' }}>Pro</div>
-              <span style={{
-                background: '#DBEAFE', color: '#1E40AF',
-                fontSize: 10, fontWeight: 500, padding: '3px 9px', borderRadius: 10,
-              }}>Populaire</span>
-            </div>
-            <div style={{ fontSize: 36, fontWeight: 700, marginBottom: 6 }}>
-              {isAnnual ? '79€' : '9,99€'}{' '}
-              <span style={{ fontSize: 14, fontWeight: 400, color: '#64748B' }}>
+          <div style={{ border: '0.5px solid #E2E8F0', borderRadius: 14, padding: 24 }}>
+            <div style={{ fontSize: 13, fontWeight: 500, color: '#64748B', marginBottom: 10 }}>Basic</div>
+            <div style={{ fontSize: 32, fontWeight: 700, marginBottom: 6 }}>
+              {isAnnual ? '41,90€' : '4,99€'}{' '}
+              <span style={{ fontSize: 13, fontWeight: 400, color: '#64748B' }}>
                 /{isAnnual ? ' an' : ' mois'}
               </span>
             </div>
-            <div style={{ fontSize: 12, color: '#64748B', marginBottom: 20, lineHeight: 1.5 }}>
-              {isAnnual ? 'Soit 6,58€/mois — 2 mois offerts.' : 'Essai gratuit 14 jours inclus.'}
+            <div style={{ fontSize: 12, color: '#64748B', marginBottom: 18, lineHeight: 1.5 }}>
+              {isAnnual ? 'Soit 3,49€/mois.' : 'Essai gratuit 7 jours — sans CB.'}
             </div>
-            {['Alertes illimitées', 'Tous les job boards', 'Alertes email', 'Essai 14 jours gratuit'].map((f) => (
-              <div key={f} style={{ fontSize: 13, color: '#64748B', padding: '6px 0', borderBottom: '0.5px solid #F1F5F9', display: 'flex', gap: 8 }}>
+            {['Alertes illimitées', 'Tous les job boards', 'Scan toutes les 30 min', 'Alertes email'].map((f) => (
+              <div key={f} style={{ fontSize: 12.5, color: '#64748B', padding: '6px 0', borderBottom: '0.5px solid #F1F5F9', display: 'flex', gap: 8 }}>
                 <span style={{ color: '#2563EB', fontWeight: 700 }}>✓</span> {f}
               </div>
             ))}
             <Link href="/upgrade" style={{
-              display: 'block', textAlign: 'center', marginTop: 22,
-              padding: '11px 0', borderRadius: 9, fontSize: 13, fontWeight: 600,
+              display: 'block', textAlign: 'center', marginTop: 20,
+              padding: '10px 0', borderRadius: 9, fontSize: 13, fontWeight: 600,
+              border: '1.5px solid #2563EB', color: '#2563EB', textDecoration: 'none',
+            }}>Démarrer l'essai gratuit</Link>
+          </div>
+          <div style={{ border: '2px solid #2563EB', borderRadius: 14, padding: 24, position: 'relative' }}>
+            <div style={{
+              position: 'absolute', top: -12, left: '50%', transform: 'translateX(-50%)',
+              background: '#2563EB', color: 'white',
+              fontSize: 10, fontWeight: 600, padding: '3px 12px', borderRadius: 20,
+              whiteSpace: 'nowrap',
+            }}>Populaire</div>
+            <div style={{ fontSize: 13, fontWeight: 500, color: '#64748B', marginBottom: 10 }}>Pro</div>
+            <div style={{ fontSize: 32, fontWeight: 700, marginBottom: 6 }}>
+              {isAnnual ? '125,90€' : '14,99€'}{' '}
+              <span style={{ fontSize: 13, fontWeight: 400, color: '#64748B' }}>
+                /{isAnnual ? ' an' : ' mois'}
+              </span>
+            </div>
+            <div style={{ fontSize: 12, color: '#64748B', marginBottom: 18, lineHeight: 1.5 }}>
+              {isAnnual ? 'Soit 10,49€/mois.' : 'Essai gratuit 7 jours — sans CB.'}
+            </div>
+            {['Tout Basic, plus :', 'Blacklist d\u2019entreprises', 'Filtres avancés', 'Support prioritaire'].map((f) => (
+              <div key={f} style={{ fontSize: 12.5, color: '#64748B', padding: '6px 0', borderBottom: '0.5px solid #F1F5F9', display: 'flex', gap: 8 }}>
+                <span style={{ color: '#2563EB', fontWeight: 700 }}>✓</span> {f}
+              </div>
+            ))}
+            <Link href="/upgrade" style={{
+              display: 'block', textAlign: 'center', marginTop: 20,
+              padding: '10px 0', borderRadius: 9, fontSize: 13, fontWeight: 600,
               background: '#2563EB', color: 'white', textDecoration: 'none',
             }}>Démarrer l'essai gratuit</Link>
           </div>
+         </div>
         </div>
       </section>
 
