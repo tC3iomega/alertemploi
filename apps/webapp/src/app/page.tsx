@@ -383,7 +383,6 @@ export default function LandingPage() {
               background: '#2563EB', color: 'white', textDecoration: 'none',
             }}>Démarrer l'essai gratuit</Link>
           </div>
-         </div>
         </div>
       </section>
 
