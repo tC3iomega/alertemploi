@@ -59,9 +59,9 @@
 
 .pricingGrid {
   display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
-  gap: 20px;
-  max-width: 880px;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+  max-width: 600px;
   margin: 0 auto;
 }
 

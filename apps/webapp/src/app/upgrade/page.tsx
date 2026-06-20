@@ -138,43 +138,7 @@ export default function UpgradePage() {
         </div>
 
         {/* Plans */}
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 18, marginBottom: 28 }}>
-
-          {/* Free */}
-          <div style={{
-            background: 'white', border: '0.5px solid #E2E8F0',
-            borderRadius: 14, padding: 24,
-          }}>
-            <div style={{ marginBottom: 18 }}>
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 10 }}>
-                <span style={{ fontSize: 13, fontWeight: 500, color: '#64748B' }}>Gratuit</span>
-                <span style={{
-                  background: '#F1F5F9', color: '#64748B',
-                  fontSize: 10, fontWeight: 500, padding: '3px 9px', borderRadius: 10,
-                }}>Actuel</span>
-              </div>
-              <div style={{ fontSize: 30, fontWeight: 700, color: '#1E293B' }}>
-                0€ <span style={{ fontSize: 13, fontWeight: 400, color: '#64748B' }}>/&nbsp;mois</span>
-              </div>
-            </div>
-            {FREE_FEATURES.map((f) => (
-              <div key={f.label} style={{
-                fontSize: 12.5, color: f.included ? '#374151' : '#CBD5E1',
-                padding: '6px 0', borderBottom: '0.5px solid #F1F5F9',
-                display: 'flex', gap: 8, alignItems: 'center',
-              }}>
-                <span style={{ color: f.included ? '#2563EB' : '#CBD5E1', fontWeight: 700 }}>
-                  {f.included ? '✓' : '✗'}
-                </span>
-                {f.label}
-              </div>
-            ))}
-            <div style={{
-              display: 'block', textAlign: 'center', marginTop: 20,
-              padding: '10px 0', borderRadius: 9, fontSize: 13, fontWeight: 500,
-              border: '1px solid #E2E8F0', color: '#94A3B8',
-            }}>Plan actuel</div>
-          </div>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: 18, marginBottom: 28 }}>
 
           {/* Basic */}
           <div style={{

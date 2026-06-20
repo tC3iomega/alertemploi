@@ -314,25 +314,6 @@ export default function LandingPage() {
           }}>-34%</span>
         </div>
         <div className={styles.pricingGrid}>
-          <div style={{ border: '0.5px solid #E2E8F0', borderRadius: 14, padding: 24 }}>
-            <div style={{ fontSize: 13, fontWeight: 500, color: '#64748B', marginBottom: 10 }}>Gratuit</div>
-            <div style={{ fontSize: 32, fontWeight: 700, marginBottom: 6 }}>
-              0€ <span style={{ fontSize: 13, fontWeight: 400, color: '#64748B' }}>/&nbsp;mois</span>
-            </div>
-            <div style={{ fontSize: 12, color: '#64748B', marginBottom: 18, lineHeight: 1.5 }}>
-              Pour tester et commencer votre recherche.
-            </div>
-            {['2 alertes', 'Scan toutes les heures', '3 job boards'].map((f) => (
-              <div key={f} style={{ fontSize: 12.5, color: '#64748B', padding: '6px 0', borderBottom: '0.5px solid #F1F5F9', display: 'flex', gap: 8 }}>
-                <span style={{ color: '#2563EB', fontWeight: 700 }}>✓</span> {f}
-              </div>
-            ))}
-            <Link href="/auth/register" style={{
-              display: 'block', textAlign: 'center', marginTop: 20,
-              padding: '10px 0', borderRadius: 9, fontSize: 13, fontWeight: 500,
-              border: '1px solid #E2E8F0', color: '#475569', textDecoration: 'none',
-            }}>Commencer gratuitement</Link>
-          </div>
           <div style={{ border: '2px solid #2563EB', borderRadius: 14, padding: 24, position: 'relative' }}>
             <div style={{
               position: 'absolute', top: -12, left: '50%', transform: 'translateX(-50%)',
