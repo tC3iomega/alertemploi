@@ -67,8 +67,12 @@ export function DashboardClient({
 }) {
   const activeLinks = links.filter((l) => l.is_active);
   const trialDays = profile ? daysUntil(profile.trial_ends_at) : null;
-  const isOnTrial = profile?.plan === 'free' && trialDays !== null && trialDays > 0;
-  const isPro = profile?.plan === 'pro';
+  const hasActiveSubscription = profile?.subscription_ends_at
+    ? new Date(profile.subscription_ends_at) > new Date()
+    : false;
+  const isOnTrial = trialDays !== null && trialDays > 0 && !hasActiveSubscription;
+  const trialExpired = trialDays !== null && trialDays <= 0 && !hasActiveSubscription;
+  const isPro = profile?.plan === 'pro' && hasActiveSubscription;
 
   return (
     <div style={{ padding: "20px 16px 32px" }}>
@@ -95,6 +99,25 @@ export function DashboardClient({
             whiteSpace: 'nowrap',
           }}>
             Voir les plans
+          </Link>
+        </div>
+      )}
+
+      {trialExpired && (
+        <div style={{
+          display: 'flex', alignItems: 'center', gap: 10,
+          background: '#FEF2F2', border: '1px solid #FECACA',
+          borderRadius: 10, padding: '12px 16px', marginBottom: 20,
+        }}>
+          <ClockIcon />
+          <span style={{ fontSize: 13, color: '#B91C1C', flex: 1 }}>
+            <strong>Votre essai gratuit est termine.</strong> Passez a l'abonnement pour continuer.
+          </span>
+          <Link href="/upgrade" style={{
+            fontSize: 12, fontWeight: 600, color: 'white', textDecoration: 'none',
+            whiteSpace: 'nowrap', background: '#DC2626', padding: '6px 12px', borderRadius: 7,
+          }}>
+            S'abonner
           </Link>
         </div>
       )}
