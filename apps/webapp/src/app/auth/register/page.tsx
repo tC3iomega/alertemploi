@@ -118,7 +118,7 @@ export default function RegisterPage() {
           fontSize: 12, fontWeight: 500, padding: '4px 12px', borderRadius: 20,
           border: '1px solid #FCD34D', marginBottom: 16,
         }}>
-          Essai gratuit 14 jours
+          Essai gratuit 7 jours — sans CB
         </div>
 
         <h1 style={{ fontSize: 22, fontWeight: 700, color: '#1E293B', marginBottom: 6, letterSpacing: -0.5 }}>
