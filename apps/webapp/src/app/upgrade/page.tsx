@@ -178,9 +178,15 @@ export default function UpgradePage() {
 
           {/* Basic */}
           <div style={{
-            background: 'white', border: '0.5px solid #E2E8F0',
-            borderRadius: 14, padding: 24,
+            background: 'white', border: '2px solid #2563EB',
+            borderRadius: 14, padding: 24, position: 'relative',
           }}>
+            <div style={{
+              position: 'absolute', top: -13, left: '50%', transform: 'translateX(-50%)',
+              background: '#2563EB', color: 'white',
+              fontSize: 11, fontWeight: 600, padding: '4px 14px', borderRadius: 20,
+              whiteSpace: 'nowrap',
+            }}>Recommandé</div>
             <div style={{ marginBottom: 18 }}>
               <div style={{ fontSize: 13, fontWeight: 500, color: '#64748B', marginBottom: 10 }}>Basic</div>
               <div style={{ fontSize: 30, fontWeight: 700, color: '#1E293B' }}>
@@ -222,15 +228,9 @@ export default function UpgradePage() {
 
           {/* Pro */}
           <div style={{
-            background: 'white', border: '2px solid #2563EB',
-            borderRadius: 14, padding: 24, position: 'relative',
+            background: 'white', border: '0.5px solid #E2E8F0',
+            borderRadius: 14, padding: 24,
           }}>
-            <div style={{
-              position: 'absolute', top: -13, left: '50%', transform: 'translateX(-50%)',
-              background: '#2563EB', color: 'white',
-              fontSize: 11, fontWeight: 600, padding: '4px 14px', borderRadius: 20,
-              whiteSpace: 'nowrap',
-            }}>Recommandé</div>
             <div style={{ marginBottom: 18 }}>
               <div style={{ fontSize: 13, fontWeight: 500, color: '#64748B', marginBottom: 10 }}>Pro</div>
               <div style={{ fontSize: 30, fontWeight: 700, color: '#1E293B' }}>

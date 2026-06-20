@@ -333,7 +333,13 @@ export default function LandingPage() {
               border: '1px solid #E2E8F0', color: '#475569', textDecoration: 'none',
             }}>Commencer gratuitement</Link>
           </div>
-          <div style={{ border: '0.5px solid #E2E8F0', borderRadius: 14, padding: 24 }}>
+          <div style={{ border: '2px solid #2563EB', borderRadius: 14, padding: 24, position: 'relative' }}>
+            <div style={{
+              position: 'absolute', top: -12, left: '50%', transform: 'translateX(-50%)',
+              background: '#2563EB', color: 'white',
+              fontSize: 10, fontWeight: 600, padding: '3px 12px', borderRadius: 20,
+              whiteSpace: 'nowrap',
+            }}>Populaire</div>
             <div style={{ fontSize: 13, fontWeight: 500, color: '#64748B', marginBottom: 10 }}>Basic</div>
             <div style={{ fontSize: 32, fontWeight: 700, marginBottom: 6 }}>
               {isAnnual ? '41,90€' : '4,99€'}{' '}
@@ -355,13 +361,7 @@ export default function LandingPage() {
               border: '1.5px solid #2563EB', color: '#2563EB', textDecoration: 'none',
             }}>Démarrer l'essai gratuit</Link>
           </div>
-          <div style={{ border: '2px solid #2563EB', borderRadius: 14, padding: 24, position: 'relative' }}>
-            <div style={{
-              position: 'absolute', top: -12, left: '50%', transform: 'translateX(-50%)',
-              background: '#2563EB', color: 'white',
-              fontSize: 10, fontWeight: 600, padding: '3px 12px', borderRadius: 20,
-              whiteSpace: 'nowrap',
-            }}>Populaire</div>
+          <div style={{ border: '0.5px solid #E2E8F0', borderRadius: 14, padding: 24 }}>
             <div style={{ fontSize: 13, fontWeight: 500, color: '#64748B', marginBottom: 10 }}>Pro</div>
             <div style={{ fontSize: 32, fontWeight: 700, marginBottom: 6 }}>
               {isAnnual ? '125,90€' : '14,99€'}{' '}
