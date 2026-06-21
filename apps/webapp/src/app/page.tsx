@@ -1,8 +1,9 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import styles from './page.module.css';
+import { createClient } from '@/lib/supabase/client';
 
 const JOB_BOARDS = ['France Travail', 'APEC', 'Cadremploi', 'HelloWork', 'Welcome to the Jungle'];
 
@@ -121,6 +122,14 @@ function Logo({ size = 'md', theme = 'light' }: { size?: 'sm' | 'md'; theme?: 'l
 export default function LandingPage() {
   const [isAnnual, setIsAnnual] = useState(false);
   const [openFaq, setOpenFaq] = useState<number | null>(null);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+  useEffect(() => {
+    const supabase = createClient();
+    supabase.auth.getUser().then(({ data }) => {
+      setIsLoggedIn(!!data.user);
+    });
+  }, []);
 
   return (
     <div style={{ fontFamily: 'Arial, Helvetica, sans-serif', color: '#1E293B', background: '#F1EFE8', overflowX: 'hidden' }}>
@@ -134,16 +143,26 @@ export default function LandingPage() {
           <a href="#features" className={styles.navLink} style={{ fontSize: 14, color: '#64748B', textDecoration: 'none' }}>Fonctionnalités</a>
           <a href="#pricing" className={styles.navLink} style={{ fontSize: 14, color: '#64748B', textDecoration: 'none' }}>Tarifs</a>
           <a href="#faq" className={styles.navLink} style={{ fontSize: 14, color: '#64748B', textDecoration: 'none' }}>FAQ</a>
-          <Link href="/auth/login" style={{
-            fontSize: 14, fontWeight: 500, color: '#2563EB',
-            padding: '6px 10px', borderRadius: 8, border: '1.5px solid #2563EB',
-            textDecoration: 'none', background: 'transparent', whiteSpace: 'nowrap',
-          }} className={styles.navBtn}>Se connecter</Link>
-          <Link href="/auth/register" style={{
-            fontSize: 14, fontWeight: 500, color: 'white',
-            padding: '6px 10px', borderRadius: 8, background: '#2563EB',
-            textDecoration: 'none', whiteSpace: 'nowrap',
-          }} className={styles.navBtn}>Commencer</Link>
+          {isLoggedIn ? (
+            <Link href="/dashboard" style={{
+              fontSize: 14, fontWeight: 500, color: 'white',
+              padding: '6px 10px', borderRadius: 8, background: '#2563EB',
+              textDecoration: 'none', whiteSpace: 'nowrap',
+            }} className={styles.navBtn}>Accéder au dashboard</Link>
+          ) : (
+            <>
+              <Link href="/auth/login" style={{
+                fontSize: 14, fontWeight: 500, color: '#2563EB',
+                padding: '6px 10px', borderRadius: 8, border: '1.5px solid #2563EB',
+                textDecoration: 'none', background: 'transparent', whiteSpace: 'nowrap',
+              }} className={styles.navBtn}>Se connecter</Link>
+              <Link href="/auth/register" style={{
+                fontSize: 14, fontWeight: 500, color: 'white',
+                padding: '6px 10px', borderRadius: 8, background: '#2563EB',
+                textDecoration: 'none', whiteSpace: 'nowrap',
+              }} className={styles.navBtn}>Commencer</Link>
+            </>
+          )}
         </div>
       </nav>
 
