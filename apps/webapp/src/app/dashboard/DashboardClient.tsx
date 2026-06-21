@@ -1,7 +1,9 @@
 'use client';
 
+import { useState } from 'react';
 import Link from 'next/link';
 import { Job, Link as LinkType, Profile } from '@alertemploi/core';
+import { createPortalSession } from '../actions';
 
 function daysUntil(dateStr?: string): number | null {
   if (!dateStr) return null;
@@ -72,6 +74,18 @@ export function DashboardClient({
     : false;
   const isOnTrial = trialDays !== null && trialDays > 0 && !hasActiveSubscription;
   const trialExpired = trialDays !== null && trialDays <= 0 && !hasActiveSubscription;
+  const [portalLoading, setPortalLoading] = useState(false);
+
+  async function handleManageBilling() {
+    setPortalLoading(true);
+    try {
+      const { url } = await createPortalSession();
+      window.location.href = url;
+    } catch (e) {
+      setPortalLoading(false);
+      alert('Impossible d\'ouvrir le portail de facturation. Veuillez réessayer.');
+    }
+  }
   const isPro = profile?.plan === 'pro' && hasActiveSubscription;
 
   return (
@@ -120,6 +134,22 @@ export function DashboardClient({
             S'abonner
           </Link>
         </div>
+      )}
+
+      {profile?.stripe_customer_id && (
+        <button
+          onClick={handleManageBilling}
+          disabled={portalLoading}
+          style={{
+            display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6,
+            width: '100%', fontSize: 13, fontWeight: 500, color: '#2563EB',
+            background: 'white', border: '1px solid #E2E8F0', borderRadius: 10,
+            padding: '11px 0', marginBottom: 20, cursor: portalLoading ? 'not-allowed' : 'pointer',
+            opacity: portalLoading ? 0.6 : 1,
+          }}
+        >
+          {portalLoading ? 'Chargement...' : 'Gérer mon abonnement et mes moyens de paiement'}
+        </button>
       )}
 
       {/* Stats row */}

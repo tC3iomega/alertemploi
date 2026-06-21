@@ -199,3 +199,26 @@ export async function getProfile() {
     throw new Error(`failed to get profile: ${getExceptionMessage(error, true)}`);
   }
 }
+
+export async function createPortalSession() {
+  const api = await buildApi();
+  const profile = await api.getProfile();
+  if (!profile?.stripe_customer_id) {
+    throw new Error('No Stripe customer found for this account');
+  }
+
+  const res = await fetch('https://api.stripe.com/v1/billing_portal/sessions', {
+    method: 'POST',
+    headers: {
+      'Authorization': `Bearer ${process.env.STRIPE_SECRET_KEY}`,
+      'Content-Type': 'application/x-www-form-urlencoded',
+    },
+    body: new URLSearchParams({
+      'customer': profile.stripe_customer_id,
+      'return_url': `${process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3002'}/dashboard`,
+    }).toString(),
+  });
+  const session = await res.json();
+  if (session.error) throw new Error(session.error.message);
+  return { url: session.url };
+}

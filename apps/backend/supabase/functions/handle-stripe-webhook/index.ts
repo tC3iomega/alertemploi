@@ -6,6 +6,19 @@ import Stripe from 'npm:stripe';
 import { CORS_HEADERS } from '../_shared/cors.ts';
 import { createLoggerWithMeta } from '../_shared/logger.ts';
 
+// Map Stripe Price IDs to our subscription tiers
+const PRICE_ID_TO_TIER: Record<string, SubscriptionTier> = {
+  price_1Tk1X4V059EuUi4mpZaDiqwt: 'basic', // basic monthly
+  price_1Tk1X4V059EuUi4mwAvqhX6z: 'basic', // basic yearly
+  price_1Tk1XSV059EuUi4mcBBeAFBU: 'pro', // pro monthly
+  price_1Tk1XjV059EuUi4mCPRLTUmV: 'pro', // pro yearly
+};
+
+function getTierFromSubscription(subscription: Stripe.Subscription): SubscriptionTier {
+  const priceId = subscription.items.data[0]?.price?.id;
+  return (priceId && PRICE_ID_TO_TIER[priceId]) ?? 'basic';
+}
+
 Deno.serve(async (req) => {
   if (req.method === 'OPTIONS') {
     return new Response('ok', { headers: CORS_HEADERS });
@@ -18,20 +31,17 @@ Deno.serve(async (req) => {
     const requestId = crypto.randomUUID();
     logger.addMeta('request_id', requestId);
 
-    // init supabase client
     const supabaseClient = createClient<DbSchema>(
       Deno.env.get('SUPABASE_URL') ?? '',
       Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') ?? '',
     );
 
-    // init stripe client
     const stripeSecretKey = Deno.env.get('STRIPE_SECRET_KEY');
     if (!stripeSecretKey) {
       throw new Error('Missing STRIPE_SECRET_KEY environment variable');
     }
     const stripe = new Stripe(stripeSecretKey);
 
-    // handle stripe webhook event
     const signature = req.headers.get('Stripe-Signature');
     if (!signature) {
       throw new Error('Missing Stripe-Signature header');
@@ -44,8 +54,10 @@ Deno.serve(async (req) => {
       undefined,
     );
 
+    logger.info(`received stripe event: ${event.type}`);
+
+    // ---- checkout.session.completed / customer.subscription.created ----
     if (event.type === 'customer.subscription.created' || event.type === 'checkout.session.completed') {
-      // Pour subscription.created, on récupère le customer directement
       let customerEmail: string | null = null;
       let customerId: string | null = null;
       let subscriptionId: string | null = null;
@@ -65,113 +77,100 @@ Deno.serve(async (req) => {
 
       if (customerEmail && customerId && subscriptionId) {
         const subscription = await stripe.subscriptions.retrieve(subscriptionId);
+        const tier = getTierFromSubscription(subscription);
+
         const { data, error: getUserIdError } = await supabaseClient.rpc('get_user_id_by_email', {
           email: customerEmail.toLowerCase(),
         });
         if (getUserIdError) throw getUserIdError;
+        // deno-lint-ignore no-explicit-any
         const userId = (data as unknown as any)?.[0]?.id;
         if (!userId) throw new Error(`No user found for email ${customerEmail}`);
 
-        const trialEnd = subscription.trial_end
-          ? new Date(subscription.trial_end * 1000)
-          : new Date(subscription.current_period_end * 1000);
+        const periodEnd = new Date(subscription.current_period_end * 1000);
 
         const { error: updateProfileError } = await supabaseClient
           .from('profiles')
           .update({
             stripe_customer_id: customerId,
             stripe_subscription_id: subscriptionId,
-            subscription_ends_at: trialEnd,
-            plan: 'pro',
+            subscription_ends_at: periodEnd,
+            plan: tier,
             trial_ends_at: subscription.trial_end ? new Date(subscription.trial_end * 1000) : null,
           })
           .eq('user_id', userId);
         if (updateProfileError) throw updateProfileError;
-        logger.info(`upgraded user ${customerEmail} to pro`);
+        logger.info(`upgraded user ${customerEmail} to ${tier}`);
       }
     }
 
-    if (event.type === 'DISABLED_checkout.session.completed') {
-      const session = event.data.object;
-      if (session.mode === 'subscription' && session.customer_email) {
-        const subscription = await stripe.subscriptions.retrieve(session.subscription as string);
-        const { data, error: getUserIdError } = await supabaseClient.rpc('get_user_id_by_email', {
-          email: session.customer_email.toLowerCase(),
-        });
-        if (getUserIdError) throw getUserIdError;
-        const userId = (data as unknown as any)?.[0]?.id;
-        if (!userId) throw new Error(`No user found for email ${session.customer_email}`);
-
-        const trialEnd = subscription.trial_end
-          ? new Date(subscription.trial_end * 1000)
-          : new Date(subscription.current_period_end * 1000);
-
-        const { error: updateProfileError } = await supabaseClient
-          .from('profiles')
-          .update({
-            stripe_customer_id: session.customer as string,
-            stripe_subscription_id: session.subscription as string,
-            subscription_ends_at: trialEnd,
-            plan: 'pro',
-            trial_ends_at: subscription.trial_end ? new Date(subscription.trial_end * 1000) : null,
-          })
-          .eq('user_id', userId);
-        if (updateProfileError) throw updateProfileError;
-        logger.info(`checkout completed: upgraded user ${session.customer_email} to pro`);
-      }
-    }
-
+    // ---- customer.subscription.updated ----
     if (event.type === 'customer.subscription.updated') {
       const subscription = event.data.object;
+      const tier = getTierFromSubscription(subscription);
 
-      // fetch the customer
       const customer = await stripe.customers.retrieve(subscription.customer as string);
       if (customer.deleted) {
-        throw new Error('Customer is deleted??');
+        throw new Error('Customer is deleted');
       }
 
-      // get the matching user by email
       const { data, error: getUserIdError } = await supabaseClient.rpc('get_user_id_by_email', {
         email: customer.email?.toLowerCase(),
       });
-      if (getUserIdError) {
-        throw getUserIdError;
-      }
+      if (getUserIdError) throw getUserIdError;
       // deno-lint-ignore no-explicit-any
       const userId = (data as unknown as any)?.[0]?.id;
-      if (!userId) {
-        throw new Error(`No user found for email ${customer.email}`);
-      }
+      if (!userId) throw new Error(`No user found for email ${customer.email}`);
 
-      const { data: getUserByIdData, error: getUserByIdError } = await supabaseClient.auth.admin.getUserById(userId);
-      if (getUserByIdError) {
-        throw getUserByIdError;
-      }
-      const user = getUserByIdData.user;
-      logger.info(`found user for customer ${customer.email}`);
+      // If subscription is canceled/past_due/unpaid, treat as no active subscription
+      const isActive = subscription.status === 'active' || subscription.status === 'trialing';
+      const periodEnd = isActive ? new Date(subscription.current_period_end * 1000) : new Date();
 
-      // update the user profile
-      const tier = (subscription.items.data[0].plan.metadata?.tier ?? 'pro') as SubscriptionTier;
       const { error: updateProfileError } = await supabaseClient
         .from('profiles')
         .update({
           stripe_customer_id: customer.id,
           stripe_subscription_id: subscription.id,
-          subscription_ends_at: new Date(subscription.current_period_end * 1000),
+          subscription_ends_at: periodEnd,
           plan: tier,
-          trial_ends_at: null,
+          trial_ends_at: subscription.trial_end ? new Date(subscription.trial_end * 1000) : null,
         })
-        .eq('user_id', user.id);
-      if (updateProfileError) {
-        throw updateProfileError;
+        .eq('user_id', userId);
+      if (updateProfileError) throw updateProfileError;
+      logger.info(`successfully updated profile for customer ${customer.email}, status=${subscription.status}`);
+    }
+
+    // ---- customer.subscription.deleted (cancellation) ----
+    if (event.type === 'customer.subscription.deleted') {
+      const subscription = event.data.object;
+
+      const customer = await stripe.customers.retrieve(subscription.customer as string);
+      if (customer.deleted) {
+        throw new Error('Customer is deleted');
       }
-      logger.info(`succesfully updated profile for user ${user.email}`);
+
+      const { data, error: getUserIdError } = await supabaseClient.rpc('get_user_id_by_email', {
+        email: customer.email?.toLowerCase(),
+      });
+      if (getUserIdError) throw getUserIdError;
+      // deno-lint-ignore no-explicit-any
+      const userId = (data as unknown as any)?.[0]?.id;
+      if (!userId) throw new Error(`No user found for email ${customer.email}`);
+
+      const { error: updateProfileError } = await supabaseClient
+        .from('profiles')
+        .update({
+          subscription_ends_at: new Date(), // expire immediately
+          trial_ends_at: new Date(), // ensure trial logic doesn't grant access either
+        })
+        .eq('user_id', userId);
+      if (updateProfileError) throw updateProfileError;
+      logger.info(`subscription cancelled for customer ${customer.email}`);
     }
 
     return new Response(JSON.stringify({}), {
       headers: { 'Content-Type': 'application/json', ...CORS_HEADERS },
     });
-    // http://dragos.beastx.ro:54321/functions/v1/handle-stripe-webhook
   } catch (error) {
     logger.error(`error running handle stripe webhook: ${getExceptionMessage(error)}`);
     return new Response(JSON.stringify({ errorMessage: getExceptionMessage(error, true) }), {
@@ -180,3 +179,4 @@ Deno.serve(async (req) => {
     });
   }
 });
+
