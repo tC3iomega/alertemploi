@@ -1,13 +1,15 @@
 'use client';
 
 import { ArchiveIcon, CheckCircleIcon, HomeIcon, MenuIcon, PlusCircleIcon, SparklesIcon } from 'lucide-react';
-
+import { useState } from 'react';
 import clsx from 'clsx';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
+import { MenuDrawer } from './MenuDrawer';
 
 export function SmallNavbar() {
   const pathname = usePathname();
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   const navItems = [
     { name: 'Accueil', path: '/dashboard', Icon: HomeIcon },
@@ -15,7 +17,6 @@ export function SmallNavbar() {
     { name: 'Postulées', path: '/jobs/list/applied', Icon: CheckCircleIcon },
     { name: 'Archivées', path: '/jobs/list/archived', Icon: ArchiveIcon },
     { name: 'Alertes', path: '/links', Icon: PlusCircleIcon },
-    { name: 'Menu', path: '/menu', Icon: MenuIcon },
   ];
 
   return (
@@ -40,7 +41,26 @@ export function SmallNavbar() {
             </Link>
           );
         })}
+        <button
+          onClick={() => setIsMenuOpen(true)}
+          className="flex h-full flex-1 flex-col items-center justify-center gap-1"
+        >
+          <MenuIcon
+            className={clsx('h-[21px] w-[21px] transition-colors', isMenuOpen ? 'text-primary' : 'text-muted-foreground')}
+            strokeWidth={isMenuOpen ? 2.3 : 1.8}
+          />
+          <span
+            className={clsx(
+              'text-[10px] font-medium transition-colors',
+              isMenuOpen ? 'text-primary' : 'text-muted-foreground',
+            )}
+          >
+            Menu
+          </span>
+        </button>
       </div>
+
+      <MenuDrawer isOpen={isMenuOpen} onClose={() => setIsMenuOpen(false)} />
     </nav>
   );
 }
