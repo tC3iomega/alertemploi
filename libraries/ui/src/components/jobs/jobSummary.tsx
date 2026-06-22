@@ -90,9 +90,9 @@ export function JobSummary({
                 alt={usedLink.title}
                 className="h-5"
               />
-              <span>
+              <span className="truncate max-w-[240px]">
                 {" via "}
-                {usedLink.title}
+                {usedLink.title.startsWith("http") ? "votre alerte" : usedLink.title}
               </span>
             </a>
           )}
