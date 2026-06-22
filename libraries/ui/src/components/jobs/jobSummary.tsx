@@ -21,7 +21,7 @@ import {
 } from "@alertemploi/core"
 import { useSites } from "../../hooks/useSites"
 import { useLinks } from "../../hooks/useLinks"
-import { Avatar, AvatarImage } from "../ui/avatar"
+import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar"
 import { Button } from "../ui/button"
 import {
   Select,
@@ -152,11 +152,12 @@ export function JobSummary({
         </div>
 
         {/* Company logo */}
-        {job.companyLogo && (
-          <Avatar className="h-16 w-16">
-            <AvatarImage src={job.companyLogo} />
-          </Avatar>
-        )}
+        <Avatar className="h-16 w-16 border border-muted">
+          {job.companyLogo && <AvatarImage src={job.companyLogo} />}
+          <AvatarFallback className="bg-primary/10 text-lg font-medium text-primary">
+            {job.companyName?.slice(0, 2).toUpperCase() ?? "??"}
+          </AvatarFallback>
+        </Avatar>
       </div>
 
       {/* Job details */}
