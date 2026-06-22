@@ -131,6 +131,8 @@ export default function LandingPage() {
     });
   }, []);
 
+  const ctaHref = isLoggedIn ? '/dashboard' : '/auth/register';
+
   return (
     <div style={{ fontFamily: 'Arial, Helvetica, sans-serif', color: '#1E293B', background: '#F1EFE8', overflowX: 'hidden' }}>
 
@@ -190,11 +192,11 @@ export default function LandingPage() {
         </p>
 
         <div className={styles.heroCta}>
-          <Link href="/auth/register" style={{
+          <Link href={ctaHref} style={{
             fontSize: 16, fontWeight: 600, color: 'white',
             padding: '14px 32px', borderRadius: 10, background: '#2563EB',
             textDecoration: 'none',
-          }}>Créer mon alerte gratuite</Link>
+          }}>{isLoggedIn ? 'Accéder au dashboard' : 'Créer mon alerte gratuite'}</Link>
           <a href="#features" className={styles.navLink} style={{
             fontSize: 16, fontWeight: 500, color: '#2563EB',
             padding: '14px 32px', borderRadius: 10, background: 'white',
@@ -427,11 +429,11 @@ export default function LandingPage() {
         <p style={{ fontSize: 16, color: '#BFDBFE', marginBottom: 32 }}>
           Rejoignez les candidats qui reçoivent les offres en premier.
         </p>
-        <Link href="/auth/register" style={{
+        <Link href={ctaHref} style={{
           display: 'inline-block', background: 'white', color: '#2563EB',
           fontSize: 16, fontWeight: 600, padding: '14px 36px',
           borderRadius: 10, textDecoration: 'none',
-        }}>Créer mon compte gratuit</Link>
+        }}>{isLoggedIn ? 'Accéder au dashboard' : 'Créer mon compte gratuit'}</Link>
       </section>
 
       {/* FOOTER */}
