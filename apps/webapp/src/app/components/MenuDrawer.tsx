@@ -60,10 +60,10 @@ export function MenuDrawer({ isOpen, onClose }: { isOpen: boolean; onClose: () =
       {/* Drawer */}
       <div
         style={{
-          position: 'fixed', bottom: 0, left: 0, right: 0,
+          position: 'fixed', bottom: 0, left: '50%', right: 'auto',
+          width: '100%', maxWidth: 480, transform: isOpen ? 'translate(-50%, 0)' : 'translate(-50%, 100%)',
           background: '#F1EFE8', borderRadius: '16px 16px 0 0',
           zIndex: 101, maxHeight: '80vh', overflowY: 'auto',
-          transform: isOpen ? 'translateY(0)' : 'translateY(100%)',
           transition: 'transform 0.25s ease',
           boxShadow: '0 -4px 24px rgba(0,0,0,0.12)',
         }}
