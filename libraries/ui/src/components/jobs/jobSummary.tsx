@@ -30,12 +30,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from "../ui/select"
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from "../ui/tooltip"
 import { toast } from "../../hooks/useToast"
 
 import { DeleteJobDialog } from "./deleteJobDialog"
@@ -43,6 +37,49 @@ import clsx from "clsx"
 
 function isJobLabel(value: JobLabel): value is JobLabel {
   return Object.values(JOB_LABELS).includes(value)
+}
+
+/**
+ * Small action button with an icon and a visible label underneath.
+ * Used for the secondary job actions (apply, archive, copy, delete, etc.)
+ */
+function ActionButton({
+  icon,
+  label,
+  onClick,
+  variant = "secondary",
+}: {
+  icon: React.ReactNode
+  label: string
+  onClick: (e: React.MouseEvent) => void
+  variant?: "secondary" | "destructive"
+}) {
+  const isDestructive = variant === "destructive"
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      aria-label={label}
+      className={clsx(
+        "flex w-16 flex-col items-center gap-1 rounded-md px-1 py-2 transition-colors duration-200 ease-in-out",
+        isDestructive
+          ? "bg-destructive/10 hover:bg-destructive/20 focus:bg-destructive/20"
+          : "bg-border hover:bg-foreground/15 focus:bg-foreground/15",
+      )}
+    >
+      <span className={isDestructive ? "text-destructive" : "text-foreground"}>
+        {icon}
+      </span>
+      <span
+        className={clsx(
+          "text-center text-[10px] leading-tight",
+          isDestructive ? "text-destructive" : "text-muted-foreground",
+        )}
+      >
+        {label}
+      </span>
+    </button>
+  )
 }
 
 /**
@@ -157,9 +194,9 @@ export function JobSummary({
 
       {/* Action buttons */}
       <div
-        className={`mt-6 flex flex-col gap-2 sm:flex-row sm:justify-between ${job.status !== "excluded_by_advanced_matching" && "lg:mt-10"}`}
+        className={`mt-6 flex flex-col gap-3 sm:flex-row sm:justify-between ${job.status !== "excluded_by_advanced_matching" && "lg:mt-10"}`}
       >
-        <div className="flex justify-between gap-2">
+        <div className="flex flex-wrap items-start gap-2">
           {/* Open button */}
           <Button
             size="lg"
@@ -173,117 +210,53 @@ export function JobSummary({
 
           {/* Apply button */}
           {job.status !== "applied" && (
-            <TooltipProvider delayDuration={500}>
-              <Tooltip>
-                <TooltipTrigger asChild>
-                  <Button
-                    size="lg"
-                    variant="secondary"
-                    className="w-10 border-none bg-border px-0 transition-colors duration-200 ease-in-out hover:bg-foreground/15 focus:bg-foreground/15"
-                    onClick={() => onUpdateJobStatus(job.id, "applied")}
-                  >
-                    <CheckIcon className="h-5 w-auto" />
-                  </Button>
-                </TooltipTrigger>
-
-                <TooltipContent side="bottom" className="text-base">
-                  Marquer comme postulée
-                </TooltipContent>
-              </Tooltip>
-            </TooltipProvider>
+            <ActionButton
+              icon={<CheckIcon className="h-5 w-auto" />}
+              label="Postulée"
+              onClick={() => onUpdateJobStatus(job.id, "applied")}
+            />
           )}
 
           {/* Back to new button */}
           {job.status !== "new" && (
-            <TooltipProvider delayDuration={500}>
-              <Tooltip>
-                <TooltipTrigger asChild>
-                  <Button
-                    size="lg"
-                    variant="secondary"
-                    className="w-10 border-none bg-border px-0 transition-colors duration-200 ease-in-out hover:bg-foreground/15 focus:bg-foreground/15"
-                    onClick={() => onUpdateJobStatus(job.id, "new")}
-                  >
-                    <ResetIcon className="h-4 w-auto" />
-                  </Button>
-                </TooltipTrigger>
-
-                <TooltipContent side="bottom" className="text-base">
-                  Remettre dans Nouvelles
-                </TooltipContent>
-              </Tooltip>
-            </TooltipProvider>
+            <ActionButton
+              icon={<ResetIcon className="h-4 w-auto" />}
+              label="Nouvelles"
+              onClick={() => onUpdateJobStatus(job.id, "new")}
+            />
           )}
 
           {/* Archive button */}
           {job.status !== "archived" && (
-            <TooltipProvider delayDuration={500}>
-              <Tooltip>
-                <TooltipTrigger asChild>
-                  <Button
-                    size="lg"
-                    variant="secondary"
-                    className="w-10 border-none bg-border px-0 transition-colors duration-200 ease-in-out hover:bg-foreground/15 focus:bg-foreground/15"
-                    onClick={() => onUpdateJobStatus(job.id, "archived")}
-                  >
-                    <ArchiveIcon className="h-4 w-auto" />
-                  </Button>
-                </TooltipTrigger>
-
-                <TooltipContent side="bottom" className="text-base">
-                  Archiver
-                </TooltipContent>
-              </Tooltip>
-            </TooltipProvider>
+            <ActionButton
+              icon={<ArchiveIcon className="h-4 w-auto" />}
+              label="Archiver"
+              onClick={() => onUpdateJobStatus(job.id, "archived")}
+            />
           )}
 
           {/* Copy url button */}
-          <TooltipProvider delayDuration={500}>
-            <Tooltip>
-              <TooltipTrigger asChild>
-                <Button
-                  size="lg"
-                  variant="secondary"
-                  className="w-10 border-none bg-border px-0 transition-colors duration-200 ease-in-out hover:bg-foreground/15 focus:bg-foreground/15"
-                  onClick={(evt) => {
-                    evt.stopPropagation()
-                    navigator.clipboard.writeText(job.externalUrl)
-                    toast({
-                      title: "Lien copié",
-                      description: "Vous pouvez maintenant le coller.",
-                      variant: "success",
-                    })
-                  }}
-                >
-                  <CopyIcon className="h-4 w-auto" />
-                </Button>
-              </TooltipTrigger>
-
-              <TooltipContent side="bottom" className="text-base">
-                Copier le lien
-              </TooltipContent>
-            </Tooltip>
-          </TooltipProvider>
+          <ActionButton
+            icon={<CopyIcon className="h-4 w-auto" />}
+            label="Copier"
+            onClick={(evt) => {
+              evt.stopPropagation()
+              navigator.clipboard.writeText(job.externalUrl)
+              toast({
+                title: "Lien copié",
+                description: "Vous pouvez maintenant le coller.",
+                variant: "success",
+              })
+            }}
+          />
 
           {/* Delete button */}
-          <TooltipProvider delayDuration={500}>
-            <Tooltip>
-              <TooltipTrigger asChild>
-                <Button
-                  size="lg"
-                  variant="destructive"
-                  className="w-10 bg-destructive/10 px-0 transition-colors duration-200 ease-in-out hover:bg-destructive/20 focus:bg-destructive/20"
-                  onClick={() => setIsDeleteDialogOpen(true)}
-                >
-                  <TrashIcon className="h-5 w-auto text-destructive" />
-                </Button>
-              </TooltipTrigger>
-
-              <TooltipContent side="bottom" className="text-base">
-                Supprimer
-              </TooltipContent>
-            </Tooltip>
-          </TooltipProvider>
+          <ActionButton
+            icon={<TrashIcon className="h-5 w-auto" />}
+            label="Supprimer"
+            variant="destructive"
+            onClick={() => setIsDeleteDialogOpen(true)}
+          />
 
           <DeleteJobDialog
             isOpen={isDeleteDialogOpen}
@@ -295,7 +268,7 @@ export function JobSummary({
 
         {/* Label selector */}
         <JobLabelSelector
-          className="w-full sm:ml-16"
+          className="w-full sm:ml-16 sm:w-auto"
           job={job}
           onUpdateLabels={onUpdateLabels}
         />
@@ -365,3 +338,4 @@ function JobLabelSelector({
     </Select>
   )
 }
+
