@@ -129,7 +129,7 @@ export function JobSummary({
               />
               <span className="truncate max-w-[240px]">
                 {" via "}
-                {usedLink.title.startsWith("http") ? "votre alerte" : usedLink.title}
+                {usedLink.title.includes("http") ? "votre alerte" : usedLink.title}
               </span>
             </a>
           )}
