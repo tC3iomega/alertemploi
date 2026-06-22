@@ -196,11 +196,11 @@ export function JobSummary({
       <div
         className={`mt-6 flex flex-col gap-3 sm:flex-row sm:justify-between ${job.status !== "excluded_by_advanced_matching" && "lg:mt-10"}`}
       >
-        <div className="flex flex-wrap items-start gap-2">
+        <div className="flex flex-wrap items-center gap-2">
           {/* Open button */}
           <Button
             size="lg"
-            className="w-24 text-sm"
+            className="h-[60px] w-24 self-start text-sm"
             onClick={() => {
               onView(job)
             }}
