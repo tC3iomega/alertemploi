@@ -32,7 +32,9 @@ export async function checkUserSubscription({
 
   const now = new Date();
   const trialActive = profile.trial_ends_at ? new Date(profile.trial_ends_at) > now : false;
-  const subscriptionActive = profile.subscription_ends_at ? new Date(profile.subscription_ends_at) > now : true;
+  // No subscription_ends_at means the user never completed a Stripe checkout, so there is
+  // no active subscription to speak of — access must then come solely from the trial.
+  const subscriptionActive = profile.subscription_ends_at ? new Date(profile.subscription_ends_at) > now : false;
   const hasPaidPlan = profile.plan === 'basic' || profile.plan === 'pro';
 
   // Access is allowed if: trial is still active, OR has a paid plan with active subscription

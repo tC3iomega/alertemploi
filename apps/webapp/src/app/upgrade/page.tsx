@@ -239,6 +239,10 @@ export default function UpgradePage() {
         <p style={{ textAlign: 'center', fontSize: 12, color: '#94A3B8' }}>
           🔒 Paiement sécurisé par Stripe · Annulation à tout moment · Pas de frais cachés
         </p>
+        <p style={{ textAlign: 'center', fontSize: 12, color: '#94A3B8', marginTop: 8 }}>
+          En vous abonnant, vous acceptez nos{' '}
+          <Link href="/cgv" style={{ color: '#64748B' }}>conditions générales de vente</Link>.
+        </p>
 
       </div>
     </div>

@@ -184,14 +184,47 @@ No free plan. Two plans only:
 
 ## What's Left Before Stripe Live Mode
 
-1. End-to-end test: inscription → 7-day trial → expiration → upgrade → webhook updates `subscription_ends_at`
-2. Verify `handle-stripe-webhook` handles `checkout.session.completed`, `customer.subscription.updated/deleted`
-3. Verify Stripe customer portal (cancellation, invoices)
-4. Test cancellation → correct downgrade
-5. Verify Stripe confirmation emails
+1. ✅ **Code-fixed** — end-to-end trial → expiration → upgrade path. Found and fixed a real gating bug:
+   `_shared/subscription.ts` defaulted `subscriptionActive` to `true` when `subscription_ends_at`
+   was `null` (i.e. every account that hasn't been through Stripe checkout yet, since new accounts
+   get `plan='basic'` by default). Combined with `hasPaidPlan` being true by default, `scan-urls`
+   never actually blocked anyone after trial expiry — access was granted forever. Now defaults to
+   `false`, so access after trial expiry correctly requires an active `subscription_ends_at`.
+   **Still needs a live run-through** (test-mode Stripe): sign up → let trial lapse (or backdate
+   `trial_ends_at` in the `profiles` table) → confirm `scan-urls` returns no jobs and the dashboard
+   shows the red "essai terminé" banner → checkout → confirm access returns and `subscription_ends_at`
+   is set.
+2. ✅ **Code-reviewed** `handle-stripe-webhook` (`apps/backend/supabase/functions/handle-stripe-webhook/index.ts`):
+   `checkout.session.completed`, `customer.subscription.created/updated/deleted` are all handled,
+   price-ID → tier mapping is correct, and cancellation via `customer.subscription.deleted` only
+   fires once Stripe has already let the subscription run to period end (so it's not a premature
+   cutoff). Fixed one correctness issue: on `checkout.session.completed` the email used to match
+   the Supabase user was `session.customer_email` (only the checkout prefill value); switched to
+   prefer `session.customer_details?.email`, which reflects what the buyer actually confirmed —
+   avoids upgrading the wrong account if they edit the email mid-checkout.
+   **Still needs:** a live webhook run (Stripe CLI `stripe trigger checkout.session.completed` /
+   `customer.subscription.updated` / `.deleted` against the local function, or the Stripe Dashboard
+   webhook logs after a real test-mode purchase) since Deno isn't available in this environment to
+   run `deno check`/`deno test` locally.
+3. ⚠️ **Portal code is correct** (`createPortalSession` in `apps/webapp/src/app/actions.ts` creates a
+   real billing-portal session scoped to `profile.stripe_customer_id`), but whether cancellation
+   defaults to "end of period" (vs. immediate) and whether invoice history is shown are **Stripe
+   Dashboard settings** (Settings → Billing → Customer portal), not code — verify manually.
+4. ✅ Cancellation → downgrade is correct once fix #1 is applied: `customer.subscription.deleted`
+   sets `subscription_ends_at = now()`; `checkUserSubscription` then correctly evaluates
+   `subscriptionActive = false` and blocks access. `profile.plan` itself is intentionally left as
+   the last plan (e.g. `pro`) since every access check already re-derives from `subscriptionActive`.
+5. ⚠️ Stripe's own confirmation/receipt emails are a **Dashboard setting** (Settings → Emails), not
+   code — verify manually that "Successful payments" / "Upcoming renewals" emails are turned on.
 6. **Once SIRET received:** update mentions légales/CGV
 7. Configure Stripe webhook in live mode (different URL + secret)
 8. Switch all Stripe keys from test to live (`STRIPE_SECRET_KEY`)
 9. Verify TVA billing if applicable
 10. Real end-to-end test with a real card
-11. Verify CGV mentions tarifs and trial conditions
+11. ✅ **Done** — there was no CGV (Conditions Générales de Vente) page at all, only mentions
+    légales + confidentialité. Added `apps/webapp/src/app/cgv/page.tsx` covering: tarifs (Basic
+    4,99€/mois·41,90€/an, Pro 14,99€/mois·125,90€/an), the 7-day no-CB trial and how it converts
+    to a paid subscription, payment/renewal via Stripe, résiliation deferred to end of period,
+    droit de rétractation (waived once digital service access starts, per L221-28), and applicable
+    law. Linked from the footer, the register page's consent text, and the `/upgrade` page. Still
+    needs the SIRET update from item 6 once available.

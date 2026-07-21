@@ -70,7 +70,10 @@ Deno.serve(async (req) => {
         if (!customer.deleted) customerEmail = customer.email;
       } else {
         const session = event.data.object;
-        customerEmail = session.customer_email;
+        // customer_details.email reflects what the buyer actually entered/confirmed at
+        // checkout; customer_email is only the prefilled value and can be stale if they
+        // changed it, which would otherwise upgrade the wrong account.
+        customerEmail = session.customer_details?.email ?? session.customer_email;
         customerId = session.customer as string;
         subscriptionId = session.subscription as string;
       }
@@ -179,4 +182,3 @@ Deno.serve(async (req) => {
     });
   }
 });
-

@@ -443,6 +443,8 @@ export default function LandingPage() {
           © 2025 Alertemploi —{' '}
           <a href="/legal" style={{ color: '#475569', textDecoration: 'none' }}>Mentions légales</a>
           {' · '}
+          <a href="/cgv" style={{ color: '#475569', textDecoration: 'none' }}>CGV</a>
+          {' · '}
           <a href="/privacy" style={{ color: '#475569', textDecoration: 'none' }}>Confidentialité</a>
         </div>
       </footer>

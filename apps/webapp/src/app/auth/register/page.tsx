@@ -233,6 +233,8 @@ export default function RegisterPage() {
 
         <p style={{ fontSize: 12, color: '#94A3B8', marginTop: 20, textAlign: 'center', lineHeight: 1.6 }}>
           En créant un compte, vous acceptez nos{' '}
+          <Link href="/cgv" style={{ color: '#64748B', textDecoration: 'none' }}>conditions générales de vente</Link>
+          {', '}nos{' '}
           <Link href="/legal" style={{ color: '#64748B', textDecoration: 'none' }}>mentions légales</Link>
           {' '}et notre{' '}
           <Link href="/privacy" style={{ color: '#64748B', textDecoration: 'none' }}>politique de confidentialité</Link>.
