@@ -372,8 +372,19 @@ issue an UPDATE naming another `user_id`, Postgres rejects the whole statement
 (`new row violates row-level security policy`) since the row wouldn't satisfy `WITH CHECK` afterward
 — confirmed live with a real reassignment attempt. `profiles` was the only table missing this.
 
-**Not checked, worth a look eventually**: `sites`, `html_dumps`, `advanced_matching`, `notes`,
-`scan_queue` — RLS is enabled on all of them but their specific policies weren't audited tonight.
+**The remaining 5 tables were audited too, same evening — all fine, nothing else to fix**:
+- `advanced_matching`, `html_dumps`, `notes` — same safe `ALL` policy pattern as `links`/`jobs`
+  (matching `USING`/`WITH CHECK` on `auth.uid() = user_id`). `advanced_matching` does expose
+  `ai_api_cost`/`ai_input_tokens_used`/`ai_output_tokens_used` to column-level `UPDATE`, but grepping
+  the backend confirms these are never read anywhere (only declared in `_shared/types.ts`) — no
+  enforcement logic depends on them, so tampering has zero practical effect. Not worth touching.
+- `sites` — `SELECT`-only policy with `qual: true` (any authenticated user can read all rows) and no
+  write policies at all. Correct and intentional: it's a shared reference table (the list of job
+  boards), not per-user data.
+- `scan_queue` — RLS enabled but **zero policies of any kind**, for any role. In Postgres that means
+  fully deny-by-default for `authenticated`/`anon` (safe), and grepping the whole codebase shows it's
+  never referenced anywhere in app code either — looks like a dead/unused table, probably worth
+  dropping eventually but not a security issue as-is.
 
 ### The original checklist
 
