@@ -431,6 +431,44 @@ above), this only means AI usage cost is never actually recorded — no user-fac
 just a gap in internal cost observability. Would need the actual accumulation logic designed/added
 if that visibility is wanted; out of scope for a security pass.
 
+### Auth hardening opportunities (config-level, not touched — need frontend work first)
+
+Checked the project's Auth config via the Management API while auditing. Nothing exploitable found,
+but worth knowing about:
+- `security_captcha_enabled: false` — no CAPTCHA on signup/login, so nothing stops mass fake-account
+  creation (trial abuse) or credential-stuffing attempts. **Enabling this needs frontend work first**:
+  `register`/`login` pages have zero CAPTCHA widget integration today, so flipping the backend switch
+  alone would immediately break every signup/login (no token would ever be sent). Needs: (1) an
+  hCaptcha or Cloudflare Turnstile account + site/secret keys (user has to create this), (2) widget
+  integration in `apps/webapp/src/app/auth/{register,login}/page.tsx` passing the token via
+  `options.captchaToken` to `signUp`/`signInWithPassword`, (3) then enabling it in Auth config.
+- `password_min_length: 6` — on the low side versus modern guidance, easy config bump whenever
+  wanted.
+- `security_update_password_require_reauthentication: false` — a stolen/leaked access token could be
+  used to change the account password without knowing the current one, locking out the real owner.
+  Simple config flip, no frontend work needed, but changes the password-change UX slightly (would
+  require re-entering credentials).
+
+### Dead code removed 2026-07-23
+
+- **`handle-profile-change-webhook`** — deleted (repo + undeployed from Supabase), along with
+  `_shared/mailerLiteApi.ts` and the `mailerLiteApiKey` field in `_shared/env.ts` (both only used by
+  it). Confirmed safe to remove: no trigger on `profiles` (or anywhere) calls this function, no
+  `MAILERLITE_API_KEY` secret was ever configured (it would have thrown immediately on every
+  invocation regardless), and it's not referenced from any other file. Almost certainly a leftover
+  from the original `first2apply` fork (MailerLite predates the MailerSend integration that
+  `send-welcome-email`/`post-scan-hook` actually use today).
+- **`scan_queue` table** — audited (RLS enabled, zero policies for any role, real FK constraints to
+  `links`/`auth.users`, not referenced by any pg_cron job, trigger, or app code) but **left in place**
+  per explicit choice — not worth the irreversibility of `DROP TABLE` for a table that isn't hurting
+  anything by existing (locked down by default, no policies).
+
+**Also discovered while checking for triggers/cron jobs referencing the above**: there's a second
+pg_cron job beyond `cron-scan` — `send-trial-reminder` runs daily at 9am (`0 9 * * *`). Not yet
+verified working tonight (unlike `cron-scan`, which had 3 confirmed-and-fixed bugs) — worth checking
+next, especially since it very likely shares the same MailerSend mailer that was silently broken
+until earlier tonight.
+
 ### The original checklist
 
 1. ✅ **Fixed, deployed, and verified live end-to-end** (2026-07-23, test-mode, cleaned up after).
