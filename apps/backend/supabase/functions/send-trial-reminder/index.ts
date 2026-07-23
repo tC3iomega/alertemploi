@@ -37,10 +37,10 @@ Deno.serve(async (req) => {
     const todayStr = now.toISOString().slice(0, 10);
     const in3DaysStr = in3Days.toISOString().slice(0, 10);
 
-    const { data: profiles, error } = await supabaseAdmin
-      .from('profiles')
-      .select('user_id, trial_ends_at, plan')
-      .eq('plan', 'free');
+    // Every account (basic or pro) gets a trial via trial_ends_at regardless of which plan
+    // they picked at signup — there is no 'free' plan in the current pricing model, so
+    // filtering on plan='free' matched zero rows and this never sent a single reminder.
+    const { data: profiles, error } = await supabaseAdmin.from('profiles').select('user_id, trial_ends_at, plan');
 
     if (error) throw new Error(error.message);
 
@@ -86,22 +86,28 @@ Deno.serve(async (req) => {
 
       if (!payload) continue;
 
-      const { data: userData, error: userError } = await supabaseAdmin.auth.admin.getUserById(profile.user_id);
-      if (userError || !userData?.user?.email) {
-        logger.error(`Could not find email for user ${profile.user_id}`);
-        continue;
-      }
+      try {
+        const { data: userData, error: userError } = await supabaseAdmin.auth.admin.getUserById(profile.user_id);
+        if (userError || !userData?.user?.email) {
+          logger.error(`Could not find email for user ${profile.user_id}`);
+          continue;
+        }
 
-      await mailer.sendEmail({
-        logger,
-        to: userData.user.email,
-        template: {
-          type: EmailTemplateType.trialReminder,
-          templateId: 'yzkq3403x034d796',
-          payload,
-        },
-      });
-      sentCount++;
+        await mailer.sendEmail({
+          logger,
+          to: userData.user.email,
+          template: {
+            type: EmailTemplateType.trialReminder,
+            templateId: 'yzkq3403x034d796',
+            payload,
+          },
+        });
+        sentCount++;
+      } catch (sendError) {
+        // one recipient failing (bad address, provider quota, ...) must not stop the rest
+        // of the batch from getting their reminder
+        logger.error(`Failed to send trial reminder for user ${profile.user_id}: ${getExceptionMessage(sendError)}`);
+      }
     }
 
     logger.info(`Sent ${sentCount} trial reminder emails`);

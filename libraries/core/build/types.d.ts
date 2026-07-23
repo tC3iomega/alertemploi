@@ -94,7 +94,7 @@ export type Note = {
     text: string;
     files: string[];
 };
-export type SubscriptionTier = 'free' | 'pro';
+export type SubscriptionTier = 'basic' | 'pro';
 export type Profile = {
     id: number;
     user_id: string;

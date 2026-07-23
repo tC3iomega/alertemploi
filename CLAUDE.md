@@ -464,10 +464,46 @@ but worth knowing about:
   anything by existing (locked down by default, no policies).
 
 **Also discovered while checking for triggers/cron jobs referencing the above**: there's a second
-pg_cron job beyond `cron-scan` — `send-trial-reminder` runs daily at 9am (`0 9 * * *`). Not yet
-verified working tonight (unlike `cron-scan`, which had 3 confirmed-and-fixed bugs) — worth checking
-next, especially since it very likely shares the same MailerSend mailer that was silently broken
-until earlier tonight.
+pg_cron job beyond `cron-scan` — `send-trial-reminder` runs daily at 9am (`0 9 * * *`).
+
+### `send-trial-reminder` had 2 bugs too — checked and fixed same evening
+
+- **Never sent a single reminder, ever**: the query filtered `.eq('plan', 'free')`, but `'free'` is a
+  leftover enum value from before the pricing model changed to Basic/Pro-with-trial — confirmed zero
+  rows in `profiles` have ever had `plan='free'` (all real rows are `'basic'`). Every account gets a
+  trial via `trial_ends_at` regardless of which plan they picked, so this filter should never have
+  been there. Fixed by removing it entirely (the existing `if (!profile.trial_ends_at) continue`
+  already correctly skips anyone without an active trial date).
+  - Same stale assumption existed in the `SubscriptionTier` TypeScript type itself
+    (`libraries/core/src/types.ts` and its Edge Functions copy `_shared/types.ts`): declared as
+    `'free' | 'pro'`, missing `'basic'` entirely, even though `handle-stripe-webhook`'s
+    `PRICE_ID_TO_TIER` map has assigned literal `'basic'` values to it all along. This should be a
+    hard type error and never should have passed type-checking — strongly suggests `pnpm typecheck`
+    isn't actually being run as a gate before deploys. Fixed the type to `'basic' | 'pro'` in both
+    copies, rebuilt `libraries/core`, and confirmed `@alertemploi/webapp`'s typecheck still passes.
+- **One failed send blocks every subsequent user in the batch**: the per-profile loop had no
+  try/catch around the actual `mailer.sendEmail(...)` call, so one throwing (e.g. a bad address, or
+  the MailerSend trial-quota error from the section above) would abort the whole function — nobody
+  after that user in the loop would get their reminder either. Added a try/catch per iteration,
+  matching the pattern `cron-scan`'s per-link loop already uses.
+
+**Verified live** using the plaintext `F2A_WEBHOOK_SECRET` (visible in `cron.job`'s stored command —
+see below): created a test profile with `trial_ends_at` set to today, invoked the function directly.
+Before the fix it never even found the profile; after the plan-filter fix it correctly found it and
+attempted to send (hit the already-known MailerSend trial-quota error, not a new issue); after the
+try/catch fix the function returns a clean `200 {"success":true,"sentCount":0}` instead of crashing
+with `500` on that same quota error — ready to work correctly for real once MailerSend's account
+issue is resolved.
+
+**Incidental discovery, not itself a vulnerability but worth knowing**: `cron.job`'s stored SQL
+command has `F2A_WEBHOOK_SECRET`'s plaintext value baked directly into the `Authorization` header
+string (`select net.http_post(url := '...', headers := '{"Authorization": "Bearer <secret>"}'::jsonb, ...)`).
+This is how Supabase's own `pg_cron` + `pg_net` pattern normally works (no other easy way to pass
+headers), and the `cron` schema isn't part of the exposed API schemas in `config.toml`, so this isn't
+reachable by `anon`/`authenticated` over the REST API — but it does mean anyone with direct SQL read
+access to this project (e.g. via `supabase db query --linked`, as used all evening) can read the
+webhook secret in plaintext. Not fixed (this is Supabase's standard pattern for authenticating
+`pg_cron`-triggered function calls), just documented so it doesn't come as a surprise later.
 
 ### The original checklist
 

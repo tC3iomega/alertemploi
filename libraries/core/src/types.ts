@@ -56,7 +56,7 @@ export type Job = {
   created_at: Date; updated_at: Date; link_id?: number; exclude_reason?: string;
 };
 export type Note = { id: number; created_at: Date; user_id: string; job_id: number; text: string; files: string[]; };
-export type SubscriptionTier = 'free' | 'pro';
+export type SubscriptionTier = 'basic' | 'pro';
 export type Profile = {
   id: number; user_id: string; stripe_customer_id?: string; stripe_subscription_id?: string;
   plan: SubscriptionTier; trial_ends_at: string; subscription_ends_at?: string;
