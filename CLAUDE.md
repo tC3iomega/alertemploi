@@ -184,80 +184,76 @@ No free plan. Two plans only:
 
 ## What's Left Before Stripe Live Mode
 
-### 🔴 P0 — found during live testing 2026-07-23, needs your attention first
+### 🟢 P0 found and fixed 2026-07-23 — root cause of two separate-looking crashes
 
-- **`scan-urls` crashes (503, empty body) whenever it actually processes a real matched link**,
-  for every provider tried (`francetravail` live API call, `indeed` via the JobSpy branch). It's
-  NOT related to the subscription fix below — reproduced identically regardless of trial/subscription
-  state, and confirmed via DB side effects: the link's `last_scraped_at` does get bumped (so a scrape
-  genuinely starts and succeeds) but the function dies before returning a response, after the DB
-  write. Likely a memory or response-size limit on the Edge Function runtime (the module pulls in
-  `deno-dom-wasm` + ~15 site parsers + `turndown`), possibly made worse by a broad test keyword
-  ("test", "developpeur") returning a large real result set from France Travail's live API. **I
-  could not get a stack trace** — this Supabase CLI version (2.98.2) has no `functions logs` command
-  and Docker wasn't running locally to reproduce via `supabase functions serve`. Please check
-  **Dashboard → Edge Functions → scan-urls → Logs** for the actual error, or upgrade the CLI
-  (`npm i -g supabase@latest`) to get `supabase functions logs scan-urls --project-ref pvhtnwuzrkmnpxnfvwyv`.
-  This is your core paid feature (scanning saved searches) — it needs fixing before launch
-  regardless of the Stripe checklist below.
-- **`handle-stripe-webhook` events aren't completing** even after redeploying the fix below: I
-  created a real test-mode subscription and nudged it (metadata update) to fire a fresh
-  `customer.subscription.updated` event; Stripe's own event log shows `pending_webhooks: 1`
-  (undelivered/failing) minutes later, and the `profiles` row was never touched. The function
-  itself is healthy (a bad-signature request gets a clean, fast `500` with a proper error message —
-  no crash), so the failure is happening deeper in a *real*, correctly-signed event — possibly the
-  same resource-limit issue as `scan-urls` (this function also does several chained calls: Stripe
-  customer retrieve, a Supabase RPC, a profile update). Notably, one *other*, real historical event
-  from before today (`evt_1Tlm6gV059EuUi4mP03ons82`, for `sub_1TghQBV059EuUi4mruW9d2DX`) also shows
-  `pending_webhooks: 1` — so this isn't purely an artifact of my test, it may have already affected
-  a real subscriber. **Check Dashboard → Developers → Webhooks → `handle-stripe-webhook` endpoint →
-  that event's delivery attempts** for the actual response/error, and check whether that specific
-  real customer's `profiles` row reflects their current plan correctly.
-- Found and fixed **a second, more subtle bug** while investigating the above: Stripe API versions
-  from `2025-03-31` onward removed the top-level `current_period_end` from the `Subscription`
-  object (moved onto each subscription item). Your webhook endpoint is pinned to `2026-05-27.dahlia`
-  (confirmed via the Stripe API), so `customer.subscription.updated`'s handler — which reads
-  `event.data.object` directly — was getting `undefined` for `current_period_end`, silently writing
-  `subscription_ends_at: null` on every renewal/plan-change event. Combined with today's fix below
-  (`subscriptionActive` now correctly defaults to `false` for `null`), this would have **newly
-  locked out real paying customers** the next time their subscription updated. Fixed with a
-  `getPeriodEnd()` helper that falls back to `subscription.items.data[0].current_period_end`, and
-  deployed. This part I could verify is *correct code*, but not verify end-to-end given the
-  delivery issue above.
+While live-testing the items below, `scan-urls` was crashing (503, empty body) on every real link
+it processed, and `handle-stripe-webhook` was silently failing on real Stripe events
+(`pending_webhooks` stuck at 1, `profiles` never updated) even after the fixes further down. Both
+turned out to be **the same bug**: `_shared/logger.ts` wraps `@logdna/logger` (Mezmo), which is an
+`EventEmitter` that emits `'error'` on any connection failure (invalid/unreachable `MEZMO_API_KEY`).
+With no `.on('error', ...)` listener attached, Node/Deno's default behavior is to rethrow that as an
+uncaught exception — killing the *entire function isolate*, not just the logging call. Every
+function that logs enough to trigger a flush (i.e. any function doing real work, not just an early
+return) was exposed to this.
+
+Confirmed via the Management API's log explorer (`api.supabase.com/v1/projects/{ref}/analytics/endpoints/logs.all`,
+using the token at `~/.supabase/access-token` — this CLI version has no `functions logs` command):
+the exact crash was `event loop error: Error: A connection-based error occurred that will not be
+retried. [...] at .../@logdna/logger/2.6.11/lib/logger.js:867:29`, immediately after real log lines
+like `France Travail: fetching ...` — i.e. it only surfaced once a function actually reached
+substantive work, which is exactly why trivial requests (empty `htmls`, bad Stripe signatures)
+always looked fine.
+
+**Fixed** by attaching `mezmoLogger.on('error', (err) => console.error(...))` in
+`_shared/logger.ts` so a Mezmo connectivity issue is logged and ignored instead of crashing the
+function. **Deployed to all 9 functions that use the shared logger** (`scan-urls`,
+`handle-stripe-webhook`, `create-link`, `cron-scan`, `send-welcome-email`, `send-trial-reminder`,
+`scan-job-description`, `handle-profile-change-webhook`, `post-scan-hook`) since all were equally
+exposed — `cron-scan` in particular runs unattended every 30 minutes, so this may have been causing
+silent scan failures for a while.
+
+**Verified live end-to-end after the fix** (test-mode, disposable accounts, all cleaned up after):
+`scan-urls` now returns `200` on the exact real link/site combination that used to 503, with
+`last_scraped_at` correctly bumped (real France Travail API call completes normally). A full
+Stripe test-mode subscription lifecycle now works: checkout → `profiles` row gets
+`stripe_customer_id`/`subscription_ends_at`/`trial_ends_at` set correctly; a `metadata` nudge
+(fires `customer.subscription.updated`) delivers successfully (`pending_webhooks: 0`); cancelling
+the subscription (`customer.subscription.deleted`) correctly zeroes out `subscription_ends_at`/
+`trial_ends_at`, and a subsequent `scan-urls` call for that user is blocked instantly with no side
+effects — no crash anywhere in the chain.
+
+Whether `MEZMO_API_KEY`'s underlying connectivity issue is worth investigating further (so logs
+actually reach Mezmo/Datadog again) is now just an observability nice-to-have, not a launch
+blocker — the app can no longer be taken down by it either way.
 
 ### The original checklist
 
-1. ✅ **Code-fixed and deployed** — end-to-end trial → expiration → upgrade path. Found and fixed a
-   real gating bug: `_shared/subscription.ts` defaulted `subscriptionActive` to `true` when
-   `subscription_ends_at` was `null` (i.e. every account that hasn't been through Stripe checkout
-   yet, since new accounts get `plan='basic'` by default). Combined with `hasPaidPlan` being true by
-   default, `scan-urls` never actually blocked anyone after trial expiry — access was granted
-   forever. Now defaults to `false`. **Verified live** (2026-07-23, test-mode, cleaned up
-   afterwards): created a disposable Supabase account, backdated `trial_ends_at` to the past with
-   `subscription_ends_at` still `null`, hit `scan-urls` with a real saved link — got the fast,
-   blocked response with the link's `last_scraped_at`/`scrape_failure_count` completely untouched,
-   proving it now correctly short-circuits before ever reaching the (separately broken, see above)
-   parsing code. The upgrade half (checkout → access restored) is still blocked on the webhook
-   delivery issue above.
-2. ✅ **Code-fixed and deployed**, config double-checked against Stripe directly: the webhook
-   endpoint (`we_1TgguKV059EuUi4mxfmHIYCt`) is registered at the right URL with exactly
-   `checkout.session.completed`, `customer.subscription.created/updated/deleted` enabled, price-ID
-   → tier mapping is correct, and cancellation via `customer.subscription.deleted` only fires once
-   Stripe has already let the subscription run to period end. Fixed two correctness issues: (a) the
-   email used to match the Supabase user on `checkout.session.completed` was `session.customer_email`
-   (checkout-prefill only); switched to prefer `session.customer_details?.email`. (b) the
-   `current_period_end` API-version bug described above. **Blocked on the delivery issue above** for
-   full end-to-end verification.
-3. ⚠️ **Portal code is correct** (`createPortalSession` in `apps/webapp/src/app/actions.ts` creates a
-   real billing-portal session scoped to `profile.stripe_customer_id`), and the Stripe Dashboard
-   config was checked directly via the API: portal `cancellation.mode = 'at_period_end'` (deferred,
-   as required), `invoice_history.enabled = true`, `payment_method_update.enabled = true`. This item
-   is fully done — code and config both verified.
-4. ✅ Cancellation → downgrade is correct once fix #1 is applied: `customer.subscription.deleted`
-   sets `subscription_ends_at = now()`; `checkUserSubscription` then correctly evaluates
-   `subscriptionActive = false` and blocks access. `profile.plan` itself is intentionally left as
-   the last plan (e.g. `pro`) since every access check already re-derives from `subscriptionActive`.
-   Not yet verified live end-to-end (blocked on the webhook delivery issue above).
+1. ✅ **Fixed, deployed, and verified live end-to-end** (2026-07-23, test-mode, cleaned up after).
+   Two bugs fixed: (a) `_shared/subscription.ts` defaulted `subscriptionActive` to `true` when
+   `subscription_ends_at` was `null` (every account that hasn't checked out yet, since new accounts
+   get `plan='basic'` by default) — `scan-urls` never actually blocked anyone after trial expiry.
+   Now defaults to `false`. (b) the Mezmo logger crash above, which was masking this fully working
+   once triggered. Verified: an expired-trial account with no subscription now gets blocked
+   instantly on a real link with zero side effects; a real Stripe checkout correctly restores
+   access with `subscription_ends_at` set to the real period end.
+2. ✅ **Fixed, deployed, and verified live.** Webhook endpoint (`we_1TgguKV059EuUi4mxfmHIYCt`) has
+   the right URL and exactly `checkout.session.completed` /
+   `customer.subscription.created/updated/deleted` enabled. Fixed three issues: (a) email matching
+   on `checkout.session.completed` now prefers `session.customer_details?.email` over the
+   checkout-prefill-only `session.customer_email`. (b) Stripe API versions ≥ `2025-03-31` removed
+   the top-level `current_period_end` from `Subscription` (moved onto each item); this endpoint is
+   pinned to `2026-05-27.dahlia`, so `customer.subscription.updated`'s handler — which reads
+   `event.data.object` directly — was getting `undefined` and silently writing
+   `subscription_ends_at: null` on every renewal. Added a `getPeriodEnd()` helper with a fallback to
+   `subscription.items.data[0].current_period_end`. (c) the Mezmo logger crash above. Verified live:
+   checkout, a `customer.subscription.updated` nudge, and cancellation all now deliver successfully
+   and update `profiles` correctly.
+3. ✅ **Portal code correct** (`createPortalSession` in `apps/webapp/src/app/actions.ts`), and
+   Stripe Dashboard config checked directly via the API: `cancellation.mode = 'at_period_end'`
+   (deferred, as required), `invoice_history.enabled = true`, `payment_method_update.enabled = true`.
+4. ✅ **Verified live.** Cancelling a real test subscription correctly sets `subscription_ends_at`
+   and `trial_ends_at` to now; a subsequent `scan-urls` call for that user is blocked instantly with
+   no side effects on the link row.
 5. ⚠️ Stripe's own confirmation/receipt emails are a **Dashboard setting** (Settings → Emails), not
    code — verify manually that "Successful payments" / "Upcoming renewals" emails are turned on.
 6. **Once SIRET received:** update mentions légales/CGV

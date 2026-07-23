@@ -67,5 +67,12 @@ export const createLoggerWithMeta = (meta: Record<string, string>): ILogger => {
     meta,
     indexMeta: true,
   });
+  // mezmoLogger is an EventEmitter that emits 'error' on connection failures (e.g. an
+  // invalid/unreachable ingestion key). With no listener attached, Node/Deno rethrows
+  // that as an uncaught exception and kills the whole function isolate — logging must
+  // never be able to take down the function, so swallow it here instead.
+  mezmoLogger.on('error', (err: unknown) => {
+    console.error('Mezmo logger connection error (ignored):', err);
+  });
   return new Logger(mezmoLogger);
 };
