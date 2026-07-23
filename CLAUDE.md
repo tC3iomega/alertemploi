@@ -505,6 +505,38 @@ access to this project (e.g. via `supabase db query --linked`, as used all eveni
 webhook secret in plaintext. Not fixed (this is Supabase's standard pattern for authenticating
 `pg_cron`-triggered function calls), just documented so it doesn't come as a surprise later.
 
+### SSRF hardening added to the Pro "custom job site" feature (defense-in-depth, not an active exploit)
+
+While reading `create-link` for the first time tonight: the Pro-only "custom job site" feature lets a
+user submit an arbitrary URL (anything not matching the curated list of known job boards falls back
+to the `custom` provider). Initially flagged this as an actively-exploitable SSRF, since nothing
+stopped that URL from being `http://169.254.169.254/...` (cloud metadata) or `http://localhost/...`,
+and reaching "Pro" tier only requires picking the Pro plan at signup — no real payment needed during
+the 7-day trial.
+
+**Corrected after digging further**: no current code path actually performs a server-side fetch of a
+`custom`-provider URL. `_shared/fetchLinkContent.ts`'s `needsBrowser`/`needsJobSpy` lists explicitly
+exclude `custom`; `parseCustomJobs` only ever operates on whatever `html` string it's handed, never
+fetching itself; and the webapp always sends `html: ''`/`content: ''` regardless of provider
+(`apps/webapp/src/app/actions.ts`'s `createLink`/`scanLinks`). So today, the "custom URL" feature
+looks incomplete/non-functional on its own (nothing ever actually renders the target page), and
+there's no live SSRF to exploit through it right now.
+
+**Fixed anyway, as defense-in-depth**: added `_shared/urlSafety.ts`'s `assertUrlIsPubliclyReachable()`
+— rejects non-http(s) protocols, literal private/loopback/link-local IPs (including obfuscated
+decimal/hex forms, normalized by the standard `URL` parser), and hostnames that resolve via DNS to a
+private IP. Wired into `create-link/index.ts`, applied only when `site.provider === custom` (known
+job boards are matched against a fixed, curated domain list already, no user-controlled host there).
+Doesn't defend against DNS rebinding after creation time (a hostname could pass validation now and
+be repointed at a private IP before a later fetch) — full protection would need to re-validate right
+before every fetch, not just at link-creation time. Worth keeping in mind if the missing fetch step
+for `custom` URLs is ever added, since that's exactly when this would become a real, exploitable
+issue rather than preventive hardening.
+
+**Verified live** with a disposable Pro-tier test account: URLs targeting the cloud metadata IP and
+`localhost` are now rejected (`"points to a local or private network address"`); a real external
+domain (`example.com`) still creates the link normally.
+
 ### The original checklist
 
 1. ✅ **Fixed, deployed, and verified live end-to-end** (2026-07-23, test-mode, cleaned up after).

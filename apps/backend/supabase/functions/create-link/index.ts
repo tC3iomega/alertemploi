@@ -1,4 +1,4 @@
-import { DbSchema, Job, Link, WebPageRuntimeData } from '@alertemploi/core';
+import { DbSchema, Job, Link, SiteProvider, WebPageRuntimeData } from '@alertemploi/core';
 import { getExceptionMessage } from '@alertemploi/core';
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.48.1';
 
@@ -7,6 +7,7 @@ import { getEdgeFunctionContext } from '../_shared/edgeFunctions.ts';
 import { cleanJobUrl, parseJobsListUrl } from '../_shared/jobListParser.ts';
 import { createLoggerWithMeta } from '../_shared/logger.ts';
 import { checkUserSubscription } from '../_shared/subscription.ts';
+import { assertUrlIsPubliclyReachable } from '../_shared/urlSafety.ts';
 
 Deno.serve(async (req) => {
   if (req.method === 'OPTIONS') {
@@ -65,6 +66,13 @@ Deno.serve(async (req) => {
       allJobSites,
       hasCustomJobsParsing,
     });
+
+    // known job boards are matched against a fixed, curated domain list (see
+    // getJobSite), so only the "custom" provider ever lets a user point the server at
+    // an arbitrary URL — block private/internal targets there to prevent SSRF.
+    if (site.provider === SiteProvider.custom) {
+      await assertUrlIsPubliclyReachable(cleanUrl);
+    }
 
     // check if the site is deprecated
     if (site.deprecated) {
