@@ -3,6 +3,7 @@ import { getExceptionMessage } from '@alertemploi/core';
 
 import { CORS_HEADERS } from '../_shared/cors.ts';
 import { EdgeFunctionAuthorizedContext, getEdgeFunctionContext } from '../_shared/edgeFunctions.ts';
+import { fetchLinkContent } from '../_shared/fetchLinkContent.ts';
 import { parseJobsListUrl } from '../_shared/jobListParser.ts';
 import { createLoggerWithMeta } from '../_shared/logger.ts';
 import { checkUserSubscription } from '../_shared/subscription.ts';
@@ -149,68 +150,24 @@ async function parseHtmlToJobsList({
   }
 
   logger.info(`html.content length: ${html.content?.length ?? 0}`);
-  let htmlContent = html.content;
-// JobSpy worker pour LinkedIn et Indeed
-  const needsJobSpy = ['linkedin', 'indeed'].includes(targetSite?.provider ?? '');
-  if (needsJobSpy && context.env.jobspyWorkerUrl && context.env.jobspyWorkerSecret) {
-    logger.info(`fetching via JobSpy worker: ${link.url}`);
-    const siteProvider = targetSite?.provider ?? 'indeed';
-    const urlParams = new URL(link.url);
-    const searchTerm = urlParams.searchParams.get('q') || urlParams.searchParams.get('keywords') || 'emploi';
-    const location = urlParams.searchParams.get('l') || urlParams.searchParams.get('location') || 'France';
-    const response = await fetch(`${context.env.jobspyWorkerUrl}/scrape`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${context.env.jobspyWorkerSecret}`,
-      },
-      body: JSON.stringify({ url: link.url, site: siteProvider, search_term: searchTerm, location, results_wanted: 25 }),
+
+  if (!targetSite) {
+    logger.error(`site not found for link: ${link.id}`);
+    return { jobs: [], currentUrlParseFailed: false };
+  }
+
+  const fetched = await fetchLinkContent({
+    link,
+    site: targetSite,
+    existingHtml: html.content,
+    env: context.env,
+    logger,
+  });
+  if (fetched.jobs) {
+    fetched.jobs.forEach((job) => {
+      job.link_id = link.id;
     });
-    const data = await response.json();
-    logger.info(`JobSpy returned ${data.jobs?.length ?? 0} jobs`);
-    const jobspyJobs = (data.jobs ?? []).map((j: any) => ({
-      siteId: targetSite!.id,
-      externalId: j.externalId,
-      externalUrl: j.externalUrl,
-      title: j.title,
-      companyName: j.companyName || 'N/A',
-      location: j.location,
-      jobType: j.jobType !== 'nan' && j.jobType !== 'None' ? j.jobType : undefined,
-      description: j.description,
-      salary: j.salary || undefined,
-      tags: [],
-      labels: [],
-      link_id: link.id,
-    }));
-    return { jobs: jobspyJobs, currentUrlParseFailed: false };
-  }  
-  const needsBrowser = ['hellowork', 'wttj', 'cadremploi'].includes(targetSite?.provider ?? '');
-  if ((!htmlContent || htmlContent.trim().length === 0) && needsBrowser) {
-    const browserlessApiKey = context.env.browserlessApiKey;
-    if (browserlessApiKey) {
-      logger.info(`fetching via Browserless: ${link.url}`);
-      const response = await fetch(`https://production-sfo.browserless.io/content?token=${browserlessApiKey}`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          url: link.url,
-          waitForTimeout: 3000,
-        }),
-      });
-      htmlContent = await response.text();
-      logger.info(`fetched ${htmlContent.length} bytes via Browserless`);
-    } else {
-      logger.info(`fetching URL directly: ${link.url}`);
-      const response = await fetch(link.url, {
-        headers: {
-          'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36',
-          'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
-          'Accept-Language': 'fr-FR,fr;q=0.9,en;q=0.8',
-        },
-      });
-      htmlContent = await response.text();
-      logger.info(`fetched ${htmlContent.length} bytes directly`);
-    }
+    return { jobs: fetched.jobs, currentUrlParseFailed: false };
   }
 
   const {
@@ -220,7 +177,7 @@ async function parseHtmlToJobsList({
   } = await parseJobsListUrl({
     allJobSites,
     link,
-    html: htmlContent,
+    html: fetched.html,
     webPageRuntimeData: html.webPageRuntimeData,
     context,
   });

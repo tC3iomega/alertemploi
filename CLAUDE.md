@@ -267,6 +267,46 @@ Whether `MEZMO_API_KEY`'s underlying connectivity issue is worth investigating f
 actually reach Mezmo/Datadog again) is now just an observability nice-to-have, not a launch
 blocker — the app can no longer be taken down by it either way.
 
+### 🟢 `cron-scan` found broken in three separate ways 2026-07-23 — all fixed and deployed
+
+Fixing the Mezmo crash above unmasked `cron-scan` (the unattended 30-min auto-scan) failing on
+**every single invocation**, confirmed via the log explorer showing the identical error on every
+run in the preceding hours:
+
+1. **Crash on every run**: `.select('*, user:user_id(id, email)')` tried to embed `auth.users` via
+   PostgREST — `"Could not find a relationship between 'links' and 'user_id' in the schema cache"`.
+   `auth` isn't part of the exposed API schema (`config.toml`'s `[api] schemas` only lists `public`,
+   `storage`, `graphql_public`), so this embed could never resolve. The embedded `email` was never
+   actually used downstream (only `.id` is). Fixed by dropping the embed entirely
+   (`.select('*')`) and using `email: ''` directly. **Verified live** on the real next scheduled run:
+   went from crashing immediately to `found 2 links to scan` (two genuine pre-existing links,
+   LinkedIn + Indeed).
+2. **LinkedIn/Indeed/HelloWork/WTTJ/Cadremploi silently unscannable**: unlike `scan-urls`,
+   `cron-scan` called `parseJobsListUrl` directly with a hardcoded `html: ''`, never replicating
+   `scan-urls`'s JobSpy-worker fetch (LinkedIn/Indeed) or Browserless/direct-fetch (HelloWork/WTTJ/
+   Cadremploi) logic — so every link on those providers failed to parse on every cron run, cron-scan
+   only ever worked for France Travail/APEC (which fetch their own data server-side). Fixed by
+   extracting that fetch logic out of `scan-urls/index.ts` into a new shared
+   `_shared/fetchLinkContent.ts`, used by both functions now. **Verified live**: `scan-urls` still
+   behaves identically post-refactor (a France Travail link returns normally, an Indeed link returns
+   real JobSpy-scraped listings).
+3. **No trial/subscription gating at all**: `cron-scan` never called `checkUserSubscription` —
+   unlike `scan-urls`, it kept auto-scanning (and inserting new `jobs` rows) for every link
+   regardless of whether that user's trial had expired or they had no active subscription,
+   completely bypassing the paywall fix from earlier tonight. Fixed by checking
+   `checkUserSubscription` once per user per run (cached in-memory across that run's links, since
+   several links can belong to the same account) and skipping scanning for expired accounts.
+   **Verified live** on the very next scheduled run, on a genuine pre-existing production account
+   (not a test one): `cron-scan: skipping link 12/13, subscription expired for user 70fbe96b-...` —
+   confirming the paywall now applies to the automated scan too, not just the manual one.
+
+Redeployed `cron-scan` after each fix. All three fixes confirmed live on real scheduled runs (not
+synthetic tests) within the same evening: crash gone → real links found → subscription gate
+correctly skipping an expired real account. The JobSpy/Browserless fetch path (#2) specifically was
+verified through `scan-urls` (identical shared code, confirmed to still return real Indeed listings
+post-refactor) rather than through `cron-scan` directly, since by the time that fix shipped the only
+two real links in the database belonged to the now-correctly-blocked expired account.
+
 ### The original checklist
 
 1. ✅ **Fixed, deployed, and verified live end-to-end** (2026-07-23, test-mode, cleaned up after).
