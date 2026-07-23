@@ -325,6 +325,9 @@ sending domain in MailerSend and/or upgrade the plan** — this is an account-le
 something fixable from code or secrets. Until resolved, welcome/trial-reminder emails will still fail
 for most real recipients, just with a different (clearer) error than before.
 
+**Deferred until the SIRET arrives** (same dependency as items 6/9 below) — the MailerSend plan
+upgrade needs business billing details tied to the SIRET, same as Stripe live mode.
+
 ### The original checklist
 
 1. ✅ **Fixed, deployed, and verified live end-to-end** (2026-07-23, test-mode, cleaned up after).
