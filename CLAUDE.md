@@ -184,6 +184,36 @@ No free plan. Two plans only:
 
 ## What's Left Before Stripe Live Mode
 
+### 🔒 Security fixes 2026-07-23 — both introduced earlier the same day, both fixed and deployed
+
+A security review of the day's own changes (not a general audit) caught two HIGH-severity issues,
+both regressions from fixes made earlier the same session:
+
+- **Broken access control in `handle-stripe-webhook`**: preferring `session.customer_details.email`
+  over `session.customer_email` (the earlier fix in this same file) meant the webhook trusted a
+  field the buyer can edit on Stripe's own hosted Checkout page. Since `createCheckoutSession`
+  (`apps/webapp/src/app/actions.ts`) creates sessions with a bare `customer_email`, not a locked
+  `customer`, an authenticated attacker could start their own checkout, edit the email field to a
+  victim's account email, and have the webhook overwrite the **victim's** `profiles` row
+  (`stripe_customer_id`, `plan`, `subscription_ends_at`, etc.) with the attacker's own
+  subscription — and since `createPortalSession` blindly trusts `profile.stripe_customer_id`, the
+  victim's own "manage billing" button would then open a portal into the attacker's Stripe
+  customer. Fixed by prioritizing `session.client_reference_id` (set to the authenticated
+  Supabase `user.id` at session creation, immutable by the buyer) and only falling back to email
+  lookup when it's absent (the `customer.subscription.created` path, which has no
+  `client_reference_id` available). Verified no regression on the email-fallback path via a fresh
+  test-mode subscription.
+- **Secret exposure in `_shared/logger.ts`**: the `mezmoLogger.on('error', ...)` handler added
+  earlier the same day to stop Mezmo connection failures from crashing functions was logging the
+  raw error object. `@logdna/logger` attaches the outgoing request headers to `err.meta`, stripping
+  only `Authorization` — but the actual ingestion key travels under a header literally named
+  `apiKey`, which survives untouched, so `MEZMO_API_KEY` was printing in plaintext into every
+  function's logs on each connectivity hiccup (which, per the crash investigation above, was
+  happening on essentially every real request). Fixed to log only `err.message`. **`MEZMO_API_KEY`
+  should be rotated** since it may already have leaked into logs before this fix.
+
+Redeployed to all 9 functions using the shared logger.
+
 ### 🟢 P0 found and fixed 2026-07-23 — root cause of two separate-looking crashes
 
 While live-testing the items below, `scan-urls` was crashing (503, empty body) on every real link

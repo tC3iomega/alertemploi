@@ -71,8 +71,14 @@ export const createLoggerWithMeta = (meta: Record<string, string>): ILogger => {
   // invalid/unreachable ingestion key). With no listener attached, Node/Deno rethrows
   // that as an uncaught exception and kills the whole function isolate — logging must
   // never be able to take down the function, so swallow it here instead.
+  //
+  // Only log err.message, never the error object itself: @logdna/logger attaches an
+  // `err.meta.headers` object built from the outgoing request headers, and it only strips
+  // `Authorization` — the actual ingestion key is sent under a header literally named
+  // `apiKey`, which survives untouched. Logging the raw error would leak MEZMO_API_KEY
+  // in plaintext into these logs every time this fires.
   mezmoLogger.on('error', (err: unknown) => {
-    console.error('Mezmo logger connection error (ignored):', err);
+    console.error('Mezmo logger connection error (ignored):', err instanceof Error ? err.message : String(err));
   });
   return new Logger(mezmoLogger);
 };

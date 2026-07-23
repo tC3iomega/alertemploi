@@ -77,6 +77,12 @@ Deno.serve(async (req) => {
       let customerEmail: string | null = null;
       let customerId: string | null = null;
       let subscriptionId: string | null = null;
+      // Set only for checkout.session.completed: the authenticated Supabase user id we
+      // stamped on the session at creation time (createCheckoutSession). Unlike the email
+      // fields below, the buyer cannot edit this on Stripe's hosted checkout page, so it
+      // must always be preferred over email when present to avoid a buyer redirecting the
+      // upgrade onto an arbitrary victim account by editing the email field at checkout.
+      let clientReferenceUserId: string | null = null;
 
       if (event.type === 'customer.subscription.created') {
         const subscription = event.data.object;
@@ -86,24 +92,28 @@ Deno.serve(async (req) => {
         if (!customer.deleted) customerEmail = customer.email;
       } else {
         const session = event.data.object;
-        // customer_details.email reflects what the buyer actually entered/confirmed at
-        // checkout; customer_email is only the prefilled value and can be stale if they
-        // changed it, which would otherwise upgrade the wrong account.
+        clientReferenceUserId = session.client_reference_id;
+        // Fallback only: customer_details.email/customer_email are both editable by the
+        // buyer on Stripe's checkout page and must never be trusted when
+        // clientReferenceUserId is available.
         customerEmail = session.customer_details?.email ?? session.customer_email;
         customerId = session.customer as string;
         subscriptionId = session.subscription as string;
       }
 
-      if (customerEmail && customerId && subscriptionId) {
+      if ((clientReferenceUserId || customerEmail) && customerId && subscriptionId) {
         const subscription = await stripe.subscriptions.retrieve(subscriptionId);
         const tier = getTierFromSubscription(subscription);
 
-        const { data, error: getUserIdError } = await supabaseClient.rpc('get_user_id_by_email', {
-          email: customerEmail.toLowerCase(),
-        });
-        if (getUserIdError) throw getUserIdError;
-        // deno-lint-ignore no-explicit-any
-        const userId = (data as unknown as any)?.[0]?.id;
+        let userId: string | undefined = clientReferenceUserId ?? undefined;
+        if (!userId && customerEmail) {
+          const { data, error: getUserIdError } = await supabaseClient.rpc('get_user_id_by_email', {
+            email: customerEmail.toLowerCase(),
+          });
+          if (getUserIdError) throw getUserIdError;
+          // deno-lint-ignore no-explicit-any
+          userId = (data as unknown as any)?.[0]?.id;
+        }
         if (!userId) throw new Error(`No user found for email ${customerEmail}`);
 
         const periodEnd = new Date(getPeriodEnd(subscription) * 1000);
@@ -119,7 +129,7 @@ Deno.serve(async (req) => {
           })
           .eq('user_id', userId);
         if (updateProfileError) throw updateProfileError;
-        logger.info(`upgraded user ${customerEmail} to ${tier}`);
+        logger.info(`upgraded user ${userId} to ${tier}`);
       }
     }
 
