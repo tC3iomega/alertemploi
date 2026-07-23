@@ -209,8 +209,19 @@ both regressions from fixes made earlier the same session:
   only `Authorization` — but the actual ingestion key travels under a header literally named
   `apiKey`, which survives untouched, so `MEZMO_API_KEY` was printing in plaintext into every
   function's logs on each connectivity hiccup (which, per the crash investigation above, was
-  happening on essentially every real request). Fixed to log only `err.message`. **`MEZMO_API_KEY`
-  should be rotated** since it may already have leaked into logs before this fix.
+  happening on essentially every real request). Fixed to log only `err.message`.
+
+  Confirmed via the log explorer that the real key value had in fact already been logged in
+  plaintext multiple times during that window (unrelated to any real signup — purely from this
+  session's own test traffic), and that Mezmo was rejecting it with a `403` regardless — i.e. the
+  key was already dead, not just exposed. Mezmo now requires a paid plan to issue a new ingestion
+  key, so rather than pay for that, **`MEZMO_API_KEY` was removed from Supabase secrets entirely**
+  (`supabase secrets unset MEZMO_API_KEY`). `createLoggerWithMeta` already falls back to a plain
+  `console.log`/`console.error`-based logger when the key is absent — no code change needed, no
+  functionality lost (Supabase's own log explorer, used throughout this investigation, already
+  gives full visibility), and it fully removes this entire class of risk going forward. Verified
+  live: `scan-urls` still returns `200` normally with the key unset, and no more `Mezmo` log lines
+  appear.
 
 Redeployed to all 9 functions using the shared logger.
 
