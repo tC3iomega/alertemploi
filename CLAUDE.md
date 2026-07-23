@@ -307,6 +307,24 @@ verified through `scan-urls` (identical shared code, confirmed to still return r
 post-refactor) rather than through `cron-scan` directly, since by the time that fix shipped the only
 two real links in the database belonged to the now-correctly-blocked expired account.
 
+### ⚠️ `MAILERSEND_API_KEY` was also dead — new key set, but MailerSend account needs attention
+
+A final sweep of the other 4 functions' logs (`send-trial-reminder`, `handle-profile-change-webhook`,
+`post-scan-hook`, `scan-job-description`) turned up one more real, non-crashing issue:
+`send-welcome-email` was failing on every single signup with `401 Unauthenticated` from MailerSend's
+API — same category of problem as the Mezmo key (a dead third-party credential), confirmed on 8+
+occurrences across the evening. Unlike Mezmo, this doesn't crash anything (the error is caught and
+logged), it just means **no welcome emails were going out**, and likely no trial-reminder emails
+either (`send-trial-reminder` shares the same `_shared/emails/mailer.ts`).
+
+A new API token was generated in MailerSend and set via `supabase secrets set MAILERSEND_API_KEY=...`.
+This fixed the auth error, but surfaced the real underlying issue: the MailerSend account is still on
+a **trial plan**, which caps sending to a limited number of unique recipients
+(`"You have reached trial account unique recipients limit. #MS42225"`, HTTP 422). **Verify the
+sending domain in MailerSend and/or upgrade the plan** — this is an account-level restriction, not
+something fixable from code or secrets. Until resolved, welcome/trial-reminder emails will still fail
+for most real recipients, just with a different (clearer) error than before.
+
 ### The original checklist
 
 1. ✅ **Fixed, deployed, and verified live end-to-end** (2026-07-23, test-mode, cleaned up after).
