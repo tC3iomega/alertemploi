@@ -184,36 +184,80 @@ No free plan. Two plans only:
 
 ## What's Left Before Stripe Live Mode
 
-1. ✅ **Code-fixed** — end-to-end trial → expiration → upgrade path. Found and fixed a real gating bug:
-   `_shared/subscription.ts` defaulted `subscriptionActive` to `true` when `subscription_ends_at`
-   was `null` (i.e. every account that hasn't been through Stripe checkout yet, since new accounts
-   get `plan='basic'` by default). Combined with `hasPaidPlan` being true by default, `scan-urls`
-   never actually blocked anyone after trial expiry — access was granted forever. Now defaults to
-   `false`, so access after trial expiry correctly requires an active `subscription_ends_at`.
-   **Still needs a live run-through** (test-mode Stripe): sign up → let trial lapse (or backdate
-   `trial_ends_at` in the `profiles` table) → confirm `scan-urls` returns no jobs and the dashboard
-   shows the red "essai terminé" banner → checkout → confirm access returns and `subscription_ends_at`
-   is set.
-2. ✅ **Code-reviewed** `handle-stripe-webhook` (`apps/backend/supabase/functions/handle-stripe-webhook/index.ts`):
-   `checkout.session.completed`, `customer.subscription.created/updated/deleted` are all handled,
-   price-ID → tier mapping is correct, and cancellation via `customer.subscription.deleted` only
-   fires once Stripe has already let the subscription run to period end (so it's not a premature
-   cutoff). Fixed one correctness issue: on `checkout.session.completed` the email used to match
-   the Supabase user was `session.customer_email` (only the checkout prefill value); switched to
-   prefer `session.customer_details?.email`, which reflects what the buyer actually confirmed —
-   avoids upgrading the wrong account if they edit the email mid-checkout.
-   **Still needs:** a live webhook run (Stripe CLI `stripe trigger checkout.session.completed` /
-   `customer.subscription.updated` / `.deleted` against the local function, or the Stripe Dashboard
-   webhook logs after a real test-mode purchase) since Deno isn't available in this environment to
-   run `deno check`/`deno test` locally.
+### 🔴 P0 — found during live testing 2026-07-23, needs your attention first
+
+- **`scan-urls` crashes (503, empty body) whenever it actually processes a real matched link**,
+  for every provider tried (`francetravail` live API call, `indeed` via the JobSpy branch). It's
+  NOT related to the subscription fix below — reproduced identically regardless of trial/subscription
+  state, and confirmed via DB side effects: the link's `last_scraped_at` does get bumped (so a scrape
+  genuinely starts and succeeds) but the function dies before returning a response, after the DB
+  write. Likely a memory or response-size limit on the Edge Function runtime (the module pulls in
+  `deno-dom-wasm` + ~15 site parsers + `turndown`), possibly made worse by a broad test keyword
+  ("test", "developpeur") returning a large real result set from France Travail's live API. **I
+  could not get a stack trace** — this Supabase CLI version (2.98.2) has no `functions logs` command
+  and Docker wasn't running locally to reproduce via `supabase functions serve`. Please check
+  **Dashboard → Edge Functions → scan-urls → Logs** for the actual error, or upgrade the CLI
+  (`npm i -g supabase@latest`) to get `supabase functions logs scan-urls --project-ref pvhtnwuzrkmnpxnfvwyv`.
+  This is your core paid feature (scanning saved searches) — it needs fixing before launch
+  regardless of the Stripe checklist below.
+- **`handle-stripe-webhook` events aren't completing** even after redeploying the fix below: I
+  created a real test-mode subscription and nudged it (metadata update) to fire a fresh
+  `customer.subscription.updated` event; Stripe's own event log shows `pending_webhooks: 1`
+  (undelivered/failing) minutes later, and the `profiles` row was never touched. The function
+  itself is healthy (a bad-signature request gets a clean, fast `500` with a proper error message —
+  no crash), so the failure is happening deeper in a *real*, correctly-signed event — possibly the
+  same resource-limit issue as `scan-urls` (this function also does several chained calls: Stripe
+  customer retrieve, a Supabase RPC, a profile update). Notably, one *other*, real historical event
+  from before today (`evt_1Tlm6gV059EuUi4mP03ons82`, for `sub_1TghQBV059EuUi4mruW9d2DX`) also shows
+  `pending_webhooks: 1` — so this isn't purely an artifact of my test, it may have already affected
+  a real subscriber. **Check Dashboard → Developers → Webhooks → `handle-stripe-webhook` endpoint →
+  that event's delivery attempts** for the actual response/error, and check whether that specific
+  real customer's `profiles` row reflects their current plan correctly.
+- Found and fixed **a second, more subtle bug** while investigating the above: Stripe API versions
+  from `2025-03-31` onward removed the top-level `current_period_end` from the `Subscription`
+  object (moved onto each subscription item). Your webhook endpoint is pinned to `2026-05-27.dahlia`
+  (confirmed via the Stripe API), so `customer.subscription.updated`'s handler — which reads
+  `event.data.object` directly — was getting `undefined` for `current_period_end`, silently writing
+  `subscription_ends_at: null` on every renewal/plan-change event. Combined with today's fix below
+  (`subscriptionActive` now correctly defaults to `false` for `null`), this would have **newly
+  locked out real paying customers** the next time their subscription updated. Fixed with a
+  `getPeriodEnd()` helper that falls back to `subscription.items.data[0].current_period_end`, and
+  deployed. This part I could verify is *correct code*, but not verify end-to-end given the
+  delivery issue above.
+
+### The original checklist
+
+1. ✅ **Code-fixed and deployed** — end-to-end trial → expiration → upgrade path. Found and fixed a
+   real gating bug: `_shared/subscription.ts` defaulted `subscriptionActive` to `true` when
+   `subscription_ends_at` was `null` (i.e. every account that hasn't been through Stripe checkout
+   yet, since new accounts get `plan='basic'` by default). Combined with `hasPaidPlan` being true by
+   default, `scan-urls` never actually blocked anyone after trial expiry — access was granted
+   forever. Now defaults to `false`. **Verified live** (2026-07-23, test-mode, cleaned up
+   afterwards): created a disposable Supabase account, backdated `trial_ends_at` to the past with
+   `subscription_ends_at` still `null`, hit `scan-urls` with a real saved link — got the fast,
+   blocked response with the link's `last_scraped_at`/`scrape_failure_count` completely untouched,
+   proving it now correctly short-circuits before ever reaching the (separately broken, see above)
+   parsing code. The upgrade half (checkout → access restored) is still blocked on the webhook
+   delivery issue above.
+2. ✅ **Code-fixed and deployed**, config double-checked against Stripe directly: the webhook
+   endpoint (`we_1TgguKV059EuUi4mxfmHIYCt`) is registered at the right URL with exactly
+   `checkout.session.completed`, `customer.subscription.created/updated/deleted` enabled, price-ID
+   → tier mapping is correct, and cancellation via `customer.subscription.deleted` only fires once
+   Stripe has already let the subscription run to period end. Fixed two correctness issues: (a) the
+   email used to match the Supabase user on `checkout.session.completed` was `session.customer_email`
+   (checkout-prefill only); switched to prefer `session.customer_details?.email`. (b) the
+   `current_period_end` API-version bug described above. **Blocked on the delivery issue above** for
+   full end-to-end verification.
 3. ⚠️ **Portal code is correct** (`createPortalSession` in `apps/webapp/src/app/actions.ts` creates a
-   real billing-portal session scoped to `profile.stripe_customer_id`), but whether cancellation
-   defaults to "end of period" (vs. immediate) and whether invoice history is shown are **Stripe
-   Dashboard settings** (Settings → Billing → Customer portal), not code — verify manually.
+   real billing-portal session scoped to `profile.stripe_customer_id`), and the Stripe Dashboard
+   config was checked directly via the API: portal `cancellation.mode = 'at_period_end'` (deferred,
+   as required), `invoice_history.enabled = true`, `payment_method_update.enabled = true`. This item
+   is fully done — code and config both verified.
 4. ✅ Cancellation → downgrade is correct once fix #1 is applied: `customer.subscription.deleted`
    sets `subscription_ends_at = now()`; `checkUserSubscription` then correctly evaluates
    `subscriptionActive = false` and blocks access. `profile.plan` itself is intentionally left as
    the last plan (e.g. `pro`) since every access check already re-derives from `subscriptionActive`.
+   Not yet verified live end-to-end (blocked on the webhook delivery issue above).
 5. ⚠️ Stripe's own confirmation/receipt emails are a **Dashboard setting** (Settings → Emails), not
    code — verify manually that "Successful payments" / "Upcoming renewals" emails are turned on.
 6. **Once SIRET received:** update mentions légales/CGV

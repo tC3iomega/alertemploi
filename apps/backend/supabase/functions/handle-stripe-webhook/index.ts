@@ -19,6 +19,22 @@ function getTierFromSubscription(subscription: Stripe.Subscription): Subscriptio
   return (priceId && PRICE_ID_TO_TIER[priceId]) ?? 'basic';
 }
 
+/**
+ * Stripe API versions from 2025-03-31 onward removed the top-level `current_period_end`
+ * from Subscription objects, moving it onto each subscription item instead. Webhook
+ * payloads are shaped per the endpoint's pinned API version (currently 2026-05-27.dahlia
+ * here, which lacks the top-level field), so read both shapes to stay correct regardless
+ * of which API version is in play.
+ */
+function getPeriodEnd(subscription: Stripe.Subscription): number {
+  const topLevel = subscription.current_period_end;
+  if (topLevel) return topLevel;
+  const itemLevel = (subscription.items.data[0] as unknown as { current_period_end?: number })
+    ?.current_period_end;
+  if (!itemLevel) throw new Error(`Unable to determine period end for subscription ${subscription.id}`);
+  return itemLevel;
+}
+
 Deno.serve(async (req) => {
   if (req.method === 'OPTIONS') {
     return new Response('ok', { headers: CORS_HEADERS });
@@ -90,7 +106,7 @@ Deno.serve(async (req) => {
         const userId = (data as unknown as any)?.[0]?.id;
         if (!userId) throw new Error(`No user found for email ${customerEmail}`);
 
-        const periodEnd = new Date(subscription.current_period_end * 1000);
+        const periodEnd = new Date(getPeriodEnd(subscription) * 1000);
 
         const { error: updateProfileError } = await supabaseClient
           .from('profiles')
@@ -127,7 +143,7 @@ Deno.serve(async (req) => {
 
       // If subscription is canceled/past_due/unpaid, treat as no active subscription
       const isActive = subscription.status === 'active' || subscription.status === 'trialing';
-      const periodEnd = isActive ? new Date(subscription.current_period_end * 1000) : new Date();
+      const periodEnd = isActive ? new Date(getPeriodEnd(subscription) * 1000) : new Date();
 
       const { error: updateProfileError } = await supabaseClient
         .from('profiles')
