@@ -9,7 +9,7 @@ const JOB_BOARDS = ['France Travail', 'APEC', 'Cadremploi', 'HelloWork', 'Welcom
 
 const FEATURES = [
   {
-    title: 'Scan toutes les heures',
+    title: 'Scan toutes les 30 min',
     desc: `Vos alertes sont analysées 24h/24, 7j/7. Les nouvelles offres sont détectées dès leur publication.`,
     icon: (
       <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
@@ -78,7 +78,7 @@ const FEATURES = [
 const FAQS = [
   {
     q: "Comment fonctionne Alertemploi ?",
-    a: "Vous ajoutez l'URL de votre recherche sur un job board. Alertemploi la scanne toutes les heures et vous envoie un email dès qu'une nouvelle offre apparaît.",
+    a: "Vous ajoutez l'URL de votre recherche sur un job board. Alertemploi la scanne toutes les 30 minutes et vous envoie un email dès qu'une nouvelle offre apparaît.",
   },
   {
     q: "Faut-il une carte bancaire pour l'essai gratuit ?",
@@ -93,8 +93,8 @@ const FAQS = [
     a: "Oui, sans engagement. Vous pouvez annuler votre abonnement depuis votre espace personnel à tout moment.",
   },
   {
-    q: "Quelle est la différence entre le plan gratuit et Pro ?",
-    a: "Le plan gratuit permet de créer 2 alertes sur 3 job boards. Le plan Pro donne accès aux alertes illimitées, tous les job boards et les notifications email.",
+    q: "Quelle est la différence entre Basic et Pro ?",
+    a: "Les deux plans incluent les alertes illimitées et tous les job boards. Le plan Pro ajoute un filtre de blacklist d'entreprises, des filtres avancés et un support prioritaire.",
   },
 ];
 
@@ -440,7 +440,7 @@ export default function LandingPage() {
       <footer className={styles.footer}>
         <Logo theme="dark" size="sm" />
         <div style={{ fontSize: 12, color: '#475569' }}>
-          © 2025 Alertemploi —{' '}
+          © 2026 Alertemploi —{' '}
           <a href="/legal" style={{ color: '#475569', textDecoration: 'none' }}>Mentions légales</a>
           {' · '}
           <a href="/cgv" style={{ color: '#475569', textDecoration: 'none' }}>CGV</a>

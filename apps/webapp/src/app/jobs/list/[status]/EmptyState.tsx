@@ -72,7 +72,7 @@ export function EmptyState({ hasLinks }: { hasLinks: boolean }) {
         Aucune nouvelle offre pour le moment
       </h2>
       <p style={{ fontSize: 14, color: '#64748B', lineHeight: 1.6 }}>
-        Vos alertes sont actives et scannées toutes les heures.
+        Vos alertes sont actives et scannées toutes les 30 minutes.
         Vous recevrez un email dès qu'une nouvelle offre correspond à vos critères.
       </p>
     </div>

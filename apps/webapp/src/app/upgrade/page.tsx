@@ -25,7 +25,7 @@ function Logo() {
 const FREE_FEATURES = [
   { label: '2 alertes maximum', included: true },
   { label: 'France Travail, APEC', included: true },
-  { label: 'Scan toutes les heures', included: true },
+  { label: 'Scan toutes les 30 min', included: true },
   { label: 'Tous les job boards', included: false },
   { label: 'Alertes email', included: false },
 ];
