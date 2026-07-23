@@ -537,6 +537,39 @@ issue rather than preventive hardening.
 `localhost` are now rejected (`"points to a local or private network address"`); a real external
 domain (`example.com`) still creates the link normally.
 
+### Completed the "custom job site" fetch step — and found AI features are entirely unconfigured
+
+Per the previous section, nothing ever fetched a `custom`-provider URL server-side, so the Pro
+"custom job site" feature was inert. Added `custom` to `_shared/fetchLinkContent.ts`'s
+`needsBrowser` list (fetched the same way as HelloWork/WTTJ/Cadremploi — via Browserless, or a direct
+fetch fallback), and moved the `assertUrlIsPubliclyReachable` SSRF check to run immediately before
+this fetch (not just at `create-link` time), which also closes the DNS-rebinding gap noted above —
+every scan re-validates the target right before actually reaching out to it. Deployed to `scan-urls`
+and `cron-scan` (both consume `fetchLinkContent`).
+
+**Verified live**: a Pro test account's custom link to a real external domain now actually triggers a
+fetch (confirmed by reaching the next stage of processing, whereas before nothing happened at all).
+
+**That next stage immediately surfaced a bigger, pre-existing gap**: it failed with `Missing
+credentials. Please pass one of apiKey and azureADTokenProvider, or set the AZURE_OPENAI_API_KEY
+environment variable`. Neither `AZURE_AI_FOUNDRY_ENDPOINT` nor `AZURE_AI_FOUNDRY_API_KEY` has ever
+been configured in Supabase secrets. This means **every AI-dependent Pro feature has been
+non-functional from the start**, independent of anything from tonight:
+- `parseCustomJobs` (`_shared/customJobsParser.ts`) — extracting a job list from a custom site's HTML
+  via AI, the very feature just wired up above.
+- `parseCustomJobDescription` (same file) — AI-extracted job descriptions for custom sites.
+- `applyAdvancedMatchingFilters` → `promptOpenAI` (`_shared/advancedMatching.ts`) — the Pro "AI
+  exclusion filter" (company blacklist alone still works fine, it's plain string matching with no AI
+  involved).
+
+**Decision: parked for now, not configured.** Azure OpenAI has no perpetual free tier — usage-based
+per-token billing from the first production call, though new Azure accounts get a $200/30-day trial
+credit (needs card + phone verification). Given tonight's pattern (Mezmo, MailerSend), left this for
+a deliberate future decision rather than provisioning a paid service unprompted. Until configured,
+the custom-URL fetch improvement above has no visible effect for real users (it now correctly fetches
+the page, but the AI step that turns that HTML into job listings still fails) — this is expected and
+not a regression.
+
 ### The original checklist
 
 1. ✅ **Fixed, deployed, and verified live end-to-end** (2026-07-23, test-mode, cleaned up after).

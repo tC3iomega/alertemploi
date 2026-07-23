@@ -3,6 +3,7 @@ import { JobSite, Link } from '@alertemploi/core';
 import { First2ApplyBackendEnv } from './env.ts';
 import { ILogger } from './logger.ts';
 import { ParsedJob } from './parsers/parserTypes.ts';
+import { assertUrlIsPubliclyReachable } from './urlSafety.ts';
 
 export type FetchLinkContentResult =
   | { jobs: ParsedJob[]; html?: undefined }
@@ -13,8 +14,8 @@ export type FetchLinkContentResult =
  * strategy per provider that both scan-urls (client-supplied html) and cron-scan
  * (no client, always needs to fetch itself) must share:
  *  - LinkedIn/Indeed: scraped via the JobSpy worker, which returns jobs directly.
- *  - HelloWork/WTTJ/Cadremploi: rendered via Browserless (or a direct fetch fallback)
- *    when no html was already supplied.
+ *  - HelloWork/WTTJ/Cadremploi/custom job sites: rendered via Browserless (or a direct
+ *    fetch fallback) when no html was already supplied.
  *  - Everything else (France Travail, APEC, ...): returns `existingHtml` as-is, since
  *    those parsers either don't need html or fetch their own data internally.
  */
@@ -65,9 +66,14 @@ export async function fetchLinkContent({
     return { jobs };
   }
 
-  const needsBrowser = ['hellowork', 'wttj', 'cadremploi'].includes(site.provider ?? '');
+  const needsBrowser = ['hellowork', 'wttj', 'cadremploi', 'custom'].includes(site.provider ?? '');
   let htmlContent = existingHtml ?? '';
   if ((!htmlContent || htmlContent.trim().length === 0) && needsBrowser) {
+    // Re-validated right before the actual fetch (not just at link-creation time in
+    // create-link), since a custom-provider hostname could have been repointed at a
+    // private/internal address via DNS after the link was first created.
+    await assertUrlIsPubliclyReachable(link.url);
+
     const browserlessApiKey = env.browserlessApiKey;
     if (browserlessApiKey) {
       logger.info(`fetching via Browserless: ${link.url}`);
