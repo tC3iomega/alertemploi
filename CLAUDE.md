@@ -386,6 +386,51 @@ issue an UPDATE naming another `user_id`, Postgres rejects the whole statement
   never referenced anywhere in app code either — looks like a dead/unused table, probably worth
   dropping eventually but not a security issue as-is.
 
+### 🔴 CRITICAL — unauthenticated email → user-id → subscription-status oracle (found & fixed 2026-07-23)
+
+Extending the audit to RPC functions (`pg_proc` joined with `information_schema.routine_privileges`)
+found two more `SECURITY DEFINER` functions callable with **zero authentication at all** — not even
+a valid user session, just the public anon key that ships in every page load:
+
+- `get_user_id_by_email(email text)` — `SELECT id FROM auth.users WHERE lower(email) = lower($1)`.
+  Meant to be called only by `handle-stripe-webhook` via `service_role`, but was also directly
+  callable by `anon`.
+- `is_pro_user(check_user_id uuid)` — reads `profiles` for any given user id (bypassing that table's
+  RLS via `SECURITY DEFINER`) and returns whether they have active Basic/Pro access. Not called
+  anywhere in the codebase at all (only present in generated types) — pure leftover surface.
+
+**Confirmed live**, no auth header, just `apikey: <anon key>`:
+`POST /rest/v1/rpc/get_user_id_by_email {"email":"..."}` → `200 [{"id":"<real uuid>"}]`. Chained with
+`is_pro_user`, this is a complete "does this email have an account, and are they a paying customer"
+oracle available to anyone on the internet.
+
+**Root cause worth remembering**: Postgres grants `EXECUTE` to `PUBLIC` on every new function by
+default, and `anon`/`authenticated` inherit from `PUBLIC` — so the first fix attempt
+(`REVOKE ... FROM anon, authenticated`) silently did nothing, since the underlying `PUBLIC` grant
+still applied. Confirmed via `information_schema.routine_privileges` that `PUBLIC` still had
+`EXECUTE` after that first revoke, and the exploit still worked. Fixed properly with:
+```sql
+REVOKE EXECUTE ON FUNCTION public.get_user_id_by_email(text) FROM PUBLIC;
+REVOKE EXECUTE ON FUNCTION public.is_pro_user(uuid) FROM PUBLIC;
+GRANT EXECUTE ON FUNCTION public.get_user_id_by_email(text) TO service_role;
+GRANT EXECUTE ON FUNCTION public.is_pro_user(uuid) TO service_role;
+```
+**Verified live**: both now return `401 permission denied for function ...` with the anon key;
+`handle-stripe-webhook`'s real usage (via `service_role`, unaffected by these grants) still works.
+
+**Also audited, not exploitable despite showing up in the same grant list**: `handle_new_user()` and
+`rls_auto_enable()` are a trigger function and an event-trigger function respectively — Postgres
+refuses to invoke either outside their trigger context (`trigger/event trigger functions can only be
+called as triggers`), so the broad `PUBLIC` EXECUTE grant on them is inert. Not touched.
+
+**Separately noticed while in here, not fixed (low priority, not security-relevant)**:
+`_shared/openAI.ts`'s `logAiUsage()` calls `supabaseAdminClient.rpc('log_ai_usage', ...)`, but no
+`log_ai_usage` function exists anywhere in the database — the call fails every time, silently caught
+and logged. Since `advanced_matching.ai_api_cost`/token columns are never read anywhere either (see
+above), this only means AI usage cost is never actually recorded — no user-facing or security impact,
+just a gap in internal cost observability. Would need the actual accumulation logic designed/added
+if that visibility is wanted; out of scope for a security pass.
+
 ### The original checklist
 
 1. ✅ **Fixed, deployed, and verified live end-to-end** (2026-07-23, test-mode, cleaned up after).
