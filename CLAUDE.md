@@ -328,6 +328,53 @@ for most real recipients, just with a different (clearer) error than before.
 **Deferred until the SIRET arrives** (same dependency as items 6/9 below) — the MailerSend plan
 upgrade needs business billing details tied to the SIRET, same as Stripe live mode.
 
+### 🔴 CRITICAL — `profiles` RLS let any user grant themselves Pro forever, for free (found & fixed 2026-07-23)
+
+Auditing RLS (which nothing tonight had touched — everything so far used `service_role`, which
+bypasses RLS entirely) found the most severe issue of the night. `pg_policies` showed the `profiles`
+UPDATE policy (`mise à jour profil propre uniquement`) had a correct `USING (auth.uid() = user_id)`
+but **`WITH CHECK` was `null`**, and `information_schema.column_privileges` showed `authenticated`
+had column-level `UPDATE` grants on *every* column, including `plan`, `subscription_ends_at`,
+`trial_ends_at`, `stripe_customer_id`, `stripe_subscription_id`.
+
+**Confirmed exploitable with a single request** using only the public anon key + a normal user's own
+session JWT (exactly what any signed-in browser has) — a throwaway test account was created,
+signed in normally, and this succeeded with `HTTP 200`:
+```
+PATCH /rest/v1/profiles?user_id=eq.<own-id>
+{"plan":"pro","subscription_ends_at":"2099-12-31","trial_ends_at":"2099-12-31"}
+```
+Any signed-up user could grant themselves permanent Pro access with one API call from devtools —
+no Stripe, no payment, ever. This has presumably been possible since the `profiles` table was
+created.
+
+**Fixed** with two statements run directly against the linked project (`supabase db query --linked`
+— there's no local migration history for this project, changes are applied straight to the remote
+DB):
+```sql
+REVOKE UPDATE ON public.profiles FROM authenticated, anon;
+GRANT UPDATE (email_alerts_enabled, alert_frequency) ON public.profiles TO authenticated;
+ALTER POLICY "mise à jour profil propre uniquement" ON public.profiles
+  USING (auth.uid() = user_id) WITH CHECK (auth.uid() = user_id);
+```
+`authenticated` can now only update the two genuinely user-editable preference columns; the `WITH
+CHECK` is added defense-in-depth against row reassignment (mirrors the pattern `links`/`jobs` already
+had correctly — see below). Server-side updates via `service_role` (the Stripe webhook, cron-scan,
+etc.) are unaffected, since `service_role` bypasses table grants and RLS entirely.
+
+**Verified live**: the exact same exploit request now returns `403 permission denied for table
+profiles`; a legitimate preference update (`alert_frequency`) still returns `200` and applies
+correctly.
+
+**`links` and `jobs` were checked too and are fine** — both have an `ALL` policy with matching
+`USING`/`WITH CHECK` (`auth.uid() = user_id` on both), so even though `authenticated` can technically
+issue an UPDATE naming another `user_id`, Postgres rejects the whole statement
+(`new row violates row-level security policy`) since the row wouldn't satisfy `WITH CHECK` afterward
+— confirmed live with a real reassignment attempt. `profiles` was the only table missing this.
+
+**Not checked, worth a look eventually**: `sites`, `html_dumps`, `advanced_matching`, `notes`,
+`scan_queue` — RLS is enabled on all of them but their specific policies weren't audited tonight.
+
 ### The original checklist
 
 1. ✅ **Fixed, deployed, and verified live end-to-end** (2026-07-23, test-mode, cleaned up after).
