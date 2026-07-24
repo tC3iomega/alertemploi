@@ -106,7 +106,7 @@ export function DashboardClient({
         }}>
           <ClockIcon />
           <span style={{ fontSize: 13, color: '#92400E', flex: 1 }}>
-            <strong>{trialDays} jour{trialDays !== 1 ? 's' : ''}</strong> restant{trialDays !== 1 ? 's' : ''} dans votre essai gratuit Pro.
+            <strong>{trialDays} jour{trialDays !== 1 ? 's' : ''}</strong> restant{trialDays !== 1 ? 's' : ''} dans votre essai gratuit.
           </span>
           <Link href="/upgrade" style={{
             fontSize: 12, fontWeight: 600, color: '#2563EB', textDecoration: 'none',
@@ -125,7 +125,7 @@ export function DashboardClient({
         }}>
           <ClockIcon />
           <span style={{ fontSize: 13, color: '#B91C1C', flex: 1 }}>
-            <strong>Votre essai gratuit est termine.</strong> Passez a l'abonnement pour continuer.
+            <strong>Votre essai gratuit est terminé.</strong> Passez à l'abonnement pour continuer.
           </span>
           <Link href="/upgrade" style={{
             fontSize: 12, fontWeight: 600, color: 'white', textDecoration: 'none',
