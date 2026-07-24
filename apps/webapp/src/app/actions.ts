@@ -6,6 +6,12 @@ import { F2aSupabaseApi } from '@alertemploi/ui';
 import { redirect } from 'next/navigation';
 import { revalidatePath } from 'next/cache';
 
+function getBaseUrl() {
+  if (process.env.NEXT_PUBLIC_APP_URL) return process.env.NEXT_PUBLIC_APP_URL;
+  if (process.env.VERCEL_URL) return `https://${process.env.VERCEL_URL}`;
+  return 'http://localhost:3002';
+}
+
 export async function login(formData: FormData) {
   try {
     const email = formData.get('email') as string;
@@ -166,8 +172,8 @@ export async function createCheckoutSession(formData: FormData) {
       'line_items[0][quantity]': '1',
       'subscription_data[trial_period_days]': '7',
       'payment_method_collection': 'if_required',
-      'success_url': `${process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3002'}/jobs/list/new`,
-      'cancel_url': `${process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3002'}/upgrade`,
+      'success_url': `${getBaseUrl()}/jobs/list/new`,
+      'cancel_url': `${getBaseUrl()}/upgrade`,
     }).toString(),
   });
 
@@ -215,7 +221,7 @@ export async function createPortalSession() {
     },
     body: new URLSearchParams({
       'customer': profile.stripe_customer_id,
-      'return_url': `${process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3002'}/dashboard`,
+      'return_url': `${getBaseUrl()}/dashboard`,
     }).toString(),
   });
   const session = await res.json();
