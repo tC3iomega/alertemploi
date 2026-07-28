@@ -19,7 +19,8 @@ export default function MentionsLegalesPage() {
             Le site <strong>alertemploi.com</strong> est édité par :<br />
             <strong>Quentin Brugeille</strong><br />
             Entrepreneur individuel<br />
-            France<br />
+            SIREN : 984 862 417 — Code APE : 62.01Z<br />
+            Immatriculé au RNE le 27/07/2026<br />
             Contact : <a href="mailto:contact@alertemploi.com" style={{ color: '#2563EB' }}>contact@alertemploi.com</a>
           </p>
         </section>

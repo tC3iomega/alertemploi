@@ -23,7 +23,7 @@ export default function CGVPage() {
           <h2 style={{ fontSize: 18, fontWeight: 600, marginBottom: 12 }}>1. Objet</h2>
           <p style={{ fontSize: 14, lineHeight: 1.8, color: '#374151' }}>
             Les présentes conditions générales de vente (CGV) régissent l'abonnement au service{' '}
-            <strong>alertemploi.com</strong>, édité par Quentin Brugeille, entrepreneur individuel. Le service consiste
+            <strong>alertemploi.com</strong>, édité par Quentin Brugeille, entrepreneur individuel (SIREN : 984 862 417). Le service consiste
             à agréger des offres d'emploi provenant de plusieurs sites tiers et à notifier l'utilisateur par email
             lorsqu'une nouvelle offre correspond à ses critères de recherche.
           </p>
