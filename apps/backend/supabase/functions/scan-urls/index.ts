@@ -1,6 +1,7 @@
 import { JobSite, Link, SiteProvider, WebPageRuntimeData } from '@alertemploi/core';
 import { getExceptionMessage } from '@alertemploi/core';
 
+import { getInitialJobStatus, loadCompanyBlacklist } from '../_shared/advancedMatching.ts';
 import { CORS_HEADERS } from '../_shared/cors.ts';
 import { EdgeFunctionAuthorizedContext, getEdgeFunctionContext } from '../_shared/edgeFunctions.ts';
 import { fetchLinkContent } from '../_shared/fetchLinkContent.ts';
@@ -85,12 +86,14 @@ Deno.serve(async (req) => {
         }),
       ).then((r) => r.flat());
 
+      const blacklist = await loadCompanyBlacklist({ supabaseAdminClient: context.supabaseAdminClient, userId });
+
       const { data: upsertedJobs, error: insertError } = await supabaseClient
         .from('jobs')
         .upsert(
           parsedJobs.map((job) => ({
             ...job,
-            status: 'processing' as const,
+            ...getInitialJobStatus({ companyName: job.companyName, blacklist, defaultStatus: 'processing' as const }),
             // ensure tags is not null
             tags: job.tags ?? [],
           })),

@@ -1,6 +1,6 @@
 'use client';
 
-import { LogOutIcon, MoonIcon, SunIcon, XIcon, FileTextIcon, ShieldIcon, MailIcon, CreditCardIcon } from 'lucide-react';
+import { LogOutIcon, MoonIcon, SunIcon, XIcon, FileTextIcon, ShieldIcon, MailIcon, CreditCardIcon, BanIcon } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { useTheme } from 'next-themes';
 import Link from 'next/link';
@@ -91,6 +91,10 @@ export function MenuDrawer({ isOpen, onClose }: { isOpen: boolean; onClose: () =
 
           <Link href="/upgrade" onClick={onClose} style={{ textDecoration: 'none' }}>
             <MenuRow icon={<span style={{ fontSize: 18 }}>⭐</span>} label="Passer à Pro" />
+          </Link>
+
+          <Link href="/blacklist" onClick={onClose} style={{ textDecoration: 'none' }}>
+            <MenuRow icon={<BanIcon className="h-5 w-5" />} label="Blacklist d'entreprises" />
           </Link>
 
           <MenuRow

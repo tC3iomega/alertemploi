@@ -70,7 +70,53 @@ export function isExcludedCompany({
   companyName: string;
   advancedMatching: AdvancedMatchingConfig;
 }): boolean {
-  const excludedCompanies = advancedMatching.blacklisted_companies.map((c) => c.toLowerCase());
-  const lowerCaseCompanyName = companyName.toLowerCase();
-  return excludedCompanies.some((c) => lowerCaseCompanyName === c);
+  return new Set(advancedMatching.blacklisted_companies.map(normalizeCompanyName)).has(
+    normalizeCompanyName(companyName),
+  );
+}
+
+function normalizeCompanyName(name: string): string {
+  return name.trim().toLowerCase();
+}
+
+/**
+ * Load a user's company blacklist, for filtering jobs right when a scan inserts them.
+ * Returns an empty blacklist when the user isn't on an active Pro subscription.
+ */
+export async function loadCompanyBlacklist({
+  supabaseAdminClient,
+  userId,
+}: {
+  supabaseAdminClient: SupabaseClient<DbSchema, 'public'>;
+  userId: string;
+}): Promise<Set<string>> {
+  const { hasAdvancedMatching } = await checkUserSubscription({ supabaseAdminClient, userId });
+  if (!hasAdvancedMatching) return new Set();
+
+  const { data, error } = await supabaseAdminClient
+    .from('advanced_matching')
+    .select('blacklisted_companies')
+    .eq('user_id', userId)
+    .maybeSingle();
+  if (error) throw error;
+
+  return new Set((data?.blacklisted_companies ?? []).map(normalizeCompanyName));
+}
+
+/**
+ * Status (and exclusion reason) a freshly scanned job should be inserted with.
+ */
+export function getInitialJobStatus<S extends JobStatus>({
+  companyName,
+  blacklist,
+  defaultStatus,
+}: {
+  companyName: string;
+  blacklist: Set<string>;
+  defaultStatus: S;
+}): { status: S | 'excluded_by_advanced_matching'; exclude_reason?: string } {
+  if (blacklist.has(normalizeCompanyName(companyName))) {
+    return { status: 'excluded_by_advanced_matching', exclude_reason: `${companyName} est dans votre blacklist.` };
+  }
+  return { status: defaultStatus };
 }

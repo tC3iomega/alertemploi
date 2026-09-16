@@ -2,6 +2,7 @@ import { Link, SiteProvider } from '@alertemploi/core';
 import { getExceptionMessage } from '@alertemploi/core';
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.48.1';
 
+import { getInitialJobStatus, loadCompanyBlacklist } from '../_shared/advancedMatching.ts';
 import { CORS_HEADERS } from '../_shared/cors.ts';
 import { parseEnv } from '../_shared/env.ts';
 import { fetchLinkContent } from '../_shared/fetchLinkContent.ts';
@@ -126,12 +127,16 @@ if (parseFailed) {
         // Insérer les jobs
         jobs.forEach((job) => { job.link_id = link.id; });
 
+        const blacklist = await loadCompanyBlacklist({ supabaseAdminClient: supabaseAdmin, userId: link.user_id });
+
         const { data: upsertedJobs, error: insertError } = await supabaseAdmin
           .from('jobs')
           .upsert(
             jobs.map((job) => ({
               ...job,
-              status: 'new' as const,
+              // service_role has no auth.uid(), so the column default can't fill this in
+              user_id: link.user_id,
+              ...getInitialJobStatus({ companyName: job.companyName, blacklist, defaultStatus: 'new' as const }),
               tags: job.tags || [],
             })),
             { onConflict: 'user_id, externalId', ignoreDuplicates: true },

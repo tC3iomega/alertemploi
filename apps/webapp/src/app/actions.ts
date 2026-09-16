@@ -228,3 +228,25 @@ export async function createPortalSession() {
   if (session.error) throw new Error(session.error.message);
   return { url: session.url };
 }
+
+export async function getCompanyBlacklist(): Promise<string[]> {
+  try {
+    const api = await buildApi();
+    const config = await api.getAdvancedMatchingConfig();
+    return config?.blacklisted_companies ?? [];
+  } catch (error) {
+    throw new Error(`failed to get company blacklist: ${getExceptionMessage(error, true)}`);
+  }
+}
+
+export async function updateCompanyBlacklist(companies: string[]) {
+  try {
+    const cleaned = Array.from(new Set(companies.map((c) => c.trim()).filter(Boolean)));
+    const api = await buildApi();
+    await api.updateAdvancedMatchingConfig({ blacklisted_companies: cleaned, ai_prompt: '' });
+    revalidatePath('/blacklist');
+    return { companies: cleaned };
+  } catch (error) {
+    return { error: getExceptionMessage(error, true) };
+  }
+}
