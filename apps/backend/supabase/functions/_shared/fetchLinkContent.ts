@@ -14,8 +14,9 @@ export type FetchLinkContentResult =
  * strategy per provider that both scan-urls (client-supplied html) and cron-scan
  * (no client, always needs to fetch itself) must share:
  *  - LinkedIn/Indeed: scraped via the JobSpy worker, which returns jobs directly.
- *  - HelloWork/WTTJ/Cadremploi/custom job sites: rendered via Browserless (or a direct
- *    fetch fallback) when no html was already supplied.
+ *  - HelloWork/WTTJ/Cadremploi: rendered via Browserless (or a direct fetch fallback)
+ *    when no html was already supplied. Custom job sites are not fetched: they need AI
+ *    parsing, which is disabled (see `hasCustomJobsParsing` in subscription.ts).
  *  - Everything else (France Travail, APEC, ...): returns `existingHtml` as-is, since
  *    those parsers either don't need html or fetch their own data internally.
  */
@@ -66,7 +67,7 @@ export async function fetchLinkContent({
     return { jobs };
   }
 
-  const needsBrowser = ['hellowork', 'wttj', 'cadremploi', 'custom'].includes(site.provider ?? '');
+  const needsBrowser = ['hellowork', 'wttj', 'cadremploi'].includes(site.provider ?? '');
   let htmlContent = existingHtml ?? '';
   if ((!htmlContent || htmlContent.trim().length === 0) && needsBrowser) {
     // Re-validated right before the actual fetch (not just at link-creation time in

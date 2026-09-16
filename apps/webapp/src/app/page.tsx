@@ -94,7 +94,7 @@ const FAQS = [
   },
   {
     q: "Quelle est la différence entre Basic et Pro ?",
-    a: "Les deux plans incluent les alertes illimitées et tous les job boards. Le plan Pro ajoute un filtre de blacklist d'entreprises, des filtres avancés et un support prioritaire.",
+    a: "Les deux plans incluent les alertes illimitées et tous les job boards. Le plan Pro ajoute un filtre de blacklist d'entreprises et un support prioritaire.",
   },
 ];
 
@@ -374,7 +374,7 @@ export default function LandingPage() {
             <div style={{ fontSize: 12, color: '#64748B', marginBottom: 18, lineHeight: 1.5 }}>
               {isAnnual ? 'Soit 10,49€/mois.' : 'Essai gratuit 7 jours — sans CB.'}
             </div>
-            {['Tout Basic, plus :', 'Blacklist d\u2019entreprises', 'Filtres avancés', 'Support prioritaire'].map((f) => (
+            {['Tout Basic, plus :', 'Blacklist d\u2019entreprises', 'Support prioritaire'].map((f) => (
               <div key={f} style={{ fontSize: 12.5, color: '#64748B', padding: '6px 0', borderBottom: '0.5px solid #F1F5F9', display: 'flex', gap: 8 }}>
                 <span style={{ color: '#2563EB', fontWeight: 700 }}>✓</span> {f}
               </div>

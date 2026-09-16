@@ -41,7 +41,6 @@ const BASIC_FEATURES = [
 const PRO_FEATURES = [
   { label: 'Tout Basic, plus :', included: true },
   { label: 'Blacklist d\u2019entreprises', included: true },
-  { label: 'Filtres avancés (mots-clés exclus)', included: true },
   { label: 'Support prioritaire', included: true },
   { label: 'Essai 7 jours gratuit', included: true },
 ];

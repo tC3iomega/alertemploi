@@ -47,6 +47,7 @@ export async function checkUserSubscription({
     profile,
     subscriptionHasExpired,
     hasAdvancedMatching: hasProTier,
-    hasCustomJobsParsing: hasProTier,
+    // Custom job sites rely on AI parsing, which is not offered (no LLM provider configured).
+    hasCustomJobsParsing: false,
   };
 }

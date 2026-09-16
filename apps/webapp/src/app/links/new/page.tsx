@@ -18,7 +18,8 @@ export default function NewLinkPage() {
   const [detectedSite, setDetectedSite] = useState<Site | null>(null);
 
   useEffect(() => {
-    listSites().then((s) => setSites(s as Site[]));
+    // custom job sites need AI parsing, which isn't offered
+    listSites().then((s) => setSites((s as Site[]).filter((site) => site.provider !== 'custom')));
   }, []);
 
   useEffect(() => {
@@ -86,7 +87,7 @@ async function handleSubmit(e: React.FormEvent) {
           )}
           {url && !detectedSite && (
             <p className="text-xs text-muted-foreground">
-              Site non reconnu — l&apos;alerte sera créée en mode personnalisé.
+              Site non reconnu — seuls les sites listés ci-dessous sont pris en charge.
             </p>
           )}
         </div>
