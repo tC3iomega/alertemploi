@@ -51,10 +51,10 @@ export default function UpgradePage() {
   const [loading, setLoading] = useState<string | null>(null);
   const [isAnnual, setIsAnnual] = useState(false);
 
-  const basicMonthlyPriceId = 'price_1Tk1X4V059EuUi4mpZaDiqwt';
-  const basicYearlyPriceId = 'price_1Tk1X4V059EuUi4mwAvqhX6z';
-  const proMonthlyPriceId = 'price_1Tk1XSV059EuUi4mcBBeAFBU';
-  const proYearlyPriceId = 'price_1Tk1XjV059EuUi4mCPRLTUmV';
+  const basicMonthlyPriceId = 'price_1UGQGDV05CSUPvQveeN8BJSg';
+  const basicYearlyPriceId = 'price_1UGQGDV05CSUPvQvf3cJ4zwO';
+  const proMonthlyPriceId = 'price_1UGQGDV05CSUPvQv1UbCvLXH';
+  const proYearlyPriceId = 'price_1UGQGEV05CSUPvQvXOombR5L';
 
   async function handleCheckout(priceId: string) {
     setLoading(priceId);
@@ -238,6 +238,9 @@ export default function UpgradePage() {
         {/* Garantie */}
         <p style={{ textAlign: 'center', fontSize: 12, color: '#94A3B8' }}>
           🔒 Paiement sécurisé par Stripe · Annulation à tout moment · Pas de frais cachés
+        </p>
+        <p style={{ textAlign: 'center', fontSize: 12, color: '#94A3B8', marginTop: 8 }}>
+          TVA non applicable, art. 293 B du CGI.
         </p>
         <p style={{ textAlign: 'center', fontSize: 12, color: '#94A3B8', marginTop: 8 }}>
           En vous abonnant, vous acceptez nos{' '}

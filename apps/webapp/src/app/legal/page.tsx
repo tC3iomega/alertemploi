@@ -21,6 +21,7 @@ export default function MentionsLegalesPage() {
             Entrepreneur individuel<br />
             9 Rue de la Vieille Douve, 44270 Machecoul-Saint-Même<br />
             SIRET : 984 862 417 00040 — Code APE : 62.01Z<br />
+            TVA non applicable, art. 293 B du CGI<br />
             Immatriculé au RNE le 27/07/2026<br />
             Contact : <a href="mailto:contact@alertemploi.com" style={{ color: '#2563EB' }}>contact@alertemploi.com</a>
           </p>

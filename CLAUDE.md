@@ -111,11 +111,18 @@ No free plan. Two plans only:
 | Basic | 4,99€ | 41,90€ |
 | Pro | 14,99€ | 125,90€ |
 
-**Stripe Price IDs:**
-- Basic monthly: `price_1Tk1X4V059EuUi4mpZaDiqwt`
-- Basic annual: `price_1Tk1X4V059EuUi4mwAvqhX6z`
-- Pro monthly: `price_1Tk1XSV059EuUi4mcBBeAFBU`
-- Pro annual: `price_1Tk1XjV059EuUi4mCPRLTUmV`
+**Stripe Price IDs (LIVE, account `acct_1TggbNV05CSUPvQv`, created 2026-09-16):**
+- Basic monthly: `price_1UGQGDV05CSUPvQveeN8BJSg`
+- Basic annual: `price_1UGQGDV05CSUPvQvf3cJ4zwO`
+- Pro monthly: `price_1UGQGDV05CSUPvQv1UbCvLXH`
+- Pro annual: `price_1UGQGEV05CSUPvQvXOombR5L`
+
+Old test-mode IDs (`price_1Tk1X4V059EuUi4m…`, `price_1Tk1XSV059EuUi4m…`, `price_1Tk1XjV059EuUi4m…`) are no
+longer referenced in code. Live webhook endpoint: `we_1UGQGzV05CSUPvQvX1YlrRML` (API version
+`2026-05-27.dahlia`). Live portal config: `bpc_1UGQH4V05CSUPvQvqe9gAdqq` (default, cancel at period end).
+
+**TVA:** franchise en base — "TVA non applicable, art. 293 B du CGI" on CGV, mentions légales, `/upgrade`.
+No Stripe Tax.
 
 **Trial:** 7 days, no credit card required (`payment_method_collection: if_required`)
 - New accounts: `plan='basic'`, `trial_ends_at = now() + 7 days`

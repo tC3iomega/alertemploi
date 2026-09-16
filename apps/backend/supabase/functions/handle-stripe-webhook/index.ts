@@ -8,10 +8,10 @@ import { createLoggerWithMeta } from '../_shared/logger.ts';
 
 // Map Stripe Price IDs to our subscription tiers
 const PRICE_ID_TO_TIER: Record<string, SubscriptionTier> = {
-  price_1Tk1X4V059EuUi4mpZaDiqwt: 'basic', // basic monthly
-  price_1Tk1X4V059EuUi4mwAvqhX6z: 'basic', // basic yearly
-  price_1Tk1XSV059EuUi4mcBBeAFBU: 'pro', // pro monthly
-  price_1Tk1XjV059EuUi4mCPRLTUmV: 'pro', // pro yearly
+  price_1UGQGDV05CSUPvQveeN8BJSg: 'basic', // basic monthly
+  price_1UGQGDV05CSUPvQvf3cJ4zwO: 'basic', // basic yearly
+  price_1UGQGDV05CSUPvQv1UbCvLXH: 'pro', // pro monthly
+  price_1UGQGEV05CSUPvQvXOombR5L: 'pro', // pro yearly
 };
 
 function getTierFromSubscription(subscription: Stripe.Subscription): SubscriptionTier {

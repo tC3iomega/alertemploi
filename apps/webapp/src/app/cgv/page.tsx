@@ -32,7 +32,7 @@ export default function CGVPage() {
         <section style={{ marginBottom: 36 }}>
           <h2 style={{ fontSize: 18, fontWeight: 600, marginBottom: 12 }}>2. Tarifs</h2>
           <p style={{ fontSize: 14, lineHeight: 1.8, color: '#374151', marginBottom: 12 }}>
-            Le service est proposé sous forme d'abonnement, sans engagement, selon les formules suivantes (prix TTC) :
+            Le service est proposé sous forme d'abonnement, sans engagement, selon les formules suivantes (TVA non applicable, art. 293 B du CGI) :
           </p>
           <ul style={{ fontSize: 14, lineHeight: 1.8, color: '#374151', paddingLeft: 20 }}>
             <li>
