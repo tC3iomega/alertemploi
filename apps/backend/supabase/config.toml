@@ -171,3 +171,8 @@ verify_jwt = false
 
 [functions.send-trial-reminder]
 verify_jwt = false
+
+# Must stay true: the function trusts the JWT's role claim (service_role only), which is
+# only safe because the gateway has verified the signature first.
+[functions.send-welcome-email]
+verify_jwt = true
