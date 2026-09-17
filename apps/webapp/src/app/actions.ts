@@ -3,10 +3,20 @@
 import { createClient } from '@/lib/supabase/server';
 import { JobLabel, JobStatus, ListJobsParams, getExceptionMessage } from '@alertemploi/core';
 import { F2aSupabaseApi } from '@alertemploi/ui';
+import { headers } from 'next/headers';
 import { redirect } from 'next/navigation';
 import { revalidatePath } from 'next/cache';
 
-function getBaseUrl() {
+// Return URLs (Stripe checkout/portal) must point at the exact host the user is browsing:
+// the session cookie is host-only, so sending them back to another domain serving the same
+// app (e.g. alertemploi.vercel.app instead of www.alertemploi.com) lands them logged out.
+async function getBaseUrl() {
+  const h = await headers();
+  const host = h.get('x-forwarded-host') ?? h.get('host');
+  if (host && /(^|\.)alertemploi\.com$|\.vercel\.app$|^localhost(:\d+)?$/.test(host)) {
+    const proto = h.get('x-forwarded-proto') ?? (host.startsWith('localhost') ? 'http' : 'https');
+    return `${proto}://${host}`;
+  }
   if (process.env.NEXT_PUBLIC_APP_URL) return process.env.NEXT_PUBLIC_APP_URL;
   if (process.env.VERCEL_URL) return `https://${process.env.VERCEL_URL}`;
   return 'http://localhost:3002';
@@ -175,7 +185,7 @@ export async function createCheckoutSession(formData: FormData) {
       },
       body: new URLSearchParams({
         'customer': profile.stripe_customer_id!,
-        'return_url': `${getBaseUrl()}/dashboard`,
+        'return_url': `${await getBaseUrl()}/dashboard`,
         'flow_data[type]': 'subscription_update',
         'flow_data[subscription_update][subscription]': profile.stripe_subscription_id!,
       }).toString(),
@@ -191,8 +201,8 @@ export async function createCheckoutSession(formData: FormData) {
     'line_items[0][price]': priceId,
     'line_items[0][quantity]': '1',
     'payment_method_collection': 'if_required',
-    'success_url': `${getBaseUrl()}/jobs/list/new`,
-    'cancel_url': `${getBaseUrl()}/upgrade`,
+    'success_url': `${await getBaseUrl()}/jobs/list/new`,
+    'cancel_url': `${await getBaseUrl()}/upgrade`,
   };
   if (profile?.stripe_customer_id) {
     params['customer'] = profile.stripe_customer_id;
@@ -203,10 +213,16 @@ export async function createCheckoutSession(formData: FormData) {
   // The free trial starts at signup (profiles.trial_ends_at). Checkout only carries over
   // what's left of it, never a fresh 7 days — and nothing for accounts that already had a
   // subscription. Stripe requires trial_end to be at least 48h away.
+  // The remainder is rounded up to whole days: Stripe Checkout displays whole days rounded
+  // down, so a signup trial with 6 days 23h left would otherwise read "6 jours" right after
+  // signing up for a "7 jours" trial.
   const trialEnd = profile?.trial_ends_at ? new Date(profile.trial_ends_at) : null;
+  const DAY_MS = 24 * 60 * 60 * 1000;
   const MIN_TRIAL_MS = 48 * 60 * 60 * 1000 + 5 * 60 * 1000;
-  if (!profile?.stripe_customer_id && trialEnd && trialEnd.getTime() - Date.now() > MIN_TRIAL_MS) {
-    params['subscription_data[trial_end]'] = String(Math.floor(trialEnd.getTime() / 1000));
+  const remainingMs = trialEnd ? trialEnd.getTime() - Date.now() : 0;
+  if (!profile?.stripe_customer_id && remainingMs > MIN_TRIAL_MS) {
+    const roundedTrialEnd = Date.now() + Math.ceil(remainingMs / DAY_MS) * DAY_MS + 60 * 1000;
+    params['subscription_data[trial_end]'] = String(Math.floor(roundedTrialEnd / 1000));
   }
 
   const res = await fetch('https://api.stripe.com/v1/checkout/sessions', {
@@ -262,7 +278,7 @@ export async function createPortalSession() {
     },
     body: new URLSearchParams({
       'customer': profile.stripe_customer_id,
-      'return_url': `${getBaseUrl()}/dashboard`,
+      'return_url': `${await getBaseUrl()}/dashboard`,
     }).toString(),
   });
   const session = await res.json();
