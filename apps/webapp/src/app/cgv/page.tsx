@@ -3,25 +3,25 @@ export default function CGVPage() {
     <main
       style={{
         minHeight: '100vh',
-        background: '#F1EFE8',
+        background: 'var(--ae-bg)',
         fontFamily: 'Arial, Helvetica, sans-serif',
-        color: '#1E293B',
+        color: 'var(--ae-text)',
         padding: '48px 24px',
       }}
     >
       <div style={{ maxWidth: 720, margin: '0 auto' }}>
-        <a href="/" style={{ fontSize: 13, color: '#2563EB', textDecoration: 'none' }}>
+        <a href="/" style={{ fontSize: 13, color: 'var(--ae-primary)', textDecoration: 'none' }}>
           ← Retour
         </a>
 
         <h1 style={{ fontSize: 28, fontWeight: 700, marginTop: 24, marginBottom: 8, letterSpacing: -0.5 }}>
           Conditions générales de vente
         </h1>
-        <p style={{ fontSize: 13, color: '#64748B', marginBottom: 40 }}>Dernière mise à jour : juillet 2026</p>
+        <p style={{ fontSize: 13, color: 'var(--ae-text-muted)', marginBottom: 40 }}>Dernière mise à jour : juillet 2026</p>
 
         <section style={{ marginBottom: 36 }}>
           <h2 style={{ fontSize: 18, fontWeight: 600, marginBottom: 12 }}>1. Objet</h2>
-          <p style={{ fontSize: 14, lineHeight: 1.8, color: '#374151' }}>
+          <p style={{ fontSize: 14, lineHeight: 1.8, color: 'var(--ae-text-body)' }}>
             Les présentes conditions générales de vente (CGV) régissent l'abonnement au service{' '}
             <strong>alertemploi.com</strong>, édité par Quentin Brugeille, entrepreneur individuel (SIRET : 984 862 417 00040). Le service consiste
             à agréger des offres d'emploi provenant de plusieurs sites tiers et à notifier l'utilisateur par email
@@ -31,10 +31,10 @@ export default function CGVPage() {
 
         <section style={{ marginBottom: 36 }}>
           <h2 style={{ fontSize: 18, fontWeight: 600, marginBottom: 12 }}>2. Tarifs</h2>
-          <p style={{ fontSize: 14, lineHeight: 1.8, color: '#374151', marginBottom: 12 }}>
+          <p style={{ fontSize: 14, lineHeight: 1.8, color: 'var(--ae-text-body)', marginBottom: 12 }}>
             Le service est proposé sous forme d'abonnement, sans engagement, selon les formules suivantes (TVA non applicable, art. 293 B du CGI) :
           </p>
-          <ul style={{ fontSize: 14, lineHeight: 1.8, color: '#374151', paddingLeft: 20 }}>
+          <ul style={{ fontSize: 14, lineHeight: 1.8, color: 'var(--ae-text-body)', paddingLeft: 20 }}>
             <li>
               <strong>Basic</strong> — 4,99€ / mois ou 41,90€ / an
             </li>
@@ -42,9 +42,9 @@ export default function CGVPage() {
               <strong>Pro</strong> — 14,99€ / mois ou 125,90€ / an
             </li>
           </ul>
-          <p style={{ fontSize: 14, lineHeight: 1.8, color: '#374151', marginTop: 12 }}>
+          <p style={{ fontSize: 14, lineHeight: 1.8, color: 'var(--ae-text-body)', marginTop: 12 }}>
             Les tarifs affichés sur la page{' '}
-            <a href="/upgrade" style={{ color: '#2563EB' }}>
+            <a href="/upgrade" style={{ color: 'var(--ae-primary)' }}>
               Abonnement
             </a>{' '}
             font foi et peuvent être modifiés à tout moment ; toute modification tarifaire ne s'applique qu'aux nouveaux
@@ -54,14 +54,14 @@ export default function CGVPage() {
 
         <section style={{ marginBottom: 36 }}>
           <h2 style={{ fontSize: 18, fontWeight: 600, marginBottom: 12 }}>3. Essai gratuit</h2>
-          <p style={{ fontSize: 14, lineHeight: 1.8, color: '#374151' }}>
+          <p style={{ fontSize: 14, lineHeight: 1.8, color: 'var(--ae-text-body)' }}>
             Chaque nouveau compte bénéficie d'une période d'essai gratuite de <strong>7 jours</strong> à compter de
             son inscription, sans carte bancaire requise pour démarrer. Aucun prélèvement n'est effectué pendant cette
             période. L'essai n'est accordé qu'une seule fois par compte : souscrire une formule (Basic ou Pro,
             mensuelle ou annuelle) pendant l'essai ne le prolonge pas, et une souscription effectuée après la fin de
             l'essai, moins de 48 heures avant sa fin, ou après un précédent abonnement, est payable immédiatement.
           </p>
-          <p style={{ fontSize: 14, lineHeight: 1.8, color: '#374151', marginTop: 12 }}>
+          <p style={{ fontSize: 14, lineHeight: 1.8, color: 'var(--ae-text-body)', marginTop: 12 }}>
             Si l'utilisateur souscrit une formule pendant l'essai, associe un moyen de paiement et ne résilie pas avant
             la fin de l'essai, l'abonnement choisi démarre automatiquement à l'issue de celui-ci et le premier
             prélèvement est effectué à cette date, au tarif en vigueur pour la formule sélectionnée. L'utilisateur peut
@@ -71,7 +71,7 @@ export default function CGVPage() {
 
         <section style={{ marginBottom: 36 }}>
           <h2 style={{ fontSize: 18, fontWeight: 600, marginBottom: 12 }}>4. Paiement et renouvellement</h2>
-          <p style={{ fontSize: 14, lineHeight: 1.8, color: '#374151' }}>
+          <p style={{ fontSize: 14, lineHeight: 1.8, color: 'var(--ae-text-body)' }}>
             Les paiements sont traités par notre prestataire <strong>Stripe</strong>. Alertemploi ne stocke aucune
             donnée bancaire. L'abonnement est reconduit automatiquement à chaque échéance (mensuelle ou annuelle selon
             la formule choisie), sauf résiliation préalable par l'utilisateur.
@@ -80,7 +80,7 @@ export default function CGVPage() {
 
         <section style={{ marginBottom: 36 }}>
           <h2 style={{ fontSize: 18, fontWeight: 600, marginBottom: 12 }}>5. Résiliation</h2>
-          <p style={{ fontSize: 14, lineHeight: 1.8, color: '#374151' }}>
+          <p style={{ fontSize: 14, lineHeight: 1.8, color: 'var(--ae-text-body)' }}>
             L'utilisateur peut résilier son abonnement à tout moment, sans justification ni frais, depuis le portail de
             gestion d'abonnement accessible dans son tableau de bord. La résiliation prend effet à la{' '}
             <strong>fin de la période de facturation en cours</strong> (mensuelle ou annuelle) : l'accès au service
@@ -90,7 +90,7 @@ export default function CGVPage() {
 
         <section style={{ marginBottom: 36 }}>
           <h2 style={{ fontSize: 18, fontWeight: 600, marginBottom: 12 }}>6. Droit de rétractation</h2>
-          <p style={{ fontSize: 14, lineHeight: 1.8, color: '#374151' }}>
+          <p style={{ fontSize: 14, lineHeight: 1.8, color: 'var(--ae-text-body)' }}>
             Conformément à l'article L221-28 du Code de la consommation, le droit de rétractation ne peut être exercé
             pour les contrats de fourniture de contenu numérique ou de services pleinement exécutés avant la fin du
             délai de rétractation, lorsque l'exécution a commencé avec l'accord préalable exprès du consommateur. En
@@ -101,7 +101,7 @@ export default function CGVPage() {
 
         <section style={{ marginBottom: 36 }}>
           <h2 style={{ fontSize: 18, fontWeight: 600, marginBottom: 12 }}>7. Responsabilité</h2>
-          <p style={{ fontSize: 14, lineHeight: 1.8, color: '#374151' }}>
+          <p style={{ fontSize: 14, lineHeight: 1.8, color: 'var(--ae-text-body)' }}>
             Alertemploi agrège des offres d'emploi provenant de sites tiers et ne garantit ni l'exactitude, ni la
             disponibilité, ni l'exhaustivité des offres affichées. Le service est fourni à titre informatif et ne
             constitue en rien un engagement de résultat quant à l'obtention d'un emploi.
@@ -110,7 +110,7 @@ export default function CGVPage() {
 
         <section style={{ marginBottom: 36 }}>
           <h2 style={{ fontSize: 18, fontWeight: 600, marginBottom: 12 }}>8. Droit applicable</h2>
-          <p style={{ fontSize: 14, lineHeight: 1.8, color: '#374151' }}>
+          <p style={{ fontSize: 14, lineHeight: 1.8, color: 'var(--ae-text-body)' }}>
             Les présentes CGV sont soumises au droit français. Tout litige relatif à leur interprétation ou à leur
             exécution relève des tribunaux compétents de France.
           </p>
@@ -118,9 +118,9 @@ export default function CGVPage() {
 
         <section style={{ marginBottom: 36 }}>
           <h2 style={{ fontSize: 18, fontWeight: 600, marginBottom: 12 }}>Contact</h2>
-          <p style={{ fontSize: 14, lineHeight: 1.8, color: '#374151' }}>
+          <p style={{ fontSize: 14, lineHeight: 1.8, color: 'var(--ae-text-body)' }}>
             Pour toute question relative à ces conditions générales de vente, contactez-nous à :<br />
-            <a href="mailto:contact@alertemploi.com" style={{ color: '#2563EB' }}>
+            <a href="mailto:contact@alertemploi.com" style={{ color: 'var(--ae-primary)' }}>
               contact@alertemploi.com
             </a>
           </p>

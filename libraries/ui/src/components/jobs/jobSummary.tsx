@@ -73,7 +73,7 @@ function ActionButton({
       <span
         className={clsx(
           "text-center text-[10px] leading-tight",
-          isDestructive ? "text-destructive" : "text-muted-foreground",
+          isDestructive ? "text-destructive" : "text-foreground/90",
         )}
       >
         {label}
@@ -122,11 +122,13 @@ export function JobSummary({
                 onOpenUrl(usedLink.url)
               }}
             >
-              <img
-                src={siteLogos[usedLink.site_id]}
-                alt={usedLink.title}
-                className="h-5"
-              />
+              {siteLogos[usedLink.site_id] && (
+                <img
+                  src={siteLogos[usedLink.site_id]}
+                  alt={usedLink.title}
+                  className="h-5"
+                />
+              )}
               <span className="truncate max-w-[240px]">
                 {" via "}
                 {usedLink.title.includes("http") ? "votre alerte" : usedLink.title}
@@ -276,7 +278,7 @@ export function JobSummary({
       </div>
 
       {/* Timestamp */}
-      <p className="mt-2 text-xs text-foreground/80">
+      <p className="mt-2 text-xs text-foreground/80" suppressHydrationWarning>
         détectée {getRelativeTimeString(new Date(job.created_at))}
       </p>
     </div>

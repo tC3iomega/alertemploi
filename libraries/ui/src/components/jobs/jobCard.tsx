@@ -151,7 +151,7 @@ export function JobCard({
         </p>
 
         {/* Timestamp */}
-        <p className="ml-auto w-fit shrink-0 text-xs text-foreground/80">
+        <p className="ml-auto w-fit shrink-0 text-xs text-foreground/80" suppressHydrationWarning>
           détectée {getRelativeTimeString(new Date(job.created_at))}
         </p>
       </div>

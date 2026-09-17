@@ -22,7 +22,7 @@ function PlusIcon() {
 
 function BellIcon() {
   return (
-    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#2563EB" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round">
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--ae-primary)" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round">
       <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9" />
       <path d="M13.73 21a2 2 0 0 1-3.46 0" />
     </svg>
@@ -31,7 +31,7 @@ function BellIcon() {
 
 function LinkIcon() {
   return (
-    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#2563EB" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round">
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--ae-primary)" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round">
       <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71" />
       <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71" />
     </svg>
@@ -40,7 +40,7 @@ function LinkIcon() {
 
 function ClockIcon() {
   return (
-    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#D97706" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--ae-amber-icon)" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
       <circle cx="12" cy="12" r="10" />
       <polyline points="12 6 12 12 16 14" />
     </svg>
@@ -90,10 +90,10 @@ export function DashboardClient({
 
   return (
     <div style={{ padding: "20px 16px 32px" }}>
-      <h1 style={{ fontSize: 22, fontWeight: 600, color: '#1E293B', margin: '16px' }}>
+      <h1 style={{ fontSize: 22, fontWeight: 600, color: 'var(--ae-text)', margin: '16px 0 6px' }}>
         Tableau de bord
       </h1>
-      <p style={{ fontSize: 14, color: '#64748B', marginBottom: 24 }}>
+      <p style={{ fontSize: 14, color: 'var(--ae-text-muted)', marginBottom: 24 }}>
         Voici un aperçu de votre activité.
       </p>
 
@@ -101,15 +101,15 @@ export function DashboardClient({
       {isOnTrial && (
         <div style={{
           display: 'flex', alignItems: 'center', gap: 10,
-          background: '#FFFBEB', border: '1px solid #FCD34D',
+          background: 'var(--ae-amber-bg)', border: '1px solid var(--ae-amber-border)',
           borderRadius: 10, padding: '12px 16px', marginBottom: 20,
         }}>
           <ClockIcon />
-          <span style={{ fontSize: 13, color: '#92400E', flex: 1 }}>
+          <span style={{ fontSize: 13, color: 'var(--ae-amber-text-strong)', flex: 1 }}>
             <strong>{trialDays} jour{trialDays !== 1 ? 's' : ''}</strong> restant{trialDays !== 1 ? 's' : ''} dans votre essai gratuit.
           </span>
           <Link href="/upgrade" style={{
-            fontSize: 12, fontWeight: 600, color: '#2563EB', textDecoration: 'none',
+            fontSize: 12, fontWeight: 600, color: 'var(--ae-primary)', textDecoration: 'none',
             whiteSpace: 'nowrap',
           }}>
             Voir les plans
@@ -120,16 +120,16 @@ export function DashboardClient({
       {trialExpired && (
         <div style={{
           display: 'flex', alignItems: 'center', gap: 10,
-          background: '#FEF2F2', border: '1px solid #FECACA',
+          background: 'var(--ae-red-bg)', border: '1px solid var(--ae-red-border)',
           borderRadius: 10, padding: '12px 16px', marginBottom: 20,
         }}>
           <ClockIcon />
-          <span style={{ fontSize: 13, color: '#B91C1C', flex: 1 }}>
+          <span style={{ fontSize: 13, color: 'var(--ae-red-text)', flex: 1 }}>
             <strong>Votre essai gratuit est terminé.</strong> Passez à l'abonnement pour continuer.
           </span>
           <Link href="/upgrade" style={{
             fontSize: 12, fontWeight: 600, color: 'white', textDecoration: 'none',
-            whiteSpace: 'nowrap', background: '#DC2626', padding: '6px 12px', borderRadius: 7,
+            whiteSpace: 'nowrap', background: 'var(--ae-red-bg-strong)', padding: '6px 12px', borderRadius: 7,
           }}>
             S'abonner
           </Link>
@@ -142,8 +142,8 @@ export function DashboardClient({
           disabled={portalLoading}
           style={{
             display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6,
-            width: '100%', fontSize: 13, fontWeight: 500, color: '#2563EB',
-            background: 'white', border: '1px solid #E2E8F0', borderRadius: 10,
+            width: '100%', fontSize: 13, fontWeight: 500, color: 'var(--ae-primary)',
+            background: 'var(--ae-surface)', border: '1px solid var(--ae-border)', borderRadius: 10,
             padding: '11px 0', marginBottom: 20, cursor: portalLoading ? 'not-allowed' : 'pointer',
             opacity: portalLoading ? 0.6 : 1,
           }}
@@ -155,46 +155,46 @@ export function DashboardClient({
       {/* Stats row */}
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: 12, marginBottom: 24 }}>
         <Link href="/jobs/list/new" style={{
-          background: 'white', borderRadius: 12, border: '0.5px solid #E2E8F0',
+          background: 'var(--ae-surface)', borderRadius: 12, border: '0.5px solid var(--ae-border)',
           padding: 18, textDecoration: 'none', display: 'block',
         }}>
           <div style={{
-            width: 36, height: 36, borderRadius: 9, background: '#DBEAFE',
+            width: 36, height: 36, borderRadius: 9, background: 'var(--ae-blue-bg)',
             display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: 10,
           }}>
             <BellIcon />
           </div>
-          <div style={{ fontSize: 24, fontWeight: 700, color: '#1E293B' }}>{newJobsCount}</div>
-          <div style={{ fontSize: 12, color: '#64748B' }}>Nouvelles offres</div>
+          <div style={{ fontSize: 24, fontWeight: 700, color: 'var(--ae-text)' }}>{newJobsCount}</div>
+          <div style={{ fontSize: 12, color: 'var(--ae-text-muted)' }}>Nouvelles offres</div>
         </Link>
 
         <Link href="/links" style={{
-          background: 'white', borderRadius: 12, border: '0.5px solid #E2E8F0',
+          background: 'var(--ae-surface)', borderRadius: 12, border: '0.5px solid var(--ae-border)',
           padding: 18, textDecoration: 'none', display: 'block',
         }}>
           <div style={{
-            width: 36, height: 36, borderRadius: 9, background: '#DBEAFE',
+            width: 36, height: 36, borderRadius: 9, background: 'var(--ae-blue-bg)',
             display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: 10,
           }}>
             <LinkIcon />
           </div>
-          <div style={{ fontSize: 24, fontWeight: 700, color: '#1E293B' }}>{activeLinks.length}</div>
-          <div style={{ fontSize: 12, color: '#64748B' }}>Alerte{activeLinks.length !== 1 ? 's' : ''} active{activeLinks.length !== 1 ? 's' : ''}</div>
+          <div style={{ fontSize: 24, fontWeight: 700, color: 'var(--ae-text)' }}>{activeLinks.length}</div>
+          <div style={{ fontSize: 12, color: 'var(--ae-text-muted)' }}>Alerte{activeLinks.length !== 1 ? 's' : ''} active{activeLinks.length !== 1 ? 's' : ''}</div>
         </Link>
       </div>
 
       {/* No links yet — call to action */}
       {links.length === 0 && (
         <div style={{
-          background: '#F0F7FF', border: '1px solid #DBEAFE',
+          background: 'var(--ae-blue-bg-soft)', border: '1px solid var(--ae-blue-bg)',
           borderRadius: 12, padding: 22, marginBottom: 24, textAlign: 'center',
         }}>
-          <p style={{ fontSize: 14, color: '#1E40AF', marginBottom: 14, lineHeight: 1.6 }}>
+          <p style={{ fontSize: 14, color: 'var(--ae-primary-strong)', marginBottom: 14, lineHeight: 1.6 }}>
             Vous n'avez pas encore d'alerte. Créez-en une pour commencer à recevoir des offres.
           </p>
           <Link href="/links/new" style={{
             display: 'inline-flex', alignItems: 'center', gap: 6,
-            background: '#2563EB', color: 'white', fontSize: 13, fontWeight: 600,
+            background: 'var(--ae-primary-bg)', color: 'white', fontSize: 13, fontWeight: 600,
             padding: '9px 18px', borderRadius: 8, textDecoration: 'none',
           }}>
             <PlusIcon />
@@ -207,9 +207,9 @@ export function DashboardClient({
       {recentJobs.length > 0 && (
         <div style={{ marginBottom: 12 }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', marginBottom: 12 }}>
-            <h2 style={{ fontSize: 16, fontWeight: 600, color: '#1E293B' }}>Dernières offres</h2>
+            <h2 style={{ fontSize: 16, fontWeight: 600, color: 'var(--ae-text)' }}>Dernières offres</h2>
             <Link href="/jobs/list/new" style={{
-              fontSize: 12, color: '#2563EB', textDecoration: 'none',
+              fontSize: 12, color: 'var(--ae-primary)', textDecoration: 'none',
               display: 'flex', alignItems: 'center', gap: 3,
             }}>
               Tout voir <ArrowRightIcon />
@@ -218,14 +218,14 @@ export function DashboardClient({
           <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
             {recentJobs.slice(0, 3).map((job) => (
               <Link key={job.id} href={`/jobs/${job.id}`} style={{
-                background: 'white', border: '0.5px solid #E2E8F0',
+                background: 'var(--ae-surface)', border: '0.5px solid var(--ae-border)',
                 borderRadius: 10, padding: '12px 14px', textDecoration: 'none',
                 display: 'block',
               }}>
-                <div style={{ fontSize: 13, fontWeight: 500, color: '#1E293B', marginBottom: 3 }}>
+                <div style={{ fontSize: 13, fontWeight: 500, color: 'var(--ae-text)', marginBottom: 3 }}>
                   {job.title}
                 </div>
-                <div style={{ fontSize: 12, color: '#94A3B8' }}>
+                <div style={{ fontSize: 12, color: 'var(--ae-text-subtle)' }}>
                   {job.companyName}{job.location ? ` · ${job.location}` : ''}
                 </div>
               </Link>
@@ -238,8 +238,8 @@ export function DashboardClient({
       {links.length > 0 && (
         <Link href="/links/new" style={{
           display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6,
-          fontSize: 13, fontWeight: 500, color: '#2563EB',
-          border: '1px dashed #93C5FD', borderRadius: 10,
+          fontSize: 13, fontWeight: 500, color: 'var(--ae-primary)',
+          border: '1px dashed var(--ae-blue-border-strong)', borderRadius: 10,
           padding: '12px 0', textDecoration: 'none', marginTop: 12,
         }}>
           <PlusIcon />

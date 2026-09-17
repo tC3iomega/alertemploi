@@ -62,7 +62,7 @@ export function MenuDrawer({ isOpen, onClose }: { isOpen: boolean; onClose: () =
         style={{
           position: 'fixed', bottom: 0, left: '50%', right: 'auto',
           width: '100%', maxWidth: 480, transform: isOpen ? 'translate(-50%, 0)' : 'translate(-50%, 100%)',
-          background: '#F1EFE8', borderRadius: '16px 16px 0 0',
+          background: 'var(--ae-bg)', borderRadius: '16px 16px 0 0',
           zIndex: 101, maxHeight: '80vh', overflowY: 'auto',
           transition: 'transform 0.25s ease',
           boxShadow: '0 -4px 24px rgba(0,0,0,0.12)',
@@ -70,15 +70,15 @@ export function MenuDrawer({ isOpen, onClose }: { isOpen: boolean; onClose: () =
       >
         <div style={{
           display: 'flex', alignItems: 'center', justifyContent: 'space-between',
-          padding: '18px 20px', borderBottom: '0.5px solid #E2E8F0',
+          padding: '18px 20px', borderBottom: '0.5px solid var(--ae-border)',
         }}>
-          <h2 style={{ fontSize: 17, fontWeight: 600, color: '#1E293B', margin: 0 }}>Menu</h2>
+          <h2 style={{ fontSize: 17, fontWeight: 600, color: 'var(--ae-text)', margin: 0 }}>Menu</h2>
           <button
             onClick={onClose}
             aria-label="Fermer"
             style={{ background: 'none', border: 'none', cursor: 'pointer', padding: 4 }}
           >
-            <XIcon className="h-5 w-5" style={{ color: '#64748B' }} />
+            <XIcon className="h-5 w-5" style={{ color: 'var(--ae-text-muted)' }} />
           </button>
         </div>
 
@@ -155,11 +155,11 @@ function MenuRow({
         background: 'none', border: 'none', textAlign: 'left',
         cursor: disabled ? 'not-allowed' : 'pointer',
         opacity: disabled ? 0.5 : 1,
-        color: destructive ? '#DC2626' : '#1E293B',
+        color: destructive ? 'var(--ae-red)' : 'var(--ae-text)',
         fontSize: 15,
       }}
     >
-      <span style={{ color: destructive ? '#DC2626' : '#64748B', display: 'flex' }}>{icon}</span>
+      <span style={{ color: destructive ? 'var(--ae-red)' : 'var(--ae-text-muted)', display: 'flex' }}>{icon}</span>
       {label}
     </button>
   );

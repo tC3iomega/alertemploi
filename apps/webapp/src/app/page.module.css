@@ -3,8 +3,8 @@
   align-items: center;
   justify-content: space-between;
   padding: 14px 48px;
-  border-bottom: 0.5px solid #E2E8F0;
-  background: #F1EFE8;
+  border-bottom: 0.5px solid var(--ae-border);
+  background: var(--ae-bg);
   position: sticky;
   top: 0;
   z-index: 100;
@@ -17,7 +17,7 @@
 }
 
 .hero {
-  background: #F1EFE8;
+  background: var(--ae-bg);
   padding: 80px 48px 64px;
   text-align: center;
 }
@@ -25,7 +25,7 @@
 .heroTitle {
   font-size: 52px;
   font-weight: 700;
-  color: #1E293B;
+  color: var(--ae-text);
   line-height: 1.1;
   letter-spacing: -1.5px;
   margin-bottom: 20px;
@@ -43,7 +43,7 @@
 }
 
 .preview {
-  background: #F1EFE8;
+  background: var(--ae-bg);
   padding: 0 48px 72px;
   display: flex;
   justify-content: center;
@@ -71,16 +71,16 @@
 
 .sectionBeige {
   padding: 64px 48px;
-  background: #F1EFE8;
+  background: var(--ae-bg);
 }
 
 .faqSection {
   padding: 80px 48px;
-  background: #F1EFE8;
+  background: var(--ae-bg);
 }
 
 .footer {
-  background: #1E293B;
+  background: var(--ae-footer);
   padding: 28px 48px;
   display: flex;
   justify-content: space-between;

@@ -8,27 +8,19 @@ import { createCheckoutSession } from '@/app/actions';
 function Logo() {
   return (
     <svg width="160" height="36" viewBox="0 0 160 36" xmlns="http://www.w3.org/2000/svg">
-      <circle cx="16" cy="18" r="13" fill="none" stroke="#2563EB" strokeWidth="2.5" />
-      <circle cx="16" cy="18" r="4.5" fill="#2563EB" />
-      <line x1="25" y1="9" x2="31" y2="4" stroke="#2563EB" strokeWidth="2.5" strokeLinecap="round" />
-      <circle cx="32.5" cy="3" r="4" fill="#F59E0B" />
-      <text x="44" y="23" fontFamily="Arial, sans-serif" fontSize="19" fontWeight="700" fill="#1E293B" letterSpacing="-0.5">
-        alert<tspan fill="#2563EB">emploi</tspan>
+      <circle cx="16" cy="18" r="13" fill="none" stroke="var(--ae-primary)" strokeWidth="2.5" />
+      <circle cx="16" cy="18" r="4.5" fill="var(--ae-primary)" />
+      <line x1="25" y1="9" x2="31" y2="4" stroke="var(--ae-primary)" strokeWidth="2.5" strokeLinecap="round" />
+      <circle cx="32.5" cy="3" r="4" fill="var(--ae-accent)" />
+      <text x="44" y="23" fontFamily="Arial, sans-serif" fontSize="19" fontWeight="700" fill="var(--ae-text)" letterSpacing="-0.5">
+        alert<tspan fill="var(--ae-primary)">emploi</tspan>
       </text>
-      <text x="45" y="33" fontFamily="Arial, sans-serif" fontSize="8" fontWeight="400" fill="#94A3B8" letterSpacing="1.2">
+      <text x="45" y="33" fontFamily="Arial, sans-serif" fontSize="8" fontWeight="400" fill="var(--ae-text-subtle)" letterSpacing="1.2">
         TROUVEZ EN PREMIER
       </text>
     </svg>
   );
 }
-
-const FREE_FEATURES = [
-  { label: '2 alertes maximum', included: true },
-  { label: 'France Travail, APEC', included: true },
-  { label: 'Scan toutes les 30 min', included: true },
-  { label: 'Tous les job boards', included: false },
-  { label: 'Alertes email', included: false },
-];
 
 const BASIC_FEATURES = [
   { label: 'Alertes illimitées', included: true },
@@ -65,13 +57,13 @@ export default function UpgradePage() {
   }
 
   return (
-    <div style={{ minHeight: '100vh', background: '#F1EFE8', fontFamily: 'Arial, Helvetica, sans-serif' }}>
+    <div style={{ minHeight: '100vh', background: 'var(--ae-bg)', fontFamily: 'Arial, Helvetica, sans-serif' }}>
 
       {/* Nav */}
       <nav style={{
         display: 'flex', alignItems: 'center', justifyContent: 'space-between',
-        padding: '14px 48px', borderBottom: '0.5px solid #E2E8F0',
-        background: '#F1EFE8',
+        padding: '14px 48px', borderBottom: '0.5px solid var(--ae-border)',
+        background: 'var(--ae-bg)',
       }}>
         <Link href="/" style={{ textDecoration: 'none' }}>
           <Logo />
@@ -79,7 +71,7 @@ export default function UpgradePage() {
         <button
           onClick={() => router.back()}
           style={{
-            fontSize: 13, color: '#64748B', background: 'none',
+            fontSize: 13, color: 'var(--ae-text-muted)', background: 'none',
             border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 6,
           }}
         >
@@ -92,46 +84,46 @@ export default function UpgradePage() {
         {/* Hero */}
         <div style={{ textAlign: 'center', marginBottom: 44 }}>
           <div style={{
-            display: 'inline-block', background: '#FFFBEB', color: '#B45309',
+            display: 'inline-block', background: 'var(--ae-amber-bg)', color: 'var(--ae-amber-text)',
             fontSize: 12, fontWeight: 500, padding: '5px 16px', borderRadius: 20,
-            border: '1px solid #FCD34D', marginBottom: 20,
+            border: '1px solid var(--ae-amber-border)', marginBottom: 20,
           }}>
             Essai gratuit 7 jours — sans carte bancaire
           </div>
           <h1 style={{
-            fontSize: 34, fontWeight: 700, color: '#1E293B',
+            fontSize: 34, fontWeight: 700, color: 'var(--ae-text)',
             letterSpacing: -0.8, marginBottom: 12,
           }}>
             Trouvez votre emploi plus vite
           </h1>
-          <p style={{ fontSize: 15, color: '#64748B', lineHeight: 1.6 }}>
+          <p style={{ fontSize: 15, color: 'var(--ae-text-muted)', lineHeight: 1.6 }}>
             Annulez à tout moment, sans engagement.
           </p>
         </div>
 
         {/* Toggle */}
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 14, marginBottom: 32 }}>
-          <span style={{ fontSize: 14, fontWeight: isAnnual ? 400 : 500, color: isAnnual ? '#64748B' : '#1E293B' }}>
+          <span style={{ fontSize: 14, fontWeight: isAnnual ? 400 : 500, color: isAnnual ? 'var(--ae-text-muted)' : 'var(--ae-text)' }}>
             Mensuel
           </span>
           <div
             onClick={() => setIsAnnual(!isAnnual)}
             style={{
-              width: 48, height: 26, background: '#2563EB',
+              width: 48, height: 26, background: 'var(--ae-primary-bg)',
               borderRadius: 13, position: 'relative', cursor: 'pointer', flexShrink: 0,
             }}
           >
             <div style={{
-              width: 20, height: 20, background: 'white', borderRadius: '50%',
+              width: 20, height: 20, background: 'var(--ae-surface)', borderRadius: '50%',
               position: 'absolute', top: 3,
               left: isAnnual ? 25 : 3, transition: 'left 0.2s',
             }} />
           </div>
-          <span style={{ fontSize: 14, fontWeight: isAnnual ? 500 : 400, color: isAnnual ? '#1E293B' : '#64748B' }}>
+          <span style={{ fontSize: 14, fontWeight: isAnnual ? 500 : 400, color: isAnnual ? 'var(--ae-text)' : 'var(--ae-text-muted)' }}>
             Annuel
           </span>
           <span style={{
-            background: '#DCFCE7', color: '#166534',
+            background: 'var(--ae-green-bg)', color: 'var(--ae-green-text)',
             fontSize: 11, fontWeight: 500, padding: '3px 10px', borderRadius: 10,
           }}>-30%</span>
         </div>
@@ -141,36 +133,36 @@ export default function UpgradePage() {
 
           {/* Basic */}
           <div style={{
-            background: 'white', border: '2px solid #2563EB',
+            background: 'var(--ae-surface)', border: '2px solid var(--ae-primary)',
             borderRadius: 14, padding: 24, position: 'relative',
           }}>
             <div style={{
               position: 'absolute', top: -13, left: '50%', transform: 'translateX(-50%)',
-              background: '#2563EB', color: 'white',
+              background: 'var(--ae-primary-bg)', color: 'white',
               fontSize: 11, fontWeight: 600, padding: '4px 14px', borderRadius: 20,
               whiteSpace: 'nowrap',
             }}>Recommandé</div>
             <div style={{ marginBottom: 18 }}>
-              <div style={{ fontSize: 13, fontWeight: 500, color: '#64748B', marginBottom: 10 }}>Basic</div>
-              <div style={{ fontSize: 30, fontWeight: 700, color: '#1E293B' }}>
+              <div style={{ fontSize: 13, fontWeight: 500, color: 'var(--ae-text-muted)', marginBottom: 10 }}>Basic</div>
+              <div style={{ fontSize: 30, fontWeight: 700, color: 'var(--ae-text)' }}>
                 {isAnnual ? '41,90€' : '4,99€'}{' '}
-                <span style={{ fontSize: 13, fontWeight: 400, color: '#64748B' }}>
+                <span style={{ fontSize: 13, fontWeight: 400, color: 'var(--ae-text-muted)' }}>
                   /{isAnnual ? ' an' : ' mois'}
                 </span>
               </div>
               {isAnnual && (
-                <div style={{ fontSize: 12, color: '#16A34A', marginTop: 4 }}>
+                <div style={{ fontSize: 12, color: 'var(--ae-green)', marginTop: 4 }}>
                   Soit 3,49€/mois
                 </div>
               )}
             </div>
             {BASIC_FEATURES.map((f) => (
               <div key={f.label} style={{
-                fontSize: 12.5, color: '#374151',
-                padding: '6px 0', borderBottom: '0.5px solid #F1F5F9',
+                fontSize: 12.5, color: 'var(--ae-text-body)',
+                padding: '6px 0', borderBottom: '0.5px solid var(--ae-surface-3)',
                 display: 'flex', gap: 8, alignItems: 'center',
               }}>
-                <span style={{ color: '#2563EB', fontWeight: 700 }}>✓</span>
+                <span style={{ color: 'var(--ae-primary)', fontWeight: 700 }}>✓</span>
                 {f.label}
               </div>
             ))}
@@ -179,9 +171,9 @@ export default function UpgradePage() {
               disabled={!!loading}
               style={{
                 width: '100%', padding: '11px 0', marginTop: 20,
-                background: loading ? '#F1F5F9' : 'white',
-                color: '#2563EB', fontSize: 13, fontWeight: 600,
-                border: '1.5px solid #2563EB', borderRadius: 9,
+                background: loading ? 'var(--ae-surface-3)' : 'var(--ae-surface)',
+                color: 'var(--ae-primary)', fontSize: 13, fontWeight: 600,
+                border: '1.5px solid var(--ae-primary)', borderRadius: 9,
                 cursor: loading ? 'not-allowed' : 'pointer',
               }}
             >
@@ -191,30 +183,30 @@ export default function UpgradePage() {
 
           {/* Pro */}
           <div style={{
-            background: 'white', border: '0.5px solid #E2E8F0',
+            background: 'var(--ae-surface)', border: '0.5px solid var(--ae-border)',
             borderRadius: 14, padding: 24,
           }}>
             <div style={{ marginBottom: 18 }}>
-              <div style={{ fontSize: 13, fontWeight: 500, color: '#64748B', marginBottom: 10 }}>Pro</div>
-              <div style={{ fontSize: 30, fontWeight: 700, color: '#1E293B' }}>
+              <div style={{ fontSize: 13, fontWeight: 500, color: 'var(--ae-text-muted)', marginBottom: 10 }}>Pro</div>
+              <div style={{ fontSize: 30, fontWeight: 700, color: 'var(--ae-text)' }}>
                 {isAnnual ? '125,90€' : '14,99€'}{' '}
-                <span style={{ fontSize: 13, fontWeight: 400, color: '#64748B' }}>
+                <span style={{ fontSize: 13, fontWeight: 400, color: 'var(--ae-text-muted)' }}>
                   /{isAnnual ? ' an' : ' mois'}
                 </span>
               </div>
               {isAnnual && (
-                <div style={{ fontSize: 12, color: '#16A34A', marginTop: 4 }}>
+                <div style={{ fontSize: 12, color: 'var(--ae-green)', marginTop: 4 }}>
                   Soit 10,49€/mois
                 </div>
               )}
             </div>
             {PRO_FEATURES.map((f) => (
               <div key={f.label} style={{
-                fontSize: 12.5, color: '#374151',
-                padding: '6px 0', borderBottom: '0.5px solid #F1F5F9',
+                fontSize: 12.5, color: 'var(--ae-text-body)',
+                padding: '6px 0', borderBottom: '0.5px solid var(--ae-surface-3)',
                 display: 'flex', gap: 8, alignItems: 'center',
               }}>
-                <span style={{ color: '#2563EB', fontWeight: 700 }}>✓</span>
+                <span style={{ color: 'var(--ae-primary)', fontWeight: 700 }}>✓</span>
                 {f.label}
               </div>
             ))}
@@ -223,7 +215,7 @@ export default function UpgradePage() {
               disabled={!!loading}
               style={{
                 width: '100%', padding: '11px 0', marginTop: 20,
-                background: loading ? '#93C5FD' : '#2563EB',
+                background: loading ? 'var(--ae-blue-border-strong)' : 'var(--ae-primary-bg)',
                 color: 'white', fontSize: 13, fontWeight: 600,
                 border: 'none', borderRadius: 9,
                 cursor: loading ? 'not-allowed' : 'pointer',
@@ -235,15 +227,15 @@ export default function UpgradePage() {
         </div>
 
         {/* Garantie */}
-        <p style={{ textAlign: 'center', fontSize: 12, color: '#94A3B8' }}>
+        <p style={{ textAlign: 'center', fontSize: 12, color: 'var(--ae-text-subtle)' }}>
           🔒 Paiement sécurisé par Stripe · Annulation à tout moment · Pas de frais cachés
         </p>
-        <p style={{ textAlign: 'center', fontSize: 12, color: '#94A3B8', marginTop: 8 }}>
+        <p style={{ textAlign: 'center', fontSize: 12, color: 'var(--ae-text-subtle)', marginTop: 8 }}>
           TVA non applicable, art. 293 B du CGI.
         </p>
-        <p style={{ textAlign: 'center', fontSize: 12, color: '#94A3B8', marginTop: 8 }}>
+        <p style={{ textAlign: 'center', fontSize: 12, color: 'var(--ae-text-subtle)', marginTop: 8 }}>
           En vous abonnant, vous acceptez nos{' '}
-          <Link href="/cgv" style={{ color: '#64748B' }}>conditions générales de vente</Link>.
+          <Link href="/cgv" style={{ color: 'var(--ae-text-muted)' }}>conditions générales de vente</Link>.
         </p>
 
       </div>

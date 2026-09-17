@@ -42,7 +42,7 @@ const utils_1 = require("../../lib/utils");
 const buttonVariants = (0, class_variance_authority_1.cva)("inline-flex items-center justify-center whitespace-nowrap rounded-lg font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50", {
     variants: {
         variant: {
-            default: "bg-primary text-white shadow hover:bg-[#809966]/90",
+            default: "bg-[var(--ae-primary-bg)] text-white shadow hover:opacity-90",
             destructive: "bg-destructive text-destructive-foreground shadow-sm hover:bg-destructive/90",
             outline: "border border-input bg-background shadow-sm hover:bg-popover hover:text-accent-foreground",
             secondary: "bg-secondary text-secondary-foreground shadow-sm hover:bg-secondary/80",

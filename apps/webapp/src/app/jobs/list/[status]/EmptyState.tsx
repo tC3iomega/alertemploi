@@ -10,26 +10,26 @@ export function EmptyState({ hasLinks }: { hasLinks: boolean }) {
         textAlign: 'center', padding: '64px 24px', maxWidth: 460, margin: '0 auto',
       }}>
         <div style={{
-          width: 72, height: 72, borderRadius: '50%', background: '#DBEAFE',
+          width: 72, height: 72, borderRadius: '50%', background: 'var(--ae-blue-bg)',
           display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: 24,
         }}>
-          <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="#2563EB" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round">
+          <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="var(--ae-primary)" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round">
             <circle cx="11" cy="11" r="8" />
             <line x1="21" y1="21" x2="16.65" y2="16.65" />
             <line x1="11" y1="8" x2="11" y2="14" />
             <line x1="8" y1="11" x2="14" y2="11" />
           </svg>
         </div>
-        <h2 style={{ fontSize: 19, fontWeight: 700, color: '#1E293B', marginBottom: 8 }}>
+        <h2 style={{ fontSize: 19, fontWeight: 700, color: 'var(--ae-text)', marginBottom: 8 }}>
           Créez votre première alerte
         </h2>
-        <p style={{ fontSize: 14, color: '#64748B', lineHeight: 1.6, marginBottom: 28 }}>
+        <p style={{ fontSize: 14, color: 'var(--ae-text-muted)', lineHeight: 1.6, marginBottom: 28 }}>
           Collez l'URL de votre recherche sur France Travail, LinkedIn, Indeed ou un autre job board.
           Alertemploi la surveille pour vous et vous notifie dès qu'une nouvelle offre apparaît.
         </p>
         <Link href="/links/new" style={{
           display: 'inline-flex', alignItems: 'center', gap: 8,
-          background: '#2563EB', color: 'white', fontSize: 14, fontWeight: 600,
+          background: 'var(--ae-primary-bg)', color: 'white', fontSize: 14, fontWeight: 600,
           padding: '11px 24px', borderRadius: 9, textDecoration: 'none',
         }}>
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2.2" strokeLinecap="round">
@@ -45,8 +45,8 @@ export function EmptyState({ hasLinks }: { hasLinks: boolean }) {
         }}>
           {['France Travail', 'APEC', 'LinkedIn', 'Indeed'].map((board) => (
             <span key={board} style={{
-              fontSize: 12, color: '#64748B', background: '#F8FAFC',
-              border: '0.5px solid #E2E8F0', borderRadius: 20, padding: '5px 14px',
+              fontSize: 12, color: 'var(--ae-text-muted)', background: 'var(--ae-surface-2)',
+              border: '0.5px solid var(--ae-border)', borderRadius: 20, padding: '5px 14px',
             }}>{board}</span>
           ))}
         </div>
@@ -60,18 +60,18 @@ export function EmptyState({ hasLinks }: { hasLinks: boolean }) {
       textAlign: 'center', padding: '64px 24px', maxWidth: 420, margin: '0 auto',
     }}>
       <div style={{
-        width: 72, height: 72, borderRadius: '50%', background: '#FFFBEB',
+        width: 72, height: 72, borderRadius: '50%', background: 'var(--ae-amber-bg)',
         display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: 24,
       }}>
-        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#D97706" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round">
+        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="var(--ae-amber-icon)" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round">
           <circle cx="12" cy="12" r="10" />
           <polyline points="12 6 12 12 16 14" />
         </svg>
       </div>
-      <h2 style={{ fontSize: 19, fontWeight: 700, color: '#1E293B', marginBottom: 8 }}>
+      <h2 style={{ fontSize: 19, fontWeight: 700, color: 'var(--ae-text)', marginBottom: 8 }}>
         Aucune nouvelle offre pour le moment
       </h2>
-      <p style={{ fontSize: 14, color: '#64748B', lineHeight: 1.6 }}>
+      <p style={{ fontSize: 14, color: 'var(--ae-text-muted)', lineHeight: 1.6 }}>
         Vos alertes sont actives et scannées toutes les 30 minutes.
         Vous recevrez un email dès qu'une nouvelle offre correspond à vos critères.
       </p>

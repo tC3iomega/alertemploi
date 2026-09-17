@@ -13,10 +13,10 @@ const FEATURES = [
     desc: `Vos alertes sont analysées 24h/24, 7j/7. Les nouvelles offres sont détectées dès leur publication.`,
     icon: (
       <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
-        <circle cx="10" cy="10" r="8" stroke="#2563EB" strokeWidth="1.5" />
-        <circle cx="10" cy="10" r="3" fill="#2563EB" />
-        <line x1="15.5" y1="4.5" x2="19" y2="1.5" stroke="#2563EB" strokeWidth="1.5" strokeLinecap="round" />
-        <circle cx="19.5" cy="1" r="1.5" fill="#F59E0B" />
+        <circle cx="10" cy="10" r="8" stroke="var(--ae-primary)" strokeWidth="1.5" />
+        <circle cx="10" cy="10" r="3" fill="var(--ae-primary)" />
+        <line x1="15.5" y1="4.5" x2="19" y2="1.5" stroke="var(--ae-primary)" strokeWidth="1.5" strokeLinecap="round" />
+        <circle cx="19.5" cy="1" r="1.5" fill="var(--ae-accent)" />
       </svg>
     ),
   },
@@ -25,8 +25,8 @@ const FEATURES = [
     desc: 'Recevez un récapitulatif des nouvelles offres directement dans votre boîte mail, sans vous connecter.',
     icon: (
       <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
-        <rect x="2" y="4" width="16" height="12" rx="2" stroke="#2563EB" strokeWidth="1.5" />
-        <polyline points="2,4 10,11 18,4" stroke="#2563EB" strokeWidth="1.5" strokeLinejoin="round" />
+        <rect x="2" y="4" width="16" height="12" rx="2" stroke="var(--ae-primary)" strokeWidth="1.5" />
+        <polyline points="2,4 10,11 18,4" stroke="var(--ae-primary)" strokeWidth="1.5" strokeLinejoin="round" />
       </svg>
     ),
   },
@@ -35,9 +35,9 @@ const FEATURES = [
     desc: `France Travail, APEC, Cadremploi, HelloWork et Welcome to the Jungle. D'autres arrivent bientôt.`,
     icon: (
       <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
-        <rect x="2" y="2" width="16" height="16" rx="3" stroke="#2563EB" strokeWidth="1.5" />
-        <line x1="6" y1="7" x2="14" y2="7" stroke="#2563EB" strokeWidth="1.5" />
-        <line x1="6" y1="10" x2="11" y2="10" stroke="#2563EB" strokeWidth="1.5" />
+        <rect x="2" y="2" width="16" height="16" rx="3" stroke="var(--ae-primary)" strokeWidth="1.5" />
+        <line x1="6" y1="7" x2="14" y2="7" stroke="var(--ae-primary)" strokeWidth="1.5" />
+        <line x1="6" y1="10" x2="11" y2="10" stroke="var(--ae-primary)" strokeWidth="1.5" />
       </svg>
     ),
   },
@@ -46,8 +46,8 @@ const FEATURES = [
     desc: `Collez l'URL de votre recherche sur chaque site. Alertemploi surveille exactement ce que vous cherchez.`,
     icon: (
       <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
-        <circle cx="9" cy="9" r="6" stroke="#2563EB" strokeWidth="1.5" />
-        <line x1="13.5" y1="13.5" x2="18" y2="18" stroke="#2563EB" strokeWidth="1.5" strokeLinecap="round" />
+        <circle cx="9" cy="9" r="6" stroke="var(--ae-primary)" strokeWidth="1.5" />
+        <line x1="13.5" y1="13.5" x2="18" y2="18" stroke="var(--ae-primary)" strokeWidth="1.5" strokeLinecap="round" />
       </svg>
     ),
   },
@@ -56,8 +56,8 @@ const FEATURES = [
     desc: 'Les offres publiées le matin sont détectées avant même votre réveil. Postulez en premier.',
     icon: (
       <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
-        <circle cx="10" cy="10" r="8" stroke="#2563EB" strokeWidth="1.5" />
-        <polyline points="7,10 9,12 13,8" stroke="#2563EB" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+        <circle cx="10" cy="10" r="8" stroke="var(--ae-primary)" strokeWidth="1.5" />
+        <polyline points="7,10 9,12 13,8" stroke="var(--ae-primary)" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
       </svg>
     ),
   },
@@ -66,10 +66,10 @@ const FEATURES = [
     desc: 'Consultez, annotez et gérez toutes vos offres depuis un espace centralisé, à tout moment.',
     icon: (
       <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
-        <rect x="3" y="2" width="14" height="16" rx="2" stroke="#2563EB" strokeWidth="1.5" />
-        <line x1="6" y1="7" x2="14" y2="7" stroke="#2563EB" strokeWidth="1.5" />
-        <line x1="6" y1="10" x2="14" y2="10" stroke="#2563EB" strokeWidth="1.5" />
-        <line x1="6" y1="13" x2="10" y2="13" stroke="#2563EB" strokeWidth="1.5" />
+        <rect x="3" y="2" width="14" height="16" rx="2" stroke="var(--ae-primary)" strokeWidth="1.5" />
+        <line x1="6" y1="7" x2="14" y2="7" stroke="var(--ae-primary)" strokeWidth="1.5" />
+        <line x1="6" y1="10" x2="14" y2="10" stroke="var(--ae-primary)" strokeWidth="1.5" />
+        <line x1="6" y1="13" x2="10" y2="13" stroke="var(--ae-primary)" strokeWidth="1.5" />
       </svg>
     ),
   },
@@ -100,19 +100,20 @@ const FAQS = [
 
 function Logo({ size = 'md', theme = 'light' }: { size?: 'sm' | 'md'; theme?: 'light' | 'dark' }) {
   const s = size === 'sm' ? 0.75 : 1;
-  const textColor = theme === 'dark' ? '#94A3B8' : '#1E293B';
-  const blueColor = theme === 'dark' ? '#60A5FA' : '#2563EB';
-  const strokeColor = theme === 'dark' ? '#60A5FA' : '#2563EB';
+  // theme="dark" = placed on the always-dark footer, so it uses fixed light values
+  const textColor = theme === 'dark' ? '#E2E8F0' : 'var(--ae-text)';
+  const blueColor = theme === 'dark' ? '#93C5FD' : 'var(--ae-primary)';
+  const strokeColor = theme === 'dark' ? '#93C5FD' : 'var(--ae-primary)';
   return (
     <svg width={160 * s} height={36 * s} viewBox="0 0 160 36" xmlns="http://www.w3.org/2000/svg">
       <circle cx="16" cy="18" r="13" fill="none" stroke={strokeColor} strokeWidth="2.5" />
       <circle cx="16" cy="18" r="4.5" fill={strokeColor} />
       <line x1="25" y1="9" x2="31" y2="4" stroke={strokeColor} strokeWidth="2.5" strokeLinecap="round" />
-      <circle cx="32.5" cy="3" r="4" fill="#F59E0B" />
+      <circle cx="32.5" cy="3" r="4" fill="var(--ae-accent)" />
       <text x="44" y="23" fontFamily="Arial, sans-serif" fontSize="19" fontWeight="700" fill={textColor} letterSpacing="-0.5">
         alert<tspan fill={blueColor}>emploi</tspan>
       </text>
-      <text x="45" y="33" fontFamily="Arial, sans-serif" fontSize="8" fontWeight="400" fill={theme === 'dark' ? '#475569' : '#94A3B8'} letterSpacing="1.2">
+      <text x="45" y="33" fontFamily="Arial, sans-serif" fontSize="8" fontWeight="400" fill={theme === 'dark' ? '#94A3B8' : 'var(--ae-text-subtle)'} letterSpacing="1.2">
         TROUVEZ EN PREMIER
       </text>
     </svg>
@@ -134,7 +135,7 @@ export default function LandingPage() {
   const ctaHref = isLoggedIn ? '/dashboard' : '/auth/register';
 
   return (
-    <div style={{ fontFamily: 'Arial, Helvetica, sans-serif', color: '#1E293B', background: '#F1EFE8', overflowX: 'hidden' }}>
+    <div style={{ fontFamily: 'Arial, Helvetica, sans-serif', color: 'var(--ae-text)', background: 'var(--ae-bg)', overflowX: 'hidden' }}>
 
       {/* NAV */}
       <nav className={styles.nav}>
@@ -142,25 +143,25 @@ export default function LandingPage() {
           <Logo />
         </Link>
         <div className={styles.navLinks}>
-          <a href="#features" className={styles.navLink} style={{ fontSize: 14, color: '#64748B', textDecoration: 'none' }}>Fonctionnalités</a>
-          <a href="#pricing" className={styles.navLink} style={{ fontSize: 14, color: '#64748B', textDecoration: 'none' }}>Tarifs</a>
-          <a href="#faq" className={styles.navLink} style={{ fontSize: 14, color: '#64748B', textDecoration: 'none' }}>FAQ</a>
+          <a href="#features" className={styles.navLink} style={{ fontSize: 14, color: 'var(--ae-text-muted)', textDecoration: 'none' }}>Fonctionnalités</a>
+          <a href="#pricing" className={styles.navLink} style={{ fontSize: 14, color: 'var(--ae-text-muted)', textDecoration: 'none' }}>Tarifs</a>
+          <a href="#faq" className={styles.navLink} style={{ fontSize: 14, color: 'var(--ae-text-muted)', textDecoration: 'none' }}>FAQ</a>
           {isLoggedIn ? (
             <Link href="/dashboard" style={{
               fontSize: 14, fontWeight: 500, color: 'white',
-              padding: '6px 10px', borderRadius: 8, background: '#2563EB',
+              padding: '6px 10px', borderRadius: 8, background: 'var(--ae-primary-bg)',
               textDecoration: 'none', whiteSpace: 'nowrap',
             }} className={styles.navBtn}>Accéder au dashboard</Link>
           ) : (
             <>
               <Link href="/auth/login" style={{
-                fontSize: 14, fontWeight: 500, color: '#2563EB',
-                padding: '6px 10px', borderRadius: 8, border: '1.5px solid #2563EB',
+                fontSize: 14, fontWeight: 500, color: 'var(--ae-primary)',
+                padding: '6px 10px', borderRadius: 8, border: '1.5px solid var(--ae-primary)',
                 textDecoration: 'none', background: 'transparent', whiteSpace: 'nowrap',
               }} className={styles.navBtn}>Se connecter</Link>
               <Link href="/auth/register" style={{
                 fontSize: 14, fontWeight: 500, color: 'white',
-                padding: '6px 10px', borderRadius: 8, background: '#2563EB',
+                padding: '6px 10px', borderRadius: 8, background: 'var(--ae-primary-bg)',
                 textDecoration: 'none', whiteSpace: 'nowrap',
               }} className={styles.navBtn}>Commencer</Link>
             </>
@@ -171,20 +172,20 @@ export default function LandingPage() {
       {/* HERO */}
       <section className={styles.hero}>
         <div style={{
-          display: 'inline-block', background: '#FFFBEB', color: '#B45309',
+          display: 'inline-block', background: 'var(--ae-amber-bg)', color: 'var(--ae-amber-text)',
           fontSize: 12, fontWeight: 500, padding: '5px 16px', borderRadius: 20,
-          border: '1px solid #FCD34D', marginBottom: 28,
+          border: '1px solid var(--ae-amber-border)', marginBottom: 28,
         }}>
           Essai gratuit 7 jours — sans CB
         </div>
 
         <h1 className={styles.heroTitle}>
           Soyez alerté en premier<br />
-          <span style={{ color: '#2563EB' }}>dès qu'une offre apparaît</span>
+          <span style={{ color: 'var(--ae-primary)' }}>dès qu'une offre apparaît</span>
         </h1>
 
         <p style={{
-          fontSize: 18, color: '#64748B', lineHeight: 1.65,
+          fontSize: 18, color: 'var(--ae-text-muted)', lineHeight: 1.65,
           maxWidth: 540, margin: '0 auto 36px',
         }}>
           Alertemploi surveille France Travail, APEC, Cadremploi et d'autres en continu.
@@ -194,23 +195,23 @@ export default function LandingPage() {
         <div className={styles.heroCta}>
           <Link href={ctaHref} style={{
             fontSize: 16, fontWeight: 600, color: 'white',
-            padding: '14px 32px', borderRadius: 10, background: '#2563EB',
+            padding: '14px 32px', borderRadius: 10, background: 'var(--ae-primary-bg)',
             textDecoration: 'none',
           }}>{isLoggedIn ? 'Accéder au dashboard' : 'Créer mon alerte gratuite'}</Link>
           <a href="#features" className={styles.navLink} style={{
-            fontSize: 16, fontWeight: 500, color: '#2563EB',
-            padding: '14px 32px', borderRadius: 10, background: 'white',
-            border: '1.5px solid #2563EB', textDecoration: 'none',
+            fontSize: 16, fontWeight: 500, color: 'var(--ae-primary)',
+            padding: '14px 32px', borderRadius: 10, background: 'var(--ae-surface)',
+            border: '1.5px solid var(--ae-primary)', textDecoration: 'none',
           }}>Voir comment ça marche</a>
         </div>
 
         <div style={{ display: 'flex', gap: 10, justifyContent: 'center', alignItems: 'center', flexWrap: 'wrap' }}>
-          <span style={{ fontSize: 12, color: '#94A3B8', marginRight: 4 }}>Surveille</span>
+          <span style={{ fontSize: 12, color: 'var(--ae-text-subtle)', marginRight: 4 }}>Surveille</span>
           {JOB_BOARDS.map((board) => (
             <span key={board} style={{
-              background: 'white', border: '0.5px solid #E2E8F0',
+              background: 'var(--ae-surface)', border: '0.5px solid var(--ae-border)',
               borderRadius: 20, padding: '5px 14px', fontSize: 12,
-              color: '#475569', fontWeight: 500,
+              color: 'var(--ae-text-secondary)', fontWeight: 500,
             }}>{board}</span>
           ))}
         </div>
@@ -219,8 +220,8 @@ export default function LandingPage() {
       {/* APP PREVIEW */}
       <section className={styles.preview}>
         <div style={{
-          width: '100%', maxWidth: 780, background: 'white',
-          borderRadius: 14, border: '0.5px solid #E2E8F0',
+          width: '100%', maxWidth: 780, background: 'var(--ae-surface)',
+          borderRadius: 14, border: '0.5px solid var(--ae-border)',
           boxShadow: '0 8px 32px rgba(0,0,0,0.08)', overflow: 'hidden',
         }}>
           <div style={{ background: '#1E293B', padding: '12px 18px', display: 'flex', gap: 8, alignItems: 'center' }}>
@@ -229,7 +230,7 @@ export default function LandingPage() {
             <div style={{ width: 11, height: 11, borderRadius: '50%', background: '#28C840' }} />
             <div style={{
               flex: 1, background: '#334155', borderRadius: 6,
-              padding: '4px 14px', fontSize: 11, color: '#94A3B8',
+              padding: '4px 14px', fontSize: 11, color: '#CBD5E1',
               maxWidth: 280, margin: '0 auto', textAlign: 'center',
             }}>alertemploi.com/jobs/list/new</div>
           </div>
@@ -240,13 +241,13 @@ export default function LandingPage() {
               { title: 'UX Designer — Lyon', company: 'Capgemini', type: 'CDI' },
             ].map((job, i) => (
               <div key={i} style={{
-                background: '#F8FAFC', border: '0.5px solid #E2E8F0',
+                background: 'var(--ae-surface-2)', border: '0.5px solid var(--ae-border)',
                 borderRadius: 10, padding: 14,
               }}>
-                <div style={{ fontSize: 12, fontWeight: 500, color: '#1E293B', marginBottom: 4 }}>{job.title}</div>
-                <div style={{ fontSize: 11, color: '#94A3B8', marginBottom: 8 }}>{job.company} · {job.type}</div>
+                <div style={{ fontSize: 12, fontWeight: 500, color: 'var(--ae-text)', marginBottom: 4 }}>{job.title}</div>
+                <div style={{ fontSize: 11, color: 'var(--ae-text-subtle)', marginBottom: 8 }}>{job.company} · {job.type}</div>
                 <span style={{
-                  background: '#DBEAFE', color: '#1E40AF',
+                  background: 'var(--ae-blue-bg)', color: 'var(--ae-primary-strong)',
                   fontSize: 10, fontWeight: 500, padding: '2px 9px', borderRadius: 10,
                 }}>Nouveau</span>
               </div>
@@ -256,26 +257,26 @@ export default function LandingPage() {
       </section>
 
       {/* FEATURES */}
-      <section id="features" className={styles.section} style={{ background: 'white' }}>
+      <section id="features" className={styles.section} style={{ background: 'var(--ae-surface)' }}>
         <h2 style={{ fontSize: 30, fontWeight: 700, textAlign: 'center', marginBottom: 10, letterSpacing: -0.5 }}>
           Pourquoi Alertemploi ?
         </h2>
-        <p style={{ fontSize: 16, color: '#64748B', textAlign: 'center', marginBottom: 48, maxWidth: 480, margin: '0 auto 48px' }}>
+        <p style={{ fontSize: 16, color: 'var(--ae-text-muted)', textAlign: 'center', marginBottom: 48, maxWidth: 480, margin: '0 auto 48px' }}>
           Arrêtez de vérifier manuellement les sites d'emploi. On s'en occupe.
         </p>
         <div className={styles.featuresGrid}>
           {FEATURES.map((f, i) => (
             <div key={i} style={{
-              background: '#F8FAFC', borderRadius: 12, padding: 24,
-              border: '0.5px solid #F1F5F9',
+              background: 'var(--ae-surface-2)', borderRadius: 12, padding: 24,
+              border: '0.5px solid var(--ae-surface-3)',
             }}>
               <div style={{
-                width: 40, height: 40, background: '#DBEAFE',
+                width: 40, height: 40, background: 'var(--ae-blue-bg)',
                 borderRadius: 10, display: 'flex', alignItems: 'center',
                 justifyContent: 'center', marginBottom: 14,
               }}>{f.icon}</div>
               <div style={{ fontSize: 15, fontWeight: 500, marginBottom: 8 }}>{f.title}</div>
-              <div style={{ fontSize: 13, color: '#64748B', lineHeight: 1.6 }}>{f.desc}</div>
+              <div style={{ fontSize: 13, color: 'var(--ae-text-muted)', lineHeight: 1.6 }}>{f.desc}</div>
             </div>
           ))}
         </div>
@@ -286,103 +287,103 @@ export default function LandingPage() {
         <h2 style={{ fontSize: 26, fontWeight: 700, marginBottom: 10, letterSpacing: -0.3 }}>
           Les sites surveillés
         </h2>
-        <p style={{ fontSize: 15, color: '#64748B', marginBottom: 32 }}>
+        <p style={{ fontSize: 15, color: 'var(--ae-text-muted)', marginBottom: 32 }}>
           5 job boards français — d'autres arrivent bientôt.
         </p>
         <div style={{ display: 'flex', gap: 12, justifyContent: 'center', flexWrap: 'wrap' }}>
           {JOB_BOARDS.map((board) => (
             <div key={board} style={{
-              background: 'white', border: '0.5px solid #E2E8F0',
+              background: 'var(--ae-surface)', border: '0.5px solid var(--ae-border)',
               borderRadius: 10, padding: '12px 24px',
-              fontSize: 14, fontWeight: 500, color: '#475569',
+              fontSize: 14, fontWeight: 500, color: 'var(--ae-text-secondary)',
             }}>{board}</div>
           ))}
         </div>
       </section>
 
       {/* PRICING */}
-      <section id="pricing" className={styles.section} style={{ background: 'white' }}>
+      <section id="pricing" className={styles.section} style={{ background: 'var(--ae-surface)' }}>
         <h2 style={{ fontSize: 30, fontWeight: 700, textAlign: 'center', marginBottom: 10, letterSpacing: -0.5 }}>
           Tarifs simples
         </h2>
-        <p style={{ fontSize: 16, color: '#64748B', textAlign: 'center', marginBottom: 36 }}>
+        <p style={{ fontSize: 16, color: 'var(--ae-text-muted)', textAlign: 'center', marginBottom: 36 }}>
           Commencez gratuitement, passez Pro quand vous êtes prêt.
         </p>
 
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 14, marginBottom: 44 }}>
-          <span style={{ fontSize: 14, fontWeight: isAnnual ? 400 : 500, color: isAnnual ? '#64748B' : '#1E293B' }}>
+          <span style={{ fontSize: 14, fontWeight: isAnnual ? 400 : 500, color: isAnnual ? 'var(--ae-text-muted)' : 'var(--ae-text)' }}>
             Mensuel
           </span>
           <div
             onClick={() => setIsAnnual(!isAnnual)}
             style={{
-              width: 48, height: 26, background: '#2563EB',
+              width: 48, height: 26, background: 'var(--ae-primary-bg)',
               borderRadius: 13, position: 'relative', cursor: 'pointer', flexShrink: 0,
             }}
           >
             <div style={{
-              width: 20, height: 20, background: 'white',
+              width: 20, height: 20, background: 'var(--ae-surface)',
               borderRadius: '50%', position: 'absolute', top: 3,
               left: isAnnual ? 25 : 3, transition: 'left 0.2s',
             }} />
           </div>
-          <span style={{ fontSize: 14, fontWeight: isAnnual ? 500 : 400, color: isAnnual ? '#1E293B' : '#64748B' }}>
+          <span style={{ fontSize: 14, fontWeight: isAnnual ? 500 : 400, color: isAnnual ? 'var(--ae-text)' : 'var(--ae-text-muted)' }}>
             Annuel
           </span>
           <span style={{
-            background: '#DCFCE7', color: '#166534',
+            background: 'var(--ae-green-bg)', color: 'var(--ae-green-text)',
             fontSize: 11, fontWeight: 500, padding: '3px 10px', borderRadius: 10,
-          }}>-34%</span>
+          }}>-30%</span>
         </div>
         <div className={styles.pricingGrid}>
-          <div style={{ border: '2px solid #2563EB', borderRadius: 14, padding: 24, position: 'relative' }}>
+          <div style={{ border: '2px solid var(--ae-primary)', borderRadius: 14, padding: 24, position: 'relative' }}>
             <div style={{
               position: 'absolute', top: -12, left: '50%', transform: 'translateX(-50%)',
-              background: '#2563EB', color: 'white',
+              background: 'var(--ae-primary-bg)', color: 'white',
               fontSize: 10, fontWeight: 600, padding: '3px 12px', borderRadius: 20,
               whiteSpace: 'nowrap',
             }}>Populaire</div>
-            <div style={{ fontSize: 13, fontWeight: 500, color: '#64748B', marginBottom: 10 }}>Basic</div>
+            <div style={{ fontSize: 13, fontWeight: 500, color: 'var(--ae-text-muted)', marginBottom: 10 }}>Basic</div>
             <div style={{ fontSize: 32, fontWeight: 700, marginBottom: 6 }}>
               {isAnnual ? '41,90€' : '4,99€'}{' '}
-              <span style={{ fontSize: 13, fontWeight: 400, color: '#64748B' }}>
+              <span style={{ fontSize: 13, fontWeight: 400, color: 'var(--ae-text-muted)' }}>
                 /{isAnnual ? ' an' : ' mois'}
               </span>
             </div>
-            <div style={{ fontSize: 12, color: '#64748B', marginBottom: 18, lineHeight: 1.5 }}>
+            <div style={{ fontSize: 12, color: 'var(--ae-text-muted)', marginBottom: 18, lineHeight: 1.5 }}>
               {isAnnual ? 'Soit 3,49€/mois.' : 'Essai gratuit 7 jours — sans CB.'}
             </div>
             {['Alertes illimitées', 'Tous les job boards', 'Scan toutes les 30 min', 'Alertes email'].map((f) => (
-              <div key={f} style={{ fontSize: 12.5, color: '#64748B', padding: '6px 0', borderBottom: '0.5px solid #F1F5F9', display: 'flex', gap: 8 }}>
-                <span style={{ color: '#2563EB', fontWeight: 700 }}>✓</span> {f}
+              <div key={f} style={{ fontSize: 12.5, color: 'var(--ae-text-muted)', padding: '6px 0', borderBottom: '0.5px solid var(--ae-surface-3)', display: 'flex', gap: 8 }}>
+                <span style={{ color: 'var(--ae-primary)', fontWeight: 700 }}>✓</span> {f}
               </div>
             ))}
             <Link href="/upgrade" style={{
               display: 'block', textAlign: 'center', marginTop: 20,
               padding: '10px 0', borderRadius: 9, fontSize: 13, fontWeight: 600,
-              border: '1.5px solid #2563EB', color: '#2563EB', textDecoration: 'none',
+              border: '1.5px solid var(--ae-primary)', color: 'var(--ae-primary)', textDecoration: 'none',
             }}>Démarrer l'essai gratuit</Link>
           </div>
-          <div style={{ border: '0.5px solid #E2E8F0', borderRadius: 14, padding: 24 }}>
-            <div style={{ fontSize: 13, fontWeight: 500, color: '#64748B', marginBottom: 10 }}>Pro</div>
+          <div style={{ border: '0.5px solid var(--ae-border)', borderRadius: 14, padding: 24 }}>
+            <div style={{ fontSize: 13, fontWeight: 500, color: 'var(--ae-text-muted)', marginBottom: 10 }}>Pro</div>
             <div style={{ fontSize: 32, fontWeight: 700, marginBottom: 6 }}>
               {isAnnual ? '125,90€' : '14,99€'}{' '}
-              <span style={{ fontSize: 13, fontWeight: 400, color: '#64748B' }}>
+              <span style={{ fontSize: 13, fontWeight: 400, color: 'var(--ae-text-muted)' }}>
                 /{isAnnual ? ' an' : ' mois'}
               </span>
             </div>
-            <div style={{ fontSize: 12, color: '#64748B', marginBottom: 18, lineHeight: 1.5 }}>
+            <div style={{ fontSize: 12, color: 'var(--ae-text-muted)', marginBottom: 18, lineHeight: 1.5 }}>
               {isAnnual ? 'Soit 10,49€/mois.' : 'Essai gratuit 7 jours — sans CB.'}
             </div>
             {['Tout Basic, plus :', 'Blacklist d\u2019entreprises', 'Support prioritaire'].map((f) => (
-              <div key={f} style={{ fontSize: 12.5, color: '#64748B', padding: '6px 0', borderBottom: '0.5px solid #F1F5F9', display: 'flex', gap: 8 }}>
-                <span style={{ color: '#2563EB', fontWeight: 700 }}>✓</span> {f}
+              <div key={f} style={{ fontSize: 12.5, color: 'var(--ae-text-muted)', padding: '6px 0', borderBottom: '0.5px solid var(--ae-surface-3)', display: 'flex', gap: 8 }}>
+                <span style={{ color: 'var(--ae-primary)', fontWeight: 700 }}>✓</span> {f}
               </div>
             ))}
             <Link href="/upgrade" style={{
               display: 'block', textAlign: 'center', marginTop: 20,
               padding: '10px 0', borderRadius: 9, fontSize: 13, fontWeight: 600,
-              background: '#2563EB', color: 'white', textDecoration: 'none',
+              background: 'var(--ae-primary-bg)', color: 'white', textDecoration: 'none',
             }}>Démarrer l'essai gratuit</Link>
           </div>
         </div>
@@ -395,7 +396,7 @@ export default function LandingPage() {
             Questions fréquentes
           </h2>
           {FAQS.map((item, i) => (
-            <div key={i} style={{ borderBottom: '0.5px solid #CBD5E1', paddingBottom: 4 }}>
+            <div key={i} style={{ borderBottom: '0.5px solid var(--ae-border-strong)', paddingBottom: 4 }}>
               <button
                 onClick={() => setOpenFaq(openFaq === i ? null : i)}
                 style={{
@@ -404,15 +405,15 @@ export default function LandingPage() {
                   border: 'none', cursor: 'pointer', textAlign: 'left',
                 }}
               >
-                <span style={{ fontSize: 15, fontWeight: 500, color: '#1E293B' }}>{item.q}</span>
+                <span style={{ fontSize: 15, fontWeight: 500, color: 'var(--ae-text)' }}>{item.q}</span>
                 <span style={{
-                  fontSize: 20, color: '#2563EB', fontWeight: 300,
+                  fontSize: 20, color: 'var(--ae-primary)', fontWeight: 300,
                   transform: openFaq === i ? 'rotate(45deg)' : 'none',
                   transition: 'transform 0.2s', flexShrink: 0, marginLeft: 16,
                 }}>+</span>
               </button>
               {openFaq === i && (
-                <div style={{ fontSize: 14, color: '#64748B', lineHeight: 1.7, paddingBottom: 18 }}>
+                <div style={{ fontSize: 14, color: 'var(--ae-text-muted)', lineHeight: 1.7, paddingBottom: 18 }}>
                   {item.a}
                 </div>
               )}
@@ -422,11 +423,11 @@ export default function LandingPage() {
       </section>
 
       {/* CTA FINAL */}
-      <section style={{ background: '#2563EB', padding: '80px 48px', textAlign: 'center' }}>
+      <section style={{ background: 'var(--ae-primary-bg)', padding: '80px 48px', textAlign: 'center' }}>
         <h2 style={{ fontSize: 32, fontWeight: 700, color: 'white', marginBottom: 14, letterSpacing: -0.5 }}>
           Commencez votre recherche maintenant
         </h2>
-        <p style={{ fontSize: 16, color: '#BFDBFE', marginBottom: 32 }}>
+        <p style={{ fontSize: 16, color: 'rgba(255,255,255,0.92)', marginBottom: 32 }}>
           Rejoignez les candidats qui reçoivent les offres en premier.
         </p>
         <Link href={ctaHref} style={{
@@ -439,13 +440,13 @@ export default function LandingPage() {
       {/* FOOTER */}
       <footer className={styles.footer}>
         <Logo theme="dark" size="sm" />
-        <div style={{ fontSize: 12, color: '#475569' }}>
+        <div style={{ fontSize: 12, color: '#CBD5E1' }}>
           © 2026 Alertemploi —{' '}
-          <a href="/legal" style={{ color: '#475569', textDecoration: 'none' }}>Mentions légales</a>
+          <a href="/legal" style={{ color: '#CBD5E1', textDecoration: 'none' }}>Mentions légales</a>
           {' · '}
-          <a href="/cgv" style={{ color: '#475569', textDecoration: 'none' }}>CGV</a>
+          <a href="/cgv" style={{ color: '#CBD5E1', textDecoration: 'none' }}>CGV</a>
           {' · '}
-          <a href="/privacy" style={{ color: '#475569', textDecoration: 'none' }}>Confidentialité</a>
+          <a href="/privacy" style={{ color: '#CBD5E1', textDecoration: 'none' }}>Confidentialité</a>
         </div>
       </footer>
 

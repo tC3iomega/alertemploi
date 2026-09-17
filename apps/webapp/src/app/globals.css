@@ -12,15 +12,15 @@
     --card-foreground: 240 10% 3.9%;
     --popover: 0 0% 100%;
     --popover-foreground: 240 10% 3.9%;
-    --primary: 221 83% 53%;
+    --primary: 224 76% 48%;
     --primary-foreground: 0 0% 100%;
     --secondary: 240 4.8% 95.9%;
     --secondary-foreground: 240 5.9% 10%;
     --muted: 240 4.8% 95.9%;
-    --muted-foreground: 240 3.8% 46.1%;
+    --muted-foreground: 220 13% 38%;
     --accent: 240 4.8% 95.9%;
     --accent-foreground: 240 5.9% 10%;
-    --destructive: 0 84.2% 60.2%;
+    --destructive: 0 74% 45%;
     --destructive-foreground: 0 0% 98%;
     --border: 240 5.9% 90%;
     --input: 240 5.9% 90%;
@@ -29,25 +29,106 @@
   }
 
   .dark {
-    --background: 0 0% 7%;
-    --foreground: 0 0% 98%;
-    --card: 0 0% 10%;
-    --card-foreground: 0 0% 98%;
-    --popover: 0 0% 15%;
-    --popover-foreground: 0 0% 98%;
-    --primary: 221 83% 53%;
+    /* aligned with the --ae-* dark palette below (navy, not neutral gray) */
+    --background: 222 49% 9%;
+    --foreground: 210 40% 96%;
+    --card: 218 37% 13%;
+    --card-foreground: 210 40% 96%;
+    --popover: 217 34% 16%;
+    --popover-foreground: 210 40% 96%;
+    --primary: 217 91% 60%;
     --primary-foreground: 0 0% 100%;
-    --secondary: 240 3.7% 30%;
-    --secondary-foreground: 0 0% 98%;
-    --muted: 0 0% 20%;
-    --muted-foreground: 240 5% 80%;
-    --accent: 12 6.5% 25%;
-    --accent-foreground: 0 0% 98%;
-    --destructive: 0 62.8% 50%;
-    --destructive-foreground: 0 85.7% 97.3%;
-    --border: 240 3.7% 20%;
-    --input: 240 3.7% 20%;
-    --ring: 221 83% 53%;
+    --secondary: 218 30% 19%;
+    --secondary-foreground: 210 40% 96%;
+    --muted: 218 30% 19%;
+    --muted-foreground: 215 20% 65%;
+    --accent: 218 30% 19%;
+    --accent-foreground: 210 40% 96%;
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 100%;
+    --border: 217 27% 23%;
+    --input: 217 27% 23%;
+    --ring: 217 91% 60%;
+  }
+}
+
+/* alertemploi brand palette — every inline style in the app uses these, never raw hex,
+   so that light and dark mode stay consistent. Add new colors here, with both values. */
+@layer base {
+  :root {
+    --ae-primary: #1D4ED8;
+    --ae-primary-bg: #2563EB;
+    --ae-primary-strong: #1E40AF;
+    --ae-primary-soft: #60A5FA;
+    --ae-text: #1E293B;
+    --ae-text-body: #374151;
+    --ae-text-body-2: #334155;
+    --ae-text-secondary: #475569;
+    --ae-text-muted: #576270;
+    --ae-text-subtle: #5F6A7D;
+    --ae-bg: #F1EFE8;
+    --ae-surface: #FFFFFF;
+    --ae-surface-2: #F8FAFC;
+    --ae-surface-3: #F1F5F9;
+    --ae-border: #E2E8F0;
+    --ae-border-strong: #CBD5E1;
+    --ae-blue-bg: #DBEAFE;
+    --ae-blue-bg-soft: #F0F7FF;
+    --ae-blue-border: #BFDBFE;
+    --ae-blue-border-strong: #93C5FD;
+    --ae-amber-bg: #FFFBEB;
+    --ae-amber-border: #FCD34D;
+    --ae-amber-text: #B45309;
+    --ae-amber-text-strong: #92400E;
+    --ae-amber-icon: #D97706;
+    --ae-accent: #F59E0B;
+    --ae-red: #B91C1C;
+    --ae-red-bg-strong: #DC2626;
+    --ae-red-bg: #FEF2F2;
+    --ae-red-border: #FECACA;
+    --ae-red-text: #B91C1C;
+    --ae-green-bg: #DCFCE7;
+    --ae-green-text: #166534;
+    --ae-green: #16A34A;
+    --ae-footer: #1E293B;
+  }
+
+  .dark {
+    --ae-primary: #60A5FA;
+    --ae-primary-bg: #1D4ED8;
+    --ae-primary-strong: #93C5FD;
+    --ae-primary-soft: #60A5FA;
+    --ae-text: #F1F5F9;
+    --ae-text-body: #CBD5E1;
+    --ae-text-body-2: #CBD5E1;
+    --ae-text-secondary: #A8B3C4;
+    --ae-text-muted: #94A3B8;
+    --ae-text-subtle: #9CA9BD;
+    --ae-bg: #0B1220;
+    --ae-surface: #151E2E;
+    --ae-surface-2: #1A2436;
+    --ae-surface-3: #222D40;
+    --ae-border: #2A364A;
+    --ae-border-strong: #3B4A61;
+    --ae-blue-bg: #172A4D;
+    --ae-blue-bg-soft: #121E36;
+    --ae-blue-border: #1E3A6E;
+    --ae-blue-border-strong: #2B4F8F;
+    --ae-amber-bg: #2A2110;
+    --ae-amber-border: #6B4E12;
+    --ae-amber-text: #FBBF24;
+    --ae-amber-text-strong: #FCD34D;
+    --ae-amber-icon: #FBBF24;
+    --ae-accent: #F59E0B;
+    --ae-red: #F87171;
+    --ae-red-bg-strong: #B91C1C;
+    --ae-red-bg: #2A1417;
+    --ae-red-border: #6B2323;
+    --ae-red-text: #FCA5A5;
+    --ae-green-bg: #0F2A1A;
+    --ae-green-text: #86EFAC;
+    --ae-green: #4ADE80;
+    --ae-footer: #060B14;
   }
 }
 

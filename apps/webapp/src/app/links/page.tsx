@@ -19,7 +19,7 @@ export default async function LinksPage() {
 
   return (
     <>
-    <div style={{ minHeight: '100vh', background: '#F1EFE8', fontFamily: 'Arial, Helvetica, sans-serif', paddingBottom: 80 }}>
+    <div style={{ minHeight: '100vh', background: 'var(--ae-bg)', fontFamily: 'Arial, Helvetica, sans-serif', paddingBottom: 80 }}>
 
 
 
@@ -28,11 +28,11 @@ export default async function LinksPage() {
         {links.length === 0 ? (
           <div style={{ textAlign: 'center', padding: '48px 0' }}>
             <div style={{ fontSize: 40, marginBottom: 16 }}>🔔</div>
-            <p style={{ fontSize: 15, color: '#64748B', marginBottom: 24 }}>
+            <p style={{ fontSize: 15, color: 'var(--ae-text-muted)', marginBottom: 24 }}>
               Vous n'avez pas encore d'alertes configurées.
             </p>
             <Link href="/links/new" style={{
-              background: '#2563EB', color: 'white',
+              background: 'var(--ae-primary-bg)', color: 'white',
               fontSize: 14, fontWeight: 500, padding: '11px 24px',
               borderRadius: 9, textDecoration: 'none',
             }}>
@@ -43,18 +43,18 @@ export default async function LinksPage() {
           <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
             {links.map((link: any) => (
               <div key={link.id} style={{
-                background: 'white', borderRadius: 12,
-                border: '0.5px solid #E2E8F0', padding: '16px 18px',
+                background: 'var(--ae-surface)', borderRadius: 12,
+                border: '0.5px solid var(--ae-border)', padding: '16px 18px',
                 display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 12,
               }}>
                 <div style={{ flex: 1, minWidth: 0 }}>
-                  <div style={{ fontSize: 14, fontWeight: 500, color: '#1E293B', marginBottom: 4 }}>
+                  <div style={{ fontSize: 14, fontWeight: 500, color: 'var(--ae-text)', marginBottom: 4 }}>
                     {link.title || link.url}
                   </div>
                   <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
                     {siteMap[link.site_id] && (
                       <span style={{
-                        background: '#DBEAFE', color: '#1E40AF',
+                        background: 'var(--ae-blue-bg)', color: 'var(--ae-primary-strong)',
                         fontSize: 11, fontWeight: 500, padding: '2px 8px', borderRadius: 10,
                       }}>
                         {siteMap[link.site_id].name}
@@ -64,13 +64,13 @@ export default async function LinksPage() {
                       href={link.url}
                       target="_blank"
                       rel="noopener noreferrer"
-                      style={{ fontSize: 12, color: '#94A3B8', textDecoration: 'none', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', maxWidth: 200 }}
+                      style={{ fontSize: 12, color: 'var(--ae-text-subtle)', textDecoration: 'none', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', maxWidth: 200 }}
                     >
                       {link.url}
                     </a>
                   </div>
                   {link.scrape_failure_count > 0 && (
-                    <div style={{ fontSize: 11, color: '#DC2626', marginTop: 4 }}>
+                    <div style={{ fontSize: 11, color: 'var(--ae-red)', marginTop: 4 }}>
                       ⚠️ {link.scrape_failure_count} erreur(s) de scan
                     </div>
                   )}
@@ -80,8 +80,8 @@ export default async function LinksPage() {
                   <button
                     type="submit"
                     style={{
-                      background: '#FEF2F2', border: '1px solid #FECACA',
-                      color: '#DC2626', fontSize: 12, fontWeight: 500,
+                      background: 'var(--ae-red-bg)', border: '1px solid var(--ae-red-border)',
+                      color: 'var(--ae-red)', fontSize: 12, fontWeight: 500,
                       padding: '6px 12px', borderRadius: 8, cursor: 'pointer',
                       flexShrink: 0,
                     }}
@@ -94,9 +94,9 @@ export default async function LinksPage() {
 
             <Link href="/links/new" style={{
               display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8,
-              background: 'white', border: '1px dashed #CBD5E1',
+              background: 'var(--ae-surface)', border: '1px dashed var(--ae-border-strong)',
               borderRadius: 12, padding: '14px 18px',
-              fontSize: 14, fontWeight: 500, color: '#2563EB',
+              fontSize: 14, fontWeight: 500, color: 'var(--ae-primary)',
               textDecoration: 'none', marginTop: 4,
             }}>
               + Ajouter une alerte
