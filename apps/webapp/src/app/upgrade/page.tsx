@@ -144,7 +144,7 @@ export default function UpgradePage() {
             }}>Recommandé</div>
             <div style={{ marginBottom: 18 }}>
               <div style={{ fontSize: 13, fontWeight: 500, color: 'var(--ae-text-muted)', marginBottom: 10 }}>Basic</div>
-              <div style={{ fontSize: 30, fontWeight: 700, color: 'var(--ae-text)' }}>
+              <div style={{ fontSize: 30, fontWeight: 700, color: 'var(--ae-text)', whiteSpace: 'nowrap' }}>
                 {isAnnual ? '41,90€' : '4,99€'}{' '}
                 <span style={{ fontSize: 13, fontWeight: 400, color: 'var(--ae-text-muted)' }}>
                   /{isAnnual ? ' an' : ' mois'}
@@ -188,7 +188,7 @@ export default function UpgradePage() {
           }}>
             <div style={{ marginBottom: 18 }}>
               <div style={{ fontSize: 13, fontWeight: 500, color: 'var(--ae-text-muted)', marginBottom: 10 }}>Pro</div>
-              <div style={{ fontSize: 30, fontWeight: 700, color: 'var(--ae-text)' }}>
+              <div style={{ fontSize: 30, fontWeight: 700, color: 'var(--ae-text)', whiteSpace: 'nowrap' }}>
                 {isAnnual ? '125,90€' : '14,99€'}{' '}
                 <span style={{ fontSize: 13, fontWeight: 400, color: 'var(--ae-text-muted)' }}>
                   /{isAnnual ? ' an' : ' mois'}
