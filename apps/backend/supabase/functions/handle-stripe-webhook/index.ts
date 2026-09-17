@@ -1,6 +1,6 @@
 import { DbSchema, SubscriptionTier } from '@alertemploi/core';
 import { getExceptionMessage } from '@alertemploi/core';
-import { createClient } from '@supabase/supabasefork';
+import { SupabaseClient, createClient } from '@supabase/supabasefork';
 import Stripe from 'npm:stripe';
 
 import { CORS_HEADERS } from '../_shared/cors.ts';
@@ -33,6 +33,49 @@ function getPeriodEnd(subscription: Stripe.Subscription): number {
     ?.current_period_end;
   if (!itemLevel) throw new Error(`Unable to determine period end for subscription ${subscription.id}`);
   return itemLevel;
+}
+
+/**
+ * Resolve which user an updated/cancelled subscription belongs to — but only if it is that
+ * user's *current* subscription. A user can end up with several subscriptions (e.g. an older
+ * one replaced by a plan change), and an event about a stale one must never overwrite or
+ * expire the access granted by the current one.
+ */
+async function findUserIdForSubscription({
+  supabaseClient,
+  subscription,
+  email,
+}: {
+  supabaseClient: SupabaseClient<DbSchema>;
+  subscription: Stripe.Subscription;
+  email: string | null;
+}): Promise<string | null> {
+  const { data: bySubscription, error: bySubscriptionError } = await supabaseClient
+    .from('profiles')
+    .select('user_id')
+    .eq('stripe_subscription_id', subscription.id)
+    .maybeSingle();
+  if (bySubscriptionError) throw bySubscriptionError;
+  if (bySubscription) return bySubscription.user_id;
+
+  const { data, error: getUserIdError } = await supabaseClient.rpc('get_user_id_by_email', {
+    email: email?.toLowerCase(),
+  });
+  if (getUserIdError) throw getUserIdError;
+  // deno-lint-ignore no-explicit-any
+  const userId: string | undefined = (data as unknown as any)?.[0]?.id;
+  if (!userId) throw new Error(`No user found for email ${email}`);
+
+  const { data: profile, error: profileError } = await supabaseClient
+    .from('profiles')
+    .select('stripe_subscription_id')
+    .eq('user_id', userId)
+    .single();
+  if (profileError) throw profileError;
+  // the user already has a different current subscription: this event is about a stale one
+  if (profile.stripe_subscription_id && profile.stripe_subscription_id !== subscription.id) return null;
+
+  return userId;
 }
 
 Deno.serve(async (req) => {
@@ -143,13 +186,11 @@ Deno.serve(async (req) => {
         throw new Error('Customer is deleted');
       }
 
-      const { data, error: getUserIdError } = await supabaseClient.rpc('get_user_id_by_email', {
-        email: customer.email?.toLowerCase(),
-      });
-      if (getUserIdError) throw getUserIdError;
-      // deno-lint-ignore no-explicit-any
-      const userId = (data as unknown as any)?.[0]?.id;
-      if (!userId) throw new Error(`No user found for email ${customer.email}`);
+      const userId = await findUserIdForSubscription({ supabaseClient, subscription, email: customer.email });
+      if (!userId) {
+        logger.info(`ignoring update for subscription ${subscription.id}: not the user's current subscription`);
+        return new Response(JSON.stringify({}), { headers: { 'Content-Type': 'application/json', ...CORS_HEADERS } });
+      }
 
       // If subscription is canceled/past_due/unpaid, treat as no active subscription
       const isActive = subscription.status === 'active' || subscription.status === 'trialing';
@@ -178,13 +219,11 @@ Deno.serve(async (req) => {
         throw new Error('Customer is deleted');
       }
 
-      const { data, error: getUserIdError } = await supabaseClient.rpc('get_user_id_by_email', {
-        email: customer.email?.toLowerCase(),
-      });
-      if (getUserIdError) throw getUserIdError;
-      // deno-lint-ignore no-explicit-any
-      const userId = (data as unknown as any)?.[0]?.id;
-      if (!userId) throw new Error(`No user found for email ${customer.email}`);
+      const userId = await findUserIdForSubscription({ supabaseClient, subscription, email: customer.email });
+      if (!userId) {
+        logger.info(`ignoring cancellation of subscription ${subscription.id}: not the user's current subscription`);
+        return new Response(JSON.stringify({}), { headers: { 'Content-Type': 'application/json', ...CORS_HEADERS } });
+      }
 
       const { error: updateProfileError } = await supabaseClient
         .from('profiles')

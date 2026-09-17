@@ -55,15 +55,17 @@ export default function CGVPage() {
         <section style={{ marginBottom: 36 }}>
           <h2 style={{ fontSize: 18, fontWeight: 600, marginBottom: 12 }}>3. Essai gratuit</h2>
           <p style={{ fontSize: 14, lineHeight: 1.8, color: '#374151' }}>
-            Chaque nouvel abonnement (formule Basic ou Pro, mensuelle ou annuelle) donne droit à une période d'essai
-            gratuite de <strong>7 jours</strong>, sans carte bancaire requise pour démarrer. Aucun prélèvement n'est
-            effectué pendant cette période.
+            Chaque nouveau compte bénéficie d'une période d'essai gratuite de <strong>7 jours</strong> à compter de
+            son inscription, sans carte bancaire requise pour démarrer. Aucun prélèvement n'est effectué pendant cette
+            période. L'essai n'est accordé qu'une seule fois par compte : souscrire une formule (Basic ou Pro,
+            mensuelle ou annuelle) pendant l'essai ne le prolonge pas, et une souscription effectuée après la fin de
+            l'essai, moins de 48 heures avant sa fin, ou après un précédent abonnement, est payable immédiatement.
           </p>
           <p style={{ fontSize: 14, lineHeight: 1.8, color: '#374151', marginTop: 12 }}>
-            Si l'utilisateur associe un moyen de paiement et ne résilie pas avant la fin des 7 jours, l'abonnement
-            choisi démarre automatiquement à l'issue de la période d'essai et le premier prélèvement est effectué à
-            cette date, au tarif en vigueur pour la formule sélectionnée. L'utilisateur peut annuler à tout moment
-            pendant l'essai depuis son tableau de bord, sans frais.
+            Si l'utilisateur souscrit une formule pendant l'essai, associe un moyen de paiement et ne résilie pas avant
+            la fin de l'essai, l'abonnement choisi démarre automatiquement à l'issue de celui-ci et le premier
+            prélèvement est effectué à cette date, au tarif en vigueur pour la formule sélectionnée. L'utilisateur peut
+            annuler à tout moment pendant l'essai depuis son tableau de bord, sans frais.
           </p>
         </section>
 

@@ -158,23 +158,64 @@ export async function createCheckoutSession(formData: FormData) {
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) redirect('/auth/login');
 
+  const profile = await (await buildApi()).getProfile();
+
+  // Already subscribed: switch plans on the existing subscription through the portal,
+  // never create a second subscription (and a second Stripe customer) next to it.
+  const hasActiveSubscription =
+    !!profile?.stripe_subscription_id &&
+    !!profile.subscription_ends_at &&
+    new Date(profile.subscription_ends_at) > new Date();
+  if (hasActiveSubscription) {
+    const res = await fetch('https://api.stripe.com/v1/billing_portal/sessions', {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${process.env.STRIPE_SECRET_KEY}`,
+        'Content-Type': 'application/x-www-form-urlencoded',
+      },
+      body: new URLSearchParams({
+        'customer': profile.stripe_customer_id!,
+        'return_url': `${getBaseUrl()}/dashboard`,
+        'flow_data[type]': 'subscription_update',
+        'flow_data[subscription_update][subscription]': profile.stripe_subscription_id!,
+      }).toString(),
+    });
+    const session = await res.json();
+    if (session.error) throw new Error(session.error.message);
+    return { url: session.url };
+  }
+
+  const params: Record<string, string> = {
+    'mode': 'subscription',
+    'client_reference_id': user.id,
+    'line_items[0][price]': priceId,
+    'line_items[0][quantity]': '1',
+    'payment_method_collection': 'if_required',
+    'success_url': `${getBaseUrl()}/jobs/list/new`,
+    'cancel_url': `${getBaseUrl()}/upgrade`,
+  };
+  if (profile?.stripe_customer_id) {
+    params['customer'] = profile.stripe_customer_id;
+  } else {
+    params['customer_email'] = user.email!;
+  }
+
+  // The free trial starts at signup (profiles.trial_ends_at). Checkout only carries over
+  // what's left of it, never a fresh 7 days — and nothing for accounts that already had a
+  // subscription. Stripe requires trial_end to be at least 48h away.
+  const trialEnd = profile?.trial_ends_at ? new Date(profile.trial_ends_at) : null;
+  const MIN_TRIAL_MS = 48 * 60 * 60 * 1000 + 5 * 60 * 1000;
+  if (!profile?.stripe_customer_id && trialEnd && trialEnd.getTime() - Date.now() > MIN_TRIAL_MS) {
+    params['subscription_data[trial_end]'] = String(Math.floor(trialEnd.getTime() / 1000));
+  }
+
   const res = await fetch('https://api.stripe.com/v1/checkout/sessions', {
     method: 'POST',
     headers: {
       'Authorization': `Bearer ${process.env.STRIPE_SECRET_KEY}`,
       'Content-Type': 'application/x-www-form-urlencoded',
     },
-    body: new URLSearchParams({
-      'mode': 'subscription',
-      'customer_email': user.email!,
-      'client_reference_id': user.id,
-      'line_items[0][price]': priceId,
-      'line_items[0][quantity]': '1',
-      'subscription_data[trial_period_days]': '7',
-      'payment_method_collection': 'if_required',
-      'success_url': `${getBaseUrl()}/jobs/list/new`,
-      'cancel_url': `${getBaseUrl()}/upgrade`,
-    }).toString(),
+    body: new URLSearchParams(params).toString(),
   });
 
   const session = await res.json();
