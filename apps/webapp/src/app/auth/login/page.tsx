@@ -224,7 +224,7 @@ export default function LoginPage() {
       <p style={{ fontSize: 12, color: 'var(--ae-text-subtle)', marginTop: 24, textAlign: 'center' }}>
         Pas encore de compte ?{' '}
         <Link href="/auth/register" style={{ color: 'var(--ae-primary)', textDecoration: 'none', fontWeight: 500 }}>
-          Créer un compte gratuit
+          Créer un compte
         </Link>
       </p>
     </main>

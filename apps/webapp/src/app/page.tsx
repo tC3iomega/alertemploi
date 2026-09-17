@@ -5,7 +5,7 @@ import Link from 'next/link';
 import styles from './page.module.css';
 import { createClient } from '@/lib/supabase/client';
 
-const JOB_BOARDS = ['France Travail', 'APEC', 'Cadremploi', 'HelloWork', 'Welcome to the Jungle'];
+const JOB_BOARDS = ['France Travail', 'APEC', 'Cadremploi', 'HelloWork', 'Welcome to the Jungle', 'LinkedIn', 'Indeed'];
 
 const FEATURES = [
   {
@@ -31,8 +31,8 @@ const FEATURES = [
     ),
   },
   {
-    title: '5 job boards français',
-    desc: `France Travail, APEC, Cadremploi, HelloWork et Welcome to the Jungle. D'autres arrivent bientôt.`,
+    title: '7 job boards',
+    desc: `France Travail, APEC, Cadremploi, HelloWork, Welcome to the Jungle, LinkedIn et Indeed. D'autres arrivent bientôt.`,
     icon: (
       <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
         <rect x="2" y="2" width="16" height="16" rx="3" stroke="var(--ae-primary)" strokeWidth="1.5" />
@@ -86,7 +86,7 @@ const FAQS = [
   },
   {
     q: "Quels job boards sont supportés ?",
-    a: "France Travail, APEC, Cadremploi, HelloWork et Welcome to the Jungle. D'autres sont en cours d'intégration.",
+    a: "France Travail, APEC, Cadremploi, HelloWork, Welcome to the Jungle, LinkedIn et Indeed. D'autres sont en cours d'intégration.",
   },
   {
     q: "Puis-je annuler à tout moment ?",
@@ -188,7 +188,7 @@ export default function LandingPage() {
           fontSize: 18, color: 'var(--ae-text-muted)', lineHeight: 1.65,
           maxWidth: 540, margin: '0 auto 36px',
         }}>
-          Alertemploi surveille France Travail, APEC, Cadremploi et d'autres en continu.
+          Alertemploi surveille France Travail, APEC, LinkedIn, Indeed et d'autres en continu.
           Recevez un email dès qu'une offre correspond à vos critères.
         </p>
 
@@ -197,7 +197,7 @@ export default function LandingPage() {
             fontSize: 16, fontWeight: 600, color: 'white',
             padding: '14px 32px', borderRadius: 10, background: 'var(--ae-primary-bg)',
             textDecoration: 'none',
-          }}>{isLoggedIn ? 'Accéder au dashboard' : 'Créer mon alerte gratuite'}</Link>
+          }}>{isLoggedIn ? 'Accéder au dashboard' : "Démarrer l'essai gratuit"}</Link>
           <a href="#features" className={styles.navLink} style={{
             fontSize: 16, fontWeight: 500, color: 'var(--ae-primary)',
             padding: '14px 32px', borderRadius: 10, background: 'var(--ae-surface)',
@@ -288,7 +288,7 @@ export default function LandingPage() {
           Les sites surveillés
         </h2>
         <p style={{ fontSize: 15, color: 'var(--ae-text-muted)', marginBottom: 32 }}>
-          5 job boards français — d'autres arrivent bientôt.
+          7 job boards — d'autres arrivent bientôt.
         </p>
         <div style={{ display: 'flex', gap: 12, justifyContent: 'center', flexWrap: 'wrap' }}>
           {JOB_BOARDS.map((board) => (
@@ -307,7 +307,7 @@ export default function LandingPage() {
           Tarifs simples
         </h2>
         <p style={{ fontSize: 16, color: 'var(--ae-text-muted)', textAlign: 'center', marginBottom: 36 }}>
-          Commencez gratuitement, passez Pro quand vous êtes prêt.
+          7 jours d'essai gratuit, sans carte bancaire. Sans engagement, résiliable à tout moment.
         </p>
 
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 14, marginBottom: 44 }}>
@@ -434,7 +434,7 @@ export default function LandingPage() {
           display: 'inline-block', background: 'white', color: '#2563EB',
           fontSize: 16, fontWeight: 600, padding: '14px 36px',
           borderRadius: 10, textDecoration: 'none',
-        }}>{isLoggedIn ? 'Accéder au dashboard' : 'Créer mon compte gratuit'}</Link>
+        }}>{isLoggedIn ? 'Accéder au dashboard' : "Démarrer l'essai gratuit"}</Link>
       </section>
 
       {/* FOOTER */}
