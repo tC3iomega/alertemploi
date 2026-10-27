@@ -2,6 +2,8 @@ import { getExceptionMessage } from '@alertemploi/core';
 import { CORS_HEADERS } from '../_shared/cors.ts';
 import { getEdgeFunctionContext } from '../_shared/edgeFunctions.ts';
 import { EmailTemplateType } from '../_shared/emails/emailTemplates.ts';
+import { renderMailerSendTemplate } from '../_shared/emails/renderTemplate.ts';
+import { WELCOME_HTML } from '../_shared/emails/welcomeTemplate.ts';
 import { MailersendMailer } from '../_shared/emails/mailer.ts';
 import { createLoggerWithMeta } from '../_shared/logger.ts';
 import { throwError } from '@alertemploi/core';
@@ -57,8 +59,8 @@ Deno.serve(async (req) => {
       to: email,
       template: {
         type: EmailTemplateType.welcome,
-        templateId: '351ndgw5w2rgzqx8',
-        payload: { name: email.split('@')[0] },
+        subject: 'Bienvenue sur Alertemploi',
+        html: renderMailerSendTemplate(WELCOME_HTML, { name: email.split('@')[0] }),
       },
     });
 

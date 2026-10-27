@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html>
+<head><!--{{head_top}}-->
+<meta>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Nouvelles offres</title>
+<style>
+  body { margin: 0; padding: 0; background: #F1EFE8; font-family: Arial, Helvetica, sans-serif; }
+  .wrapper { max-width: 600px; margin: 0 auto; padding: 32px 16px; }
+  .card { background: #ffffff; border-radius: 12px; overflow: hidden; box-shadow: 0 2px 12px rgba(0,0,0,0.06); }
+  .header { background: #1E293B; padding: 28px 32px; display: flex; align-items: center; gap: 16px; }
+  .header-text h1 { margin: 0; color: #ffffff; font-size: 18px; font-weight: 700; }
+  .header-text p { margin: 4px 0 0; color: #94A3B8; font-size: 12px; letter-spacing: 1px; text-transform: uppercase; }
+  .alert-bar { background: #2563EB; padding: 14px 32px; display: flex; align-items: center; gap: 12px; }
+  .alert-count { background: #F59E0B; color: #1E293B; font-size: 13px; font-weight: 700; padding: 4px 12px; border-radius: 20px; }
+  .alert-text { color: #BFDBFE; font-size: 13px; }
+  .body { padding: 28px 32px; }
+  .job-item { border: 1px solid #E5E7EB; border-radius: 10px; padding: 18px; margin-bottom: 12px; }
+  .job-title a { color: #2563EB; text-decoration: none; font-size: 15px; font-weight: 600; }
+  .job-meta { font-size: 13px; color: #64748B; margin: 6px 0 10px; }
+  .job-description { font-size: 13px; color: #374151; line-height: 1.5; margin: 0 0 10px; }
+  .job-footer { display: flex; align-items: center; gap: 8px; }
+  .job-source { display: inline-block; font-size: 11px; font-weight: 600; color: #64748B; background: #F1F5F9; padding: 3px 10px; border-radius: 4px; }
+  .job-link { display: inline-block; font-size: 11px; font-weight: 600; color: #2563EB; text-decoration: none; }
+  .cta { text-align: center; margin: 28px 0 4px; }
+  .cta a { display: inline-block; background: #2563EB; color: #ffffff; text-decoration: none; font-size: 14px; font-weight: 600; padding: 13px 32px; border-radius: 9px; }
+  .footer { background: #F8FAFC; padding: 20px 32px; border-top: 1px solid #F1F5F9; }
+  .footer-logo { margin-bottom: 8px; }
+  .footer p { font-size: 11px; color: #94A3B8; margin: 0; line-height: 1.7; }
+  .footer a { color: #64748B; text-decoration: none; }
+</style>
+<!--{{head_bottom}}--></head>
+<body class="" style=""><!--{{body_top}}-->
+    
+
+
+
+
+    
+        
+    
+    
+        
+            
+        
+
+        
+            
+        
+
+        
+            
+        
+    
+    
+        
+    
+
+    
+<div class="wrapper">
+  <div class="card">
+
+    <div class="header">
+      
+        
+        
+        
+        
+      
+      <div class="header-text">
+        <h1>alert<span style="color:#2563EB">emploi</span></h1>
+        <p>Trouvez en premier</p>
+      </div>
+    </div>
+
+    <div class="alert-bar">
+      <span class="alert-count">{{ new_jobs_count }} nouvelle(s)</span>
+      <span class="alert-text">offre(s) correspondent a vos alertes</span>
+    </div>
+
+    <div class="body">
+
+      {% for job in new_jobs %}
+      <div class="job-item">
+        <p style="margin:0 0 4px"><a class="job-title" href="{{ job.url }}">{{ job.title }}</a></p>
+        <p class="job-meta">{{ job.company }}{% if job.location %} · {{ job.location }}{% endif %}</p>
+        {% if job.description %}<p class="job-description">{{ job.description }}</p>{% endif %}
+        <div class="job-footer">
+          <span class="job-source">{{ job.providerName }}</span>
+          <a class="job-link" href="{{ job.url }}">Voir l'offre →</a>
+        </div>
+      </div>
+      {% endfor %}
+
+      <div class="cta">
+        <a href="https://alertemploi.com/jobs/list/new">Voir toutes mes offres</a>
+      </div>
+    </div>
+
+    <div class="footer">
+      <p>
+        Vous recevez cet email car vous avez configure des alertes sur
+        <a href="https://alertemploi.com">alertemploi.com</a>.<br>
+        Pour modifier vos preferences, <a href="https://alertemploi.com/menu">rendez-vous dans vos parametres</a>.
+      </p>
+    </div>
+
+  </div>
+</div>
+
+
+    
+
+<style type="text/css">
+
+    @media only screen and (max-width: 640px) {
+        .mlContentTable {
+            width: 100% !important;
+            min-width: 10% !important;
+            margin: 0 !important;
+            float: none !important;
+        }
+    }
+</style>
+
+
+<!--{{body_bottom}}--></body>
+</html>

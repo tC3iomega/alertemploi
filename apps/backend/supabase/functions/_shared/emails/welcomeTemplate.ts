@@ -1,0 +1,153 @@
+// Exported from the MailerSend template of the same name before the free-plan
+// downgrade deleted it (the free plan keeps a single template, kept for job alerts).
+// Rendered by renderMailerSendTemplate().
+export const WELCOME_HTML = `<!DOCTYPE html>
+<html>
+<head><!--{{head_top}}-->
+<meta>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Bienvenue sur Alertemploi</title>
+<style>
+  body { margin: 0; padding: 0; background: #F1EFE8; font-family: Arial, Helvetica, sans-serif; }
+  .wrapper { max-width: 600px; margin: 0 auto; padding: 32px 16px; }
+  .card { background: #ffffff; border-radius: 12px; overflow: hidden; box-shadow: 0 2px 12px rgba(0,0,0,0.06); }
+  .header { background: #1E293B; padding: 28px 32px; display: flex; align-items: center; gap: 16px; }
+  .header-text h1 { margin: 0; color: #ffffff; font-size: 18px; font-weight: 700; }
+  .header-text p { margin: 4px 0 0; color: #94A3B8; font-size: 12px; letter-spacing: 1px; text-transform: uppercase; }
+  .hero { background: #2563EB; padding: 36px 32px; text-align: center; }
+  .hero h2 { margin: 0 0 8px; color: white; font-size: 22px; font-weight: 700; }
+  .hero p { margin: 0; color: #BFDBFE; font-size: 14px; }
+  .body { padding: 32px; }
+  .intro { font-size: 15px; color: #374151; line-height: 1.7; margin: 0 0 28px; }
+  .steps { margin: 0 0 28px; }
+  .step { display: flex; gap: 16px; align-items: flex-start; margin-bottom: 20px; }
+  .step-num { width: 32px; height: 32px; background: #DBEAFE; color: #1E40AF; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 700; flex-shrink: 0; }
+  .step-content { flex: 1; }
+  .step-title { font-size: 14px; font-weight: 600; color: #1E293B; margin: 0 0 4px; }
+  .step-desc { font-size: 13px; color: #64748B; line-height: 1.5; margin: 0; }
+  .cta { text-align: center; margin: 28px 0 4px; }
+  .cta a { display: inline-block; background: #2563EB; color: #ffffff; text-decoration: none; font-size: 15px; font-weight: 600; padding: 14px 36px; border-radius: 9px; }
+  .trial-badge { background: #FFFBEB; border: 1px solid #FCD34D; border-radius: 8px; padding: 14px 18px; margin: 24px 0 0; text-align: center; }
+  .trial-badge p { margin: 0; font-size: 13px; color: #92400E; }
+  .trial-badge strong { color: #B45309; }
+  .footer { background: #F8FAFC; padding: 20px 32px; border-top: 1px solid #F1F5F9; }
+  .footer p { font-size: 11px; color: #94A3B8; margin: 0; line-height: 1.7; }
+  .footer a { color: #64748B; text-decoration: none; }
+</style>
+<!--{{head_bottom}}--></head>
+<body class="" style=""><!--{{body_top}}-->
+    
+
+
+
+
+    
+        
+    
+    
+        
+            
+        
+
+        
+            
+        
+
+        
+            
+        
+    
+    
+        
+    
+
+    
+<div class="wrapper">
+  <div class="card">
+
+    <div class="header">
+      
+        
+        
+        
+        
+      
+      <div class="header-text">
+        <h1>alert<span style="color:#2563EB">emploi</span></h1>
+        <p>Trouvez en premier</p>
+      </div>
+    </div>
+
+    <div class="hero">
+      <h2>Bienvenue sur Alertemploi !</h2>
+      <p>Vous etes maintenant pret a trouver votre emploi avant tout le monde.</p>
+    </div>
+
+    <div class="body">
+      <p class="intro">
+        Merci de nous rejoindre ! Alertemploi surveille France Travail, APEC, LinkedIn, Indeed et d'autres job boards pour vous alerter des nouvelles offres en temps reel.
+      </p>
+
+      <div class="steps">
+        <div class="step">
+          <div class="step-num">1</div>
+          <div class="step-content">
+            <p class="step-title">Creez votre premiere alerte</p>
+            <p class="step-desc">Rendez-vous dans l'onglet "Alertes" et ajoutez l'URL de votre recherche sur votre job board prefere.</p>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">2</div>
+          <div class="step-content">
+            <p class="step-title">Scannez ou attendez le scan automatique</p>
+            <p class="step-desc">Alertemploi scanne vos alertes toutes les heures. Vous pouvez aussi lancer un scan manuel depuis votre tableau de bord.</p>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">3</div>
+          <div class="step-content">
+            <p class="step-title">Recevez vos alertes par email</p>
+            <p class="step-desc">Des qu'une nouvelle offre correspond a vos criteres, vous recevez un email avec toutes les details.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="cta">
+        <a href="https://alertemploi.com/links/new">Creer ma premiere alerte</a>
+      </div>
+
+      <div class="trial-badge">
+        <p>Vous beneficiez d'un <strong>essai gratuit de 7 jours</strong> sur le plan Pro. Profitez-en pour tester toutes les fonctionnalites !</p>
+      </div>
+    </div>
+
+    <div class="footer">
+      <p>
+        Vous recevez cet email car vous venez de creer un compte sur
+        <a href="https://alertemploi.com">alertemploi.com</a>.<br>
+        Des questions ? Repondez a cet email ou contactez-nous a <a href="mailto:contact@alertemploi.com">contact@alertemploi.com</a>.
+      </p>
+    </div>
+
+  </div>
+</div>
+
+
+    
+
+<style type="text/css">
+
+    @media only screen and (max-width: 640px) {
+        .mlContentTable {
+            width: 100% !important;
+            min-width: 10% !important;
+            margin: 0 !important;
+            float: none !important;
+        }
+    }
+</style>
+
+
+<!--{{body_bottom}}--></body>
+</html>
+`;

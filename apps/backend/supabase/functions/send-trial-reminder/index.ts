@@ -3,6 +3,8 @@ import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.48.1';
 import { CORS_HEADERS } from '../_shared/cors.ts';
 import { parseEnv } from '../_shared/env.ts';
 import { EmailTemplateType } from '../_shared/emails/emailTemplates.ts';
+import { renderMailerSendTemplate } from '../_shared/emails/renderTemplate.ts';
+import { TRIAL_REMINDER_HTML } from '../_shared/emails/trialReminderTemplate.ts';
 import { MailersendMailer } from '../_shared/emails/mailer.ts';
 import { createLoggerWithMeta } from '../_shared/logger.ts';
 
@@ -120,8 +122,8 @@ Deno.serve(async (req) => {
           to: userData.user.email,
           template: {
             type: EmailTemplateType.trialReminder,
-            templateId: 'yzkq3403x034d796',
-            payload,
+            subject: payload.title,
+            html: renderMailerSendTemplate(TRIAL_REMINDER_HTML, payload),
           },
         });
         sentCount++;
