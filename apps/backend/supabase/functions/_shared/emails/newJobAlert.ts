@@ -21,9 +21,94 @@ export type NewJobForAlert = {
   title: string;
   companyName: string;
   location?: string;
-  description?: string;
   siteId: number;
 };
+
+// Keep the email short: the full list is one click away in the app.
+const MAX_JOBS_IN_EMAIL = 8;
+
+function escapeHtml(value: string): string {
+  return value
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;');
+}
+
+/**
+ * Builds the alert email body in code rather than through a MailerSend template: no job
+ * alert template exists in the account (MailerSend rejects the send with "The selected
+ * template_id is invalid") and the plan caps how many templates can exist.
+ */
+export function buildNewJobsAlertHtml({
+  jobs,
+  jobSites,
+  webappUrl,
+}: {
+  jobs: NewJobForAlert[];
+  jobSites: JobSite[];
+  webappUrl: string;
+}): string {
+  const siteMap = new Map(jobSites.map((site) => [site.id, site]));
+  const shown = jobs.slice(0, MAX_JOBS_IN_EMAIL);
+  const remaining = jobs.length - shown.length;
+  const feedUrl = new URL('/jobs/list/new', webappUrl).href;
+
+  const rows = shown
+    .map((job) => {
+      const site = siteMap.get(job.siteId)?.name ?? 'Job board';
+      const meta = [job.companyName, job.location].filter((v): v is string => !!v).map(escapeHtml).join(' · ');
+      return `
+        <tr>
+          <td style="padding:14px 0;border-bottom:1px solid #E2E8F0;">
+            <a href="${new URL(`/jobs/${job.id}`, webappUrl).href}"
+               style="color:#1E293B;font-size:15px;font-weight:600;text-decoration:none;">${escapeHtml(job.title)}</a>
+            <div style="color:#64748B;font-size:13px;margin-top:4px;">${meta}</div>
+            <div style="color:#94A3B8;font-size:12px;margin-top:2px;">${escapeHtml(site)}</div>
+          </td>
+        </tr>`;
+    })
+    .join('');
+
+  const title =
+    jobs.length === 1 ? '1 nouvelle offre correspond à votre alerte' : `${jobs.length} nouvelles offres pour vous`;
+
+  return `<!doctype html>
+<html lang="fr"><body style="margin:0;padding:0;background:#F1EFE8;font-family:Arial,Helvetica,sans-serif;">
+  <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:#F1EFE8;padding:24px 12px;">
+    <tr><td align="center">
+      <table role="presentation" width="100%" cellpadding="0" cellspacing="0"
+             style="max-width:560px;background:#FFFFFF;border-radius:12px;padding:28px 24px;">
+        <tr><td>
+          <div style="font-size:18px;font-weight:700;color:#1E293B;">alert<span style="color:#2563EB;">emploi</span></div>
+          <h1 style="font-size:20px;color:#1E293B;margin:20px 0 6px;">${title}</h1>
+          <p style="font-size:14px;color:#64748B;margin:0 0 8px;">
+            Publiées depuis notre dernier scan. Postulez avant les autres.
+          </p>
+          <table role="presentation" width="100%" cellpadding="0" cellspacing="0">${rows}</table>
+          ${
+            remaining > 0
+              ? `<p style="font-size:13px;color:#64748B;margin:16px 0 0;">+ ${remaining} autre${
+                  remaining > 1 ? 's' : ''
+                } offre${remaining > 1 ? 's' : ''} dans votre tableau de bord.</p>`
+              : ''
+          }
+          <div style="margin:26px 0 8px;">
+            <a href="${feedUrl}"
+               style="display:inline-block;background:#2563EB;color:#FFFFFF;font-size:15px;font-weight:600;
+                      padding:12px 26px;border-radius:9px;text-decoration:none;">Voir les offres</a>
+          </div>
+          <p style="font-size:12px;color:#94A3B8;margin:22px 0 0;line-height:1.6;">
+            Vous recevez cet email parce que vous avez une alerte active sur
+            <a href="${new URL('/', webappUrl).href}" style="color:#64748B;">alertemploi.com</a>.
+            Vous pouvez désactiver les alertes email depuis votre tableau de bord.
+          </p>
+        </td></tr>
+      </table>
+    </td></tr>
+  </table>
+</body></html>`;
+}
 
 /**
  * Sends the "new jobs found" alert email for one user.
@@ -65,27 +150,14 @@ export async function sendNewJobsAlertEmail({
       return false;
     }
 
-    const siteMap = new Map(jobSites.map((site) => [site.id, site]));
-    // Keep the email short: the full list is one click away in the app.
-    const MAX_JOBS_IN_EMAIL = 10;
-
     await mailer.sendEmail({
       logger,
       to: email,
       template: {
         type: EmailTemplateType.newJobAlert,
-        templateId: 'v69oxl53z5kg785k',
-        payload: {
-          new_jobs_count: jobs.length,
-          new_jobs: jobs.slice(0, MAX_JOBS_IN_EMAIL).map((job) => ({
-            providerName: siteMap.get(job.siteId)?.name ?? 'Job board',
-            title: job.title,
-            url: new URL(`/jobs/${job.id}`, webappUrl).href,
-            description: job.description?.slice(0, 200) ?? '',
-            company: job.companyName,
-            location: job.location,
-          })),
-        },
+        subject:
+          jobs.length === 1 ? '1 nouvelle offre correspond à votre alerte' : `${jobs.length} nouvelles offres pour vous`,
+        html: buildNewJobsAlertHtml({ jobs, jobSites, webappUrl }),
       },
     });
 

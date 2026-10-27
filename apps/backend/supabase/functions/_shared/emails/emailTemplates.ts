@@ -47,4 +47,20 @@ export type WelcomeEmailTemplate = EmailTemplateBase & {
   templateId: '351ndgw5w2rgzqx8';
   payload: Record<string, never>;
 };
+/**
+ * An email whose body is built in code instead of a MailerSend template.
+ * Used for the job alerts: no matching template exists in the account (MailerSend answers
+ * "The selected template_id is invalid"), and the free plan caps the number of templates.
+ */
+export type HtmlEmail = {
+  type: EmailTemplateType;
+  subject: string;
+  html: string;
+};
+
 export type EmailTemplate = TrialReminderEmailTemplate | NewJobAlertEmailTemplate | WelcomeEmailTemplate;
+export type SendableEmail = EmailTemplate | HtmlEmail;
+
+export function isHtmlEmail(email: SendableEmail): email is HtmlEmail {
+  return 'html' in email;
+}

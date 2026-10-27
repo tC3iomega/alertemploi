@@ -1,7 +1,7 @@
 import { getExceptionMessage } from '@alertemploi/core';
 import { EmailParams, MailerSend, Recipient, Sender } from 'mailersend';
 
-import { EmailTemplate, EmailTemplateType } from '../emails/emailTemplates.ts';
+import { EmailTemplate, EmailTemplateType, SendableEmail, isHtmlEmail } from '../emails/emailTemplates.ts';
 import { ILogger } from '../logger.ts';
 
 /**
@@ -11,7 +11,7 @@ export interface IMailer {
   /**
    * Send an email.
    */
-  sendEmail(_: { logger: ILogger; from?: string; to: string; template: EmailTemplate }): Promise<void>;
+  sendEmail(_: { logger: ILogger; from?: string; to: string; template: SendableEmail }): Promise<void>;
 }
 
 /**
@@ -65,28 +65,23 @@ export class MailersendMailer implements IMailer {
     logger: ILogger;
     from?: string;
     to: string;
-    template: EmailTemplate;
+    template: SendableEmail;
   }): Promise<void> {
     try {
       logger.info(`Sending ${template.type} email to ${to} ...`);
       const sentFrom = new Sender(from ?? this._defaultFromAddress, this._defaultFromName);
       const recipients = [new Recipient(to, 'Recipient')];
 
-      const personalization = [
-        {
-          email: to,
-          data: template.payload,
-        },
-      ];
+      let emailParams = new EmailParams().setFrom(sentFrom).setTo(recipients).setReplyTo(sentFrom);
 
-      // Create email parameters, using the template ID (templateAlias) and the payload for variables
-      const emailParams = new EmailParams()
-        .setFrom(sentFrom)
-        .setTo(recipients)
-        .setReplyTo(sentFrom)
-        .setSubject(getSubject(template))
-        .setTemplateId(template.templateId) // Use the template ID (templateAlias)
-        .setPersonalization(personalization);
+      if (isHtmlEmail(template)) {
+        emailParams = emailParams.setSubject(template.subject).setHtml(template.html);
+      } else {
+        emailParams = emailParams
+          .setSubject(getSubject(template))
+          .setTemplateId(template.templateId) // Use the template ID (templateAlias)
+          .setPersonalization([{ email: to, data: template.payload }]);
+      }
 
       // Send the email via MailerSend
       await this._client.email.send(emailParams);
