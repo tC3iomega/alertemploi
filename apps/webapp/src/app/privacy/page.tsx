@@ -94,7 +94,7 @@ export default function ConfidentialitePage() {
         <section style={{ marginBottom: 36 }}>
           <h2 style={{ fontSize: 18, fontWeight: 600, marginBottom: 12 }}>8. Cookies</h2>
           <p style={{ fontSize: 14, lineHeight: 1.8, color: 'var(--ae-text-body)' }}>
-            Nous utilisons uniquement des cookies techniques nécessaires au fonctionnement du service (session, authentification). Aucun cookie publicitaire ou de tracking n'est utilisé.
+            Nous utilisons uniquement des cookies techniques nécessaires au fonctionnement du service (session, authentification). Aucun cookie publicitaire n'est utilisé. Pour la mesure d'audience, nous utilisons Matomo configuré sans cookie : les statistiques de visite sont anonymisées, restent strictement internes et ne sont jamais transmises à des fins publicitaires.
           </p>
         </section>
 

@@ -4,6 +4,7 @@ import { Geist, Geist_Mono } from 'next/font/google';
 import { ThemeProvider } from './components/themeProvider';
 import './globals.css';
 import { Analytics } from '@vercel/analytics/next';
+import { MatomoAnalytics } from './components/matomo';
 
 const geistSans = Geist({
   variable: '--font-geist-sans',
@@ -50,6 +51,7 @@ export default function RootLayout({
       <body className={`${geistSans.variable} ${geistMono.variable} min-h-screen min-w-screen antialiased`}>
         <ThemeProvider>{children}</ThemeProvider>
         <Analytics />
+        <MatomoAnalytics />
       </body>
     </html>
   );
