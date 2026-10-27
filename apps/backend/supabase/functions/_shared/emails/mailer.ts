@@ -15,6 +15,24 @@ export interface IMailer {
 }
 
 /**
+ * Minimal html -> text fallback for the plain-text part of an email.
+ */
+function htmlToText(html: string): string {
+  return html
+    .replace(/<style[\s\S]*?<\/style>/gi, ' ')
+    .replace(/<\/(p|div|tr|h1|h2|li)>/gi, '\n')
+    .replace(/<[^>]+>/g, ' ')
+    .replace(/&nbsp;/g, ' ')
+    .replace(/&amp;/g, '&')
+    .replace(/&lt;/g, '<')
+    .replace(/&gt;/g, '>')
+    .replace(/&quot;/g, '"')
+    .replace(/[ \t]+/g, ' ')
+    .replace(/\n\s*\n\s*\n+/g, '\n\n')
+    .trim();
+}
+
+/**
  * Subject line per template — this used to be hardcoded to the welcome subject, so every
  * email (job alerts, trial reminders) landed in the inbox titled "Bienvenue sur Alertemploi".
  */
@@ -75,7 +93,13 @@ export class MailersendMailer implements IMailer {
       let emailParams = new EmailParams().setFrom(sentFrom).setTo(recipients).setReplyTo(sentFrom);
 
       if (isHtmlEmail(template)) {
-        emailParams = emailParams.setSubject(template.subject).setHtml(template.html);
+        // MailerSend accepts an html-only payload but then produces no actual email
+        // (the message shows up with an empty `emails` array and never reaches the
+        // inbox), so always send a plain-text part alongside it.
+        emailParams = emailParams
+          .setSubject(template.subject)
+          .setHtml(template.html)
+          .setText(template.text ?? htmlToText(template.html));
       } else {
         emailParams = emailParams
           .setSubject(getSubject(template))

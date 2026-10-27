@@ -27,6 +27,11 @@ export type NewJobForAlert = {
 // Keep the email short: the full list is one click away in the app.
 const MAX_JOBS_IN_EMAIL = 8;
 
+// The account's "New alert" template. The id previously hardcoded here
+// (v69oxl53z5kg785k) came from the upstream fork and does not exist in this account,
+// so MailerSend rejected every alert with "The selected template_id is invalid".
+const NEW_JOB_ALERT_TEMPLATE_ID = 'ynrw7gy813j42k8e';
+
 function escapeHtml(value: string): string {
   return value
     .replace(/&/g, '&amp;')
@@ -150,16 +155,40 @@ export async function sendNewJobsAlertEmail({
       return false;
     }
 
-    await mailer.sendEmail({
-      logger,
-      to: email,
-      template: {
-        type: EmailTemplateType.newJobAlert,
-        subject:
-          jobs.length === 1 ? '1 nouvelle offre correspond à votre alerte' : `${jobs.length} nouvelles offres pour vous`,
-        html: buildNewJobsAlertHtml({ jobs, jobSites, webappUrl }),
-      },
-    });
+    const subject =
+      jobs.length === 1 ? '1 nouvelle offre correspond à votre alerte' : `${jobs.length} nouvelles offres pour vous`;
+    const siteMap = new Map(jobSites.map((site) => [site.id, site]));
+
+    try {
+      // Preferred path: the account's own "New alert" template (template sends are the
+      // only ones observed to actually leave MailerSend on this account).
+      await mailer.sendEmail({
+        logger,
+        to: email,
+        template: {
+          type: EmailTemplateType.newJobAlert,
+          templateId: NEW_JOB_ALERT_TEMPLATE_ID,
+          payload: {
+            new_jobs_count: jobs.length,
+            new_jobs: jobs.slice(0, MAX_JOBS_IN_EMAIL).map((job) => ({
+              providerName: siteMap.get(job.siteId)?.name ?? 'Job board',
+              title: job.title,
+              url: new URL(`/jobs/${job.id}`, webappUrl).href,
+              company: job.companyName,
+              location: job.location,
+            })),
+          },
+        },
+      });
+    } catch (templateError) {
+      // Fallback so a template problem never silences the alerts again.
+      logger.error(`template alert failed, falling back to inline html: ${getExceptionMessage(templateError)}`);
+      await mailer.sendEmail({
+        logger,
+        to: email,
+        template: { type: EmailTemplateType.newJobAlert, subject, html: buildNewJobsAlertHtml({ jobs, jobSites, webappUrl }) },
+      });
+    }
 
     logger.info(`sent new job alert to user ${userId} for ${jobs.length} jobs`);
     return true;

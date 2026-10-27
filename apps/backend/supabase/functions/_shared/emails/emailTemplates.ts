@@ -29,7 +29,7 @@ export type TrialReminderEmailTemplate = EmailTemplateBase & {
 };
 export type NewJobAlertEmailTemplate = EmailTemplateBase & {
   type: EmailTemplateType.newJobAlert;
-  templateId: 'v69oxl53z5kg785k';
+  templateId: 'ynrw7gy813j42k8e';
   payload: {
     new_jobs_count: number;
     new_jobs: Array<{
@@ -56,6 +56,7 @@ export type HtmlEmail = {
   type: EmailTemplateType;
   subject: string;
   html: string;
+  text?: string;
 };
 
 export type EmailTemplate = TrialReminderEmailTemplate | NewJobAlertEmailTemplate | WelcomeEmailTemplate;
