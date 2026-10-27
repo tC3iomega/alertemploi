@@ -33,14 +33,17 @@ Deno.serve(async (req) => {
     );
 
     const now = new Date();
-    const in3Days = new Date(now.getTime() + 3 * 24 * 60 * 60 * 1000);
+    const DAY_MS = 24 * 60 * 60 * 1000;
     const todayStr = now.toISOString().slice(0, 10);
-    const in3DaysStr = in3Days.toISOString().slice(0, 10);
+    const in3DaysStr = new Date(now.getTime() + 3 * DAY_MS).toISOString().slice(0, 10);
+    const yesterdayStr = new Date(now.getTime() - DAY_MS).toISOString().slice(0, 10);
 
     // Every account (basic or pro) gets a trial via trial_ends_at regardless of which plan
     // they picked at signup — there is no 'free' plan in the current pricing model, so
     // filtering on plan='free' matched zero rows and this never sent a single reminder.
-    const { data: profiles, error } = await supabaseAdmin.from('profiles').select('user_id, trial_ends_at, plan');
+    const { data: profiles, error } = await supabaseAdmin
+      .from('profiles')
+      .select('user_id, trial_ends_at, plan, subscription_ends_at');
 
     if (error) throw new Error(error.message);
 
@@ -48,6 +51,8 @@ Deno.serve(async (req) => {
 
     for (const profile of profiles ?? []) {
       if (!profile.trial_ends_at) continue;
+      // Someone who already pays has nothing to do with these emails.
+      if (profile.subscription_ends_at && new Date(profile.subscription_ends_at) > now) continue;
       const trialDateStr = profile.trial_ends_at.slice(0, 10);
 
       let payload = null;
@@ -56,12 +61,12 @@ Deno.serve(async (req) => {
         payload = {
           badge_text: '⏳ 3 jours restants',
           title: 'Votre essai gratuit se termine bientôt',
-          subtitle: "Ne perdez pas l'accès à vos alertes Pro",
+          subtitle: "Ne perdez pas l'accès à vos alertes",
           intro_text:
-            "Votre essai gratuit Pro se termine dans 3 jours. Passez à l'abonnement Pro pour continuer à profiter de toutes les fonctionnalités.",
+            "Votre essai gratuit se termine dans 3 jours. Choisissez une formule (Basic 4,99€/mois ou Pro 14,99€/mois) pour que vos alertes continuent d'être scannées toutes les 30 minutes.",
           show_benefits: true,
           show_warning: false,
-          cta_text: 'Continuer avec Pro',
+          cta_text: 'Choisir ma formule',
           hero_bg: '#FFFBEB',
           hero_border: '#FCD34D',
           badge_bg: '#FEF3C7',
@@ -71,16 +76,33 @@ Deno.serve(async (req) => {
         payload = {
           badge_text: '⚠️ Dernier jour',
           title: "Votre essai gratuit se termine aujourd'hui",
-          subtitle: 'Passez à Pro pour ne rien manquer',
+          subtitle: 'Choisissez votre formule pour ne rien manquer',
           intro_text:
-            "C'est le dernier jour de votre essai gratuit. À partir de demain, vos alertes seront limitées au plan gratuit.",
+            "C'est le dernier jour de votre essai gratuit. À partir de demain, vos alertes cesseront d'être scannées et vous ne recevrez plus d'offres tant que vous n'avez pas choisi une formule.",
           show_benefits: false,
           show_warning: true,
-          cta_text: 'Garder mon accès Pro',
+          cta_text: 'Choisir ma formule',
           hero_bg: '#FEF2F2',
           hero_border: '#FECACA',
           badge_bg: '#FEE2E2',
           badge_color: '#B91C1C',
+        };
+      }
+
+      else if (trialDateStr === yesterdayStr) {
+        payload = {
+          badge_text: '⏸️ Essai terminé',
+          title: 'Vos alertes sont en pause',
+          subtitle: 'Réactivez-les en moins d\'une minute',
+          intro_text:
+            "Votre essai gratuit s'est terminé hier : vos alertes ne sont plus scannées et les nouvelles offres ne vous sont plus envoyées. Réactivez votre accès à partir de 4,99€/mois, sans engagement, résiliable à tout moment.",
+          show_benefits: true,
+          show_warning: false,
+          cta_text: 'Réactiver mes alertes',
+          hero_bg: '#F0F7FF',
+          hero_border: '#BFDBFE',
+          badge_bg: '#DBEAFE',
+          badge_color: '#1E40AF',
         };
       }
 
