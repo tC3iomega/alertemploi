@@ -80,7 +80,7 @@ export default function RegisterPage() {
       return;
     }
 
-    router.push('/jobs/list/new');
+    router.push('/links/new');
   }
 
   async function handleGoogleSignup() {
@@ -89,7 +89,7 @@ export default function RegisterPage() {
     await supabase.auth.signInWithOAuth({
       provider: 'google',
       options: {
-        redirectTo: `${window.location.origin}/auth/callback`,
+        redirectTo: `${window.location.origin}/auth/callback?next=/links/new`,
       },
     });
   }
