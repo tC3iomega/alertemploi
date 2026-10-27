@@ -4,6 +4,8 @@ import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.48.1';
 
 import { getInitialJobStatus, loadCompanyBlacklist } from '../_shared/advancedMatching.ts';
 import { CORS_HEADERS } from '../_shared/cors.ts';
+import { MailersendMailer } from '../_shared/emails/mailer.ts';
+import { NewJobForAlert, sendNewJobsAlertEmail } from '../_shared/emails/newJobAlert.ts';
 import { parseEnv } from '../_shared/env.ts';
 import { fetchLinkContent } from '../_shared/fetchLinkContent.ts';
 import { parseJobsListUrl } from '../_shared/jobListParser.ts';
@@ -53,6 +55,10 @@ try {
     // Caches the trial/subscription check per user for this run, since several links can
     // belong to the same account and checkUserSubscription hits the database each time.
     const subscriptionExpiredByUser = new Map<string, boolean>();
+    // Jobs found during this run, per user, so each user gets a single alert email at the
+    // end instead of one per link.
+    const newJobsByUser = new Map<string, NewJobForAlert[]>();
+    const emailAlertsEnabledByUser = new Map<string, boolean>();
 
     // Scanner chaque lien
     for (const link of links) {
@@ -62,6 +68,7 @@ try {
           const result = await checkUserSubscription({ supabaseAdminClient: supabaseAdmin, userId: link.user_id });
           subscriptionHasExpired = result.subscriptionHasExpired;
           subscriptionExpiredByUser.set(link.user_id, subscriptionHasExpired);
+          emailAlertsEnabledByUser.set(link.user_id, result.profile.email_alerts_enabled !== false);
         }
         if (subscriptionHasExpired) {
           logger.info(`cron-scan: skipping link ${link.id}, subscription expired for user ${link.user_id}`);
@@ -149,6 +156,13 @@ if (parseFailed) {
         totalNewJobs += newCount;
         logger.info(`cron-scan: inserted ${newCount} new jobs for link ${link.id}`);
 
+        // Blacklisted jobs are filtered out of the feed, so they must not trigger an alert.
+        const jobsForAlert = (upsertedJobs ?? []).filter((job) => job.status === 'new');
+        if (jobsForAlert.length > 0) {
+          const current = newJobsByUser.get(link.user_id) ?? [];
+          newJobsByUser.set(link.user_id, current.concat(jobsForAlert as NewJobForAlert[]));
+        }
+
         // Mettre à jour last_scraped_at
         await supabaseAdmin
           .from('links')
@@ -160,8 +174,34 @@ if (parseFailed) {
       }
     }
 
-    logger.info(`cron-scan: done. Total new jobs: ${totalNewJobs}`);
-    return new Response(JSON.stringify({ totalNewJobs }), {
+    // Send one alert email per user for everything this run found.
+    let emailsSent = 0;
+    if (newJobsByUser.size > 0) {
+      if (!env.mailerSendApiKey) {
+        logger.error('cron-scan: MAILERSEND_API_KEY missing, cannot send job alerts');
+      } else {
+        const mailer = new MailersendMailer(env.mailerSendApiKey, 'contact@alertemploi.com', 'Alertemploi');
+        for (const [userId, userJobs] of newJobsByUser) {
+          if (emailAlertsEnabledByUser.get(userId) === false) {
+            logger.info(`cron-scan: email alerts disabled for user ${userId}`);
+            continue;
+          }
+          const sent = await sendNewJobsAlertEmail({
+            logger,
+            mailer,
+            supabaseAdminClient: supabaseAdmin,
+            userId,
+            jobs: userJobs,
+            jobSites: allJobSites,
+            webappUrl: env.webappUrl,
+          });
+          if (sent) emailsSent++;
+        }
+      }
+    }
+
+    logger.info(`cron-scan: done. Total new jobs: ${totalNewJobs}, alert emails sent: ${emailsSent}`);
+    return new Response(JSON.stringify({ totalNewJobs, emailsSent }), {
       headers: { 'Content-Type': 'application/json', ...CORS_HEADERS },
     });
 

@@ -1,7 +1,7 @@
 import { getExceptionMessage } from '@alertemploi/core';
 import { EmailParams, MailerSend, Recipient, Sender } from 'mailersend';
 
-import { EmailTemplate } from '../emails/emailTemplates.ts';
+import { EmailTemplate, EmailTemplateType } from '../emails/emailTemplates.ts';
 import { ILogger } from '../logger.ts';
 
 /**
@@ -12,6 +12,26 @@ export interface IMailer {
    * Send an email.
    */
   sendEmail(_: { logger: ILogger; from?: string; to: string; template: EmailTemplate }): Promise<void>;
+}
+
+/**
+ * Subject line per template — this used to be hardcoded to the welcome subject, so every
+ * email (job alerts, trial reminders) landed in the inbox titled "Bienvenue sur Alertemploi".
+ */
+function getSubject(template: EmailTemplate): string {
+  switch (template.type) {
+    case EmailTemplateType.newJobAlert: {
+      const count = template.payload.new_jobs_count;
+      return count === 1 ? '1 nouvelle offre correspond à votre alerte' : `${count} nouvelles offres pour vous`;
+    }
+    case EmailTemplateType.trialReminder:
+      return template.payload.badge_text?.includes('Dernier')
+        ? 'Votre essai gratuit se termine aujourd\'hui'
+        : 'Votre essai gratuit se termine dans 3 jours';
+    case EmailTemplateType.welcome:
+    default:
+      return 'Bienvenue sur Alertemploi';
+  }
 }
 
 /**
@@ -64,7 +84,7 @@ export class MailersendMailer implements IMailer {
         .setFrom(sentFrom)
         .setTo(recipients)
         .setReplyTo(sentFrom)
-        .setSubject('Bienvenue sur Alertemploi')
+        .setSubject(getSubject(template))
         .setTemplateId(template.templateId) // Use the template ID (templateAlias)
         .setPersonalization(personalization);
 
