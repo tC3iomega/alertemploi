@@ -164,7 +164,7 @@ export default function LoginPage() {
                 Mot de passe
               </label>
               <Link href="/auth/forgot-password" style={{ fontSize: 12, color: 'var(--ae-primary)', textDecoration: 'none' }}>
-                Mot de passe oublie ?
+                Mot de passe oublié ?
               </Link>
             </div>
             <div style={{ position: 'relative' }}>

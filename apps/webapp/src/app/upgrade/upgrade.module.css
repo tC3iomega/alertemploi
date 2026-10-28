@@ -1,0 +1,15 @@
+/* Les deux formules tiennent côte à côte sur grand écran, mais à 390px elles étaient
+   compressées et débordaient de l'écran (scroll horizontal). */
+.plans {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 18px;
+  margin-bottom: 28px;
+}
+
+@media (max-width: 640px) {
+  .plans {
+    grid-template-columns: 1fr;
+    gap: 22px;
+  }
+}

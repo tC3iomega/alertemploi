@@ -4,6 +4,7 @@ import { useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { createCheckoutSession } from '@/app/actions';
+import styles from './upgrade.module.css';
 
 function Logo() {
   return (
@@ -129,7 +130,7 @@ export default function UpgradePage() {
         </div>
 
         {/* Plans */}
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: 18, marginBottom: 28 }}>
+        <div className={styles.plans}>
 
           {/* Basic */}
           <div style={{
