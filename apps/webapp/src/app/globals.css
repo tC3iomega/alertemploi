@@ -189,3 +189,20 @@
     @apply list-disc pl-6;
   }
 }
+
+/* Pages de contenu (/alertes) : Tailwind retire les puces et les numéros par défaut, et
+   les liens n'héritent d'aucune couleur. */
+.ae-prose ol {
+  list-style: decimal;
+}
+.ae-prose ul {
+  list-style: disc;
+}
+.ae-prose a {
+  color: var(--ae-primary);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+.ae-prose p + p {
+  margin-top: 12px;
+}

@@ -89,7 +89,7 @@ export function PageShell({
 
 export function Section({ title, children }: { title: string; children: React.ReactNode }) {
   return (
-    <section style={{ marginBottom: 34 }}>
+    <section style={{ marginBottom: 34 }} className="ae-prose">
       <h2 style={{ fontSize: 20, fontWeight: 600, marginBottom: 12 }}>{title}</h2>
       <div style={{ fontSize: 15, lineHeight: 1.75, color: 'var(--ae-text-body)' }}>{children}</div>
     </section>
