@@ -11,7 +11,7 @@ import {
 } from "@radix-ui/react-icons"
 import React, { useMemo } from "react"
 
-import { LABEL_COLOR_CLASSES } from "../../lib/labels"
+import { LABEL_COLOR_CLASSES, LABEL_FR, formatJobType } from "../../lib/labels"
 import {
   JOB_LABELS,
   Job,
@@ -167,7 +167,7 @@ export function JobSummary({
         {job.jobType && (
           <div className="flex items-center gap-3 capitalize text-muted-foreground">
             <BackpackIcon className="h-4 w-4" />
-            {job.jobType}
+            {formatJobType(job.jobType)}
           </div>
         )}
         {job.salary && (
@@ -301,15 +301,17 @@ function JobLabelSelector({
 
   const LabelOptionWithColor = ({
     jobLabel,
+    display,
     colorClass,
   }: {
     jobLabel: string
+    display: string
     colorClass: string
   }) => (
     <SelectItem value={jobLabel}>
       <div className="flex items-center">
         <div className={`h-3 w-3 rounded-full ${colorClass}`}></div>
-        <div className="ml-2 flex-1">{jobLabel}</div>
+        <div className="ml-2 flex-1">{display}</div>
       </div>
     </SelectItem>
   )
@@ -327,13 +329,14 @@ function JobLabelSelector({
       </SelectTrigger>
       <SelectContent>
         {/* no label */}
-        <LabelOptionWithColor jobLabel="Aucune" colorClass="bg-background" />
+        <LabelOptionWithColor jobLabel="Aucune" display="Aucune" colorClass="bg-background" />
 
         {/* labels with colors */}
         {Object.values(JOB_LABELS).map((jobLabel) => (
           <LabelOptionWithColor
             key={jobLabel}
             jobLabel={jobLabel}
+            display={LABEL_FR[jobLabel]}
             colorClass={LABEL_COLOR_CLASSES[jobLabel]}
           />
         ))}

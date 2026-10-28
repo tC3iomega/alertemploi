@@ -7,7 +7,7 @@ import {
 } from "../ui/tooltip"
 import { Button } from "../ui/button"
 import { ArchiveIcon, TrashIcon } from "lucide-react"
-import { LABEL_COLOR_CLASSES } from "../../lib/labels"
+import { LABEL_COLOR_CLASSES, LABEL_FR, formatJobType } from "../../lib/labels"
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar"
 
 export type JobCardProps = {
@@ -52,7 +52,7 @@ export function JobCard({
                 </TooltipTrigger>
 
                 <TooltipContent side="bottom" className="text-base">
-                  Archive
+                  Archiver
                 </TooltipContent>
               </Tooltip>
             </TooltipProvider>
@@ -78,7 +78,7 @@ export function JobCard({
                 side="bottom"
                 className="bg-destructive text-base text-white"
               >
-                Delete
+                Supprimer
               </TooltipContent>
             </Tooltip>
           </TooltipProvider>
@@ -90,7 +90,7 @@ export function JobCard({
 
       <div className="mt-1.5 flex items-center justify-between gap-4">
         {/* Location, JobType, Salary & Tags */}
-        <p className="text-sm leading-[18px] tracking-tight text-foreground/80">
+        <p className="min-w-0 flex-1 text-sm leading-[18px] tracking-tight text-foreground/80">
           {job.location && <span>{job.location}</span>}
           {job.jobType && (
             <>
@@ -100,7 +100,7 @@ export function JobCard({
                   |{" "}
                 </span>
               )}
-              <span>{job.jobType}</span>
+              <span>{formatJobType(job.jobType)}</span>
             </>
           )}
           {job.salary && (
@@ -134,7 +134,7 @@ export function JobCard({
               LABEL_COLOR_CLASSES[job.labels[0]]
             }`}
           >
-            {job.labels[0]}
+            {LABEL_FR[job.labels[0]] ?? job.labels[0]}
           </div>
         )}
       </div>
