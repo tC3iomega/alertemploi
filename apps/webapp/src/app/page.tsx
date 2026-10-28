@@ -289,7 +289,9 @@ export default function LandingPage() {
         </h2>
         <p style={{ fontSize: 15, color: 'var(--ae-text-muted)', marginBottom: 32 }}>
           7 job boards — d'autres arrivent bientôt. Voir{' '}
-          <Link href="/alertes" style={{ color: 'var(--ae-primary)' }}>comment créer une alerte sur chacun</Link>.
+          <Link href="/alertes" style={{ color: 'var(--ae-primary)' }}>comment créer une alerte sur chacun</Link>, les{' '}
+          <Link href="/metiers" style={{ color: 'var(--ae-primary)' }}>conseils par métier</Link> ou le{' '}
+          <Link href="/comparatif" style={{ color: 'var(--ae-primary)' }}>comparatif avec les alertes natives</Link>.
         </p>
         <div style={{ display: 'flex', gap: 12, justifyContent: 'center', flexWrap: 'wrap' }}>
           {BOARDS.map((board) => (

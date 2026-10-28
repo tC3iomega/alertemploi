@@ -29,7 +29,7 @@ export async function updateSession(request: NextRequest) {
   // Pages publiques : accessibles sans session, et donc indexables. Toute page de contenu
   // ajoutée hors de cette liste serait redirigée vers l'accueil — y compris pour Google.
   const PUBLIC_PATHS = ['/', '/upgrade', '/legal', '/privacy', '/cgv'];
-  const PUBLIC_PREFIXES = ['/alertes', '/auth/'];
+  const PUBLIC_PREFIXES = ['/alertes', '/metiers', '/comparatif', '/auth/'];
 
   const isPublicPage =
     PUBLIC_PATHS.includes(pathname) || PUBLIC_PREFIXES.some((prefix) => pathname.startsWith(prefix));

@@ -1,6 +1,7 @@
 import type { MetadataRoute } from 'next';
 
 import { BOARDS } from './alertes/boards';
+import { JOBS } from './metiers/jobs';
 import { SITE_URL } from './seo';
 
 export default function sitemap(): MetadataRoute.Sitemap {
@@ -15,6 +16,14 @@ export default function sitemap(): MetadataRoute.Sitemap {
       changeFrequency: 'monthly' as const,
       priority: 0.7,
     })),
+    { url: `${SITE_URL}/metiers`, lastModified, changeFrequency: 'monthly', priority: 0.9 },
+    ...JOBS.map((job) => ({
+      url: `${SITE_URL}/metiers/${job.slug}`,
+      lastModified,
+      changeFrequency: 'monthly' as const,
+      priority: 0.7,
+    })),
+    { url: `${SITE_URL}/comparatif`, lastModified, changeFrequency: 'monthly', priority: 0.6 },
     { url: `${SITE_URL}/cgv`, lastModified, changeFrequency: 'yearly', priority: 0.3 },
     { url: `${SITE_URL}/legal`, lastModified, changeFrequency: 'yearly', priority: 0.3 },
     { url: `${SITE_URL}/privacy`, lastModified, changeFrequency: 'yearly', priority: 0.3 },

@@ -70,6 +70,10 @@ export default function AlertesHub() {
           Le plan Pro ajoute une blacklist d&apos;entreprises : les offres des sociétés que vous ne visez pas
           n&apos;arrivent jamais dans votre boîte. Voir les <Link href="/upgrade">tarifs</Link>.
         </p>
+        <p>
+          Voir aussi les <Link href="/metiers">conseils par métier</Link> et le{' '}
+          <Link href="/comparatif">comparatif avec les alertes natives</Link>.
+        </p>
       </Section>
     </PageShell>
   );
