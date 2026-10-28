@@ -91,8 +91,9 @@ export function parseWTTJJobs({
 
   const nextDataEl = document.querySelector('script#__NEXT_DATA__');
   if (!nextDataEl?.textContent) {
-    logger.error('WTTJ: __NEXT_DATA__ script not found');
-    return { jobs: [], listFound: false, elementsCount: 0 };
+    // WTTJ App Router: no __NEXT_DATA__, try DOM-based parsing
+    logger.info('WTTJ: no __NEXT_DATA__, trying DOM parsing (App Router)');
+    return parseWTTJJobsFromDom({ siteId, document, logger });
   }
 
   let nextData: WTTJNextData;
@@ -140,8 +141,8 @@ export function parseWTTJJobs({
     if (noResultsEl) {
       return { jobs: [], listFound: true, elementsCount: 0 };
     }
-    logger.error('WTTJ: no jobs found in any known location');
-    return { jobs: [], listFound: false, elementsCount: 0 };
+    // No __NEXT_DATA__ hits — try DOM-based parsing (App Router / rendered page)
+    return parseWTTJJobsFromDom({ siteId, document, logger });
   }
 
   const jobs = hits
@@ -151,4 +152,76 @@ export function parseWTTJJobs({
   logger.info(`WTTJ: mapped ${jobs.length} valid jobs out of ${hits.length}`);
 
   return { jobs, listFound: true, elementsCount: hits.length };
+}
+
+function parseWTTJJobsFromDom({
+  siteId,
+  document,
+  logger,
+}: {
+  siteId: number;
+  document: ReturnType<DOMParser['parseFromString']>;
+  logger: ILogger;
+}): JobSiteParseResult {
+  // WTTJ App Router: job cards link to /fr/companies/{company}/jobs/{slug}
+  // Find all such anchor elements (rendered by Algolia InstantSearch)
+  const jobLinks = Array.from(
+    document!.querySelectorAll('a[href*="/fr/companies/"][href*="/jobs/"]')
+  ) as import('deno-dom-wasm').Element[];
+
+  // Deduplicate by href
+  const seen = new Set<string>();
+  const uniqueLinks = jobLinks.filter((a) => {
+    const href = a.getAttribute('href') ?? '';
+    if (seen.has(href)) return false;
+    seen.add(href);
+    return true;
+  });
+
+  if (!uniqueLinks.length) {
+    logger.error('WTTJ: no job links found in DOM (page may not have loaded yet)');
+    return { jobs: [], listFound: false, elementsCount: 0 };
+  }
+
+  logger.info(`WTTJ DOM: found ${uniqueLinks.length} unique job links`);
+
+  const jobs = uniqueLinks.map((a): ParsedJob | null => {
+    const href = a.getAttribute('href')?.trim() ?? '';
+    // Extract slugs: /fr/companies/{company}/jobs/{job}
+    const match = href.match(/\/fr\/companies\/([^/]+)\/jobs\/([^/?#]+)/);
+    if (!match) return null;
+
+    const [, companySlug, jobSlug] = match;
+    const externalId = jobSlug;
+    const externalUrl = `https://www.welcometothejungle.com${href.startsWith('/') ? href : '/' + href}`;
+
+    // Title: look for h3 or h2 or strong or the link's own text
+    const titleEl = a.querySelector('h3, h2, strong') ?? a;
+    const rawTitle = titleEl.textContent?.trim() ?? '';
+    // Remove company name if it's repeated — first line tends to be the title
+    const title = rawTitle.split('\n')[0].trim();
+    if (!title) return null;
+
+    // Company: from the URL slug, formatted
+    const companyName = companySlug.replace(/-/g, ' ').replace(/\b\w/g, (c) => c.toUpperCase());
+
+    // Location: look for the nearest sibling/parent text after the title
+    const card = a.closest('li, article, [class*="card"], [class*="Card"]') as import('deno-dom-wasm').Element | null;
+    const locationEl = card?.querySelector('[class*="location"], [class*="Location"], [class*="city"], [data-testid*="location"]');
+    const location = locationEl?.textContent?.trim();
+
+    return {
+      siteId,
+      externalId,
+      externalUrl,
+      title,
+      companyName,
+      location,
+      tags: [],
+      labels: [],
+    };
+  }).filter((j): j is ParsedJob => !!j);
+
+  logger.info(`WTTJ DOM: mapped ${jobs.length} valid jobs`);
+  return { jobs, listFound: jobs.length > 0, elementsCount: uniqueLinks.length };
 }

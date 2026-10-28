@@ -78,13 +78,19 @@ export async function fetchLinkContent({
     const browserlessApiKey = env.browserlessApiKey;
     if (browserlessApiKey) {
       logger.info(`fetching via Browserless: ${link.url}`);
+      const isWTTJ = site.provider === 'wttj';
+      // WTTJ loads jobs client-side (Algolia), needs more time + waits for job links
+      const browserlessBody = isWTTJ
+        ? {
+            url: link.url,
+            waitForTimeout: 10000,
+            waitForSelector: 'a[href*="/fr/companies/"][href*="/jobs/"]',
+          }
+        : { url: link.url, waitForTimeout: 3000 };
       const response = await fetch(`https://production-sfo.browserless.io/content?token=${browserlessApiKey}`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          url: link.url,
-          waitForTimeout: 3000,
-        }),
+        body: JSON.stringify(browserlessBody),
       });
       htmlContent = await response.text();
       logger.info(`fetched ${htmlContent.length} bytes via Browserless`);

@@ -30,22 +30,12 @@ export function parseHelloWorkJobs({
     return { jobs: [], listFound: true, elementsCount: 0 };
   }
 
-  // Job cards are <li> elements with data-cy="job-card" or inside a job list
+  // Job cards use data-cy="serpCard" (structure: li > div > a[data-cy="offerTitle"] > h3)
   let jobElements = Array.from(
-    document.querySelectorAll('[data-cy="job-card"]')
+    document.querySelectorAll('[data-cy="serpCard"]')
   ) as Element[];
 
-  // Fallback: look for the standard job list structure
-  if (!jobElements.length) {
-    const jobList = document.querySelector('[data-cy="job-list"]') ||
-      document.querySelector('ul[class*="JobList"]') ||
-      document.querySelector('ul[class*="job-list"]');
-    if (jobList) {
-      jobElements = Array.from((jobList as Element).querySelectorAll('li')) as Element[];
-    }
-  }
-
-  // Second fallback: filter li elements that contain a job link
+  // Fallback: li elements containing a job link
   if (!jobElements.length) {
     jobElements = Array.from(
       document.querySelectorAll('li')
@@ -60,11 +50,12 @@ export function parseHelloWorkJobs({
   logger.info(`HelloWork: found ${jobElements.length} job cards`);
 
   const jobs = jobElements.map((el): ParsedJob | null => {
-    // External URL and ID
-    const linkEl = el.querySelector('a[href*="/fr-fr/emplois/"]') as Element | null;
-    if (!linkEl) return null;
+    // The offer link has data-cy="offerTitle" and href="/fr-fr/emplois/{id}.html"
+    const offerLinkEl = (el.querySelector('[data-cy="offerTitle"]') ||
+      el.querySelector('a[href*="/fr-fr/emplois/"]')) as Element | null;
+    if (!offerLinkEl) return null;
 
-    const href = linkEl.getAttribute('href')?.trim();
+    const href = offerLinkEl.getAttribute('href')?.trim();
     if (!href) return null;
 
     const externalId = href.split('/').pop()?.replace('.html', '');
@@ -72,25 +63,27 @@ export function parseHelloWorkJobs({
 
     const externalUrl = `https://www.hellowork.com${href.startsWith('/') ? href : '/' + href}`;
 
-    // Title — inside h3 > a or h2 > a
-    const titleEl = el.querySelector('h3 a, h2 a, [data-cy="job-title"]');
-    const title = titleEl?.textContent?.trim();
+    // Title: first span inside h3 (h3 contains title span + company span)
+    const h3 = offerLinkEl.querySelector('h3') as Element | null;
+    const spans = h3 ? Array.from(h3.querySelectorAll('span')) as Element[] : [];
+    const title = spans[0]?.textContent?.trim() || offerLinkEl.getAttribute('title')?.split(' - ')[0]?.trim();
     if (!title) return null;
 
-    // Company name
-    const companyEl = el.querySelector('[data-cy="company-name"], [class*="company"], .tw-typo-m');
-    const companyName = companyEl?.textContent?.trim() || 'N/A';
+    // Company name: second span inside h3, or from the title attribute
+    const companyName = spans[1]?.textContent?.trim() ||
+      offerLinkEl.getAttribute('aria-label')?.match(/chez ([^,]+)/)?.[1]?.trim() ||
+      'N/A';
 
     // Company logo
     const logoEl = el.querySelector('img[src*="/img/entreprises/"]') as Element | null;
     const companyLogo = logoEl?.getAttribute('src') || undefined;
 
     // Location
-    const locationEl = el.querySelector('[data-cy="job-location"], [class*="location"], [class*="ville"]');
+    const locationEl = el.querySelector('[data-cy="localisationCard"]');
     const location = locationEl?.textContent?.trim();
 
     // Contract type
-    const contractEl = el.querySelector('[data-cy="job-contract"], [class*="contract"], [class*="contrat"]');
+    const contractEl = el.querySelector('[data-cy="contractCard"]');
     const contractText = contractEl?.textContent?.trim();
 
     // Job type from contract
@@ -99,8 +92,8 @@ export function parseHelloWorkJobs({
       ? 'remote'
       : undefined;
 
-    // Salary
-    const salaryEl = el.querySelector('[data-cy="job-salary"], [class*="salary"], [class*="salaire"]');
+    // Salary (HelloWork doesn't always show salary in search results)
+    const salaryEl = el.querySelector('[data-cy="salaryCard"], [data-cy="job-salary"]');
     const salary = salaryEl?.textContent?.trim() || undefined;
 
     const tags: string[] = contractText ? [contractText] : [];
