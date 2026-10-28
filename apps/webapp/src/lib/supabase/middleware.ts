@@ -24,11 +24,18 @@ export async function updateSession(request: NextRequest) {
     data: { user },
   } = await supabase.auth.getUser();
 
-  const isAuthPage = request.nextUrl.pathname === '/' || request.nextUrl.pathname === '/upgrade' || request.nextUrl.pathname === '/legal' || request.nextUrl.pathname === '/privacy' || request.nextUrl.pathname === '/cgv' || request.nextUrl.pathname === '/auth/register';
-  const isAuthCallback = request.nextUrl.pathname.startsWith('/auth/');
+  const { pathname } = request.nextUrl;
+
+  // Pages publiques : accessibles sans session, et donc indexables. Toute page de contenu
+  // ajoutée hors de cette liste serait redirigée vers l'accueil — y compris pour Google.
+  const PUBLIC_PATHS = ['/', '/upgrade', '/legal', '/privacy', '/cgv'];
+  const PUBLIC_PREFIXES = ['/alertes', '/auth/'];
+
+  const isPublicPage =
+    PUBLIC_PATHS.includes(pathname) || PUBLIC_PREFIXES.some((prefix) => pathname.startsWith(prefix));
 
   // Unauthenticated → redirect to login
-  if (!user && !isAuthPage && !isAuthCallback) {
+  if (!user && !isPublicPage) {
     const url = request.nextUrl.clone();
     url.pathname = '/';
     return NextResponse.redirect(url);
