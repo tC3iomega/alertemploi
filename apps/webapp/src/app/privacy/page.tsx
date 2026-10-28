@@ -1,3 +1,13 @@
+import type { Metadata } from 'next';
+
+export const metadata: Metadata = {
+  title: 'Politique de confidentialité',
+  description:
+    "Données collectées, finalités, durée de conservation et vos droits sur le service Alertemploi.",
+  alternates: { canonical: '/privacy' },
+  openGraph: { title: 'Politique de confidentialité | Alertemploi', description: "Données collectées, finalités, durée de conservation et vos droits sur le service Alertemploi.", url: '/privacy' },
+};
+
 export default function ConfidentialitePage() {
   return (
     <main style={{

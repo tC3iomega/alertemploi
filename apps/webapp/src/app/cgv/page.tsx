@@ -1,3 +1,13 @@
+import type { Metadata } from 'next';
+
+export const metadata: Metadata = {
+  title: 'Conditions générales de vente',
+  description:
+    "Tarifs, essai gratuit, paiement, renouvellement, résiliation et droit de rétractation du service Alertemploi.",
+  alternates: { canonical: '/cgv' },
+  openGraph: { title: 'Conditions générales de vente | Alertemploi', description: "Tarifs, essai gratuit, paiement, renouvellement, résiliation et droit de rétractation du service Alertemploi.", url: '/cgv' },
+};
+
 export default function CGVPage() {
   return (
     <main

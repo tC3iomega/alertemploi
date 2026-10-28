@@ -1,3 +1,13 @@
+import type { Metadata } from 'next';
+
+export const metadata: Metadata = {
+  title: 'Mentions légales',
+  description:
+    "Éditeur, hébergeur et informations légales du service Alertemploi.",
+  alternates: { canonical: '/legal' },
+  openGraph: { title: 'Mentions légales | Alertemploi', description: "Éditeur, hébergeur et informations légales du service Alertemploi.", url: '/legal' },
+};
+
 export default function MentionsLegalesPage() {
   return (
     <main style={{
