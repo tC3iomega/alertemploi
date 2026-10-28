@@ -6,7 +6,7 @@ import { AppHeader } from '../../components/appHeader';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 
-type Site = { id: number; name: string; provider: string; urls: string[] };
+type Site = { id: number; name: string; provider: string; urls: string[]; deprecated?: boolean };
 
 export default function NewLinkPage() {
   const router = useRouter();
@@ -18,8 +18,11 @@ export default function NewLinkPage() {
   const [detectedSite, setDetectedSite] = useState<Site | null>(null);
 
   useEffect(() => {
-    // custom job sites need AI parsing, which isn't offered
-    listSites().then((s) => setSites((s as Site[]).filter((site) => site.provider !== 'custom')));
+    // custom = parsing IA non proposé ; deprecated = aucun contenu n'est récupéré pour ce
+    // site (Glassdoor), un lien créé dessus ne remonterait jamais d'offre.
+    listSites().then((s) =>
+      setSites((s as Site[]).filter((site) => site.provider !== 'custom' && !site.deprecated)),
+    );
   }, []);
 
   useEffect(() => {

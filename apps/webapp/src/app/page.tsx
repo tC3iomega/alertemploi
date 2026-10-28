@@ -3,9 +3,9 @@
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import styles from './page.module.css';
+import { BOARDS } from './alertes/boards';
 import { createClient } from '@/lib/supabase/client';
 
-const JOB_BOARDS = ['France Travail', 'APEC', 'Cadremploi', 'HelloWork', 'Welcome to the Jungle', 'LinkedIn', 'Indeed'];
 
 const FEATURES = [
   {
@@ -207,7 +207,7 @@ export default function LandingPage() {
 
         <div style={{ display: 'flex', gap: 10, justifyContent: 'center', alignItems: 'center', flexWrap: 'wrap' }}>
           <span style={{ fontSize: 12, color: 'var(--ae-text-subtle)', marginRight: 4 }}>Surveille</span>
-          {JOB_BOARDS.map((board) => (
+          {BOARDS.map(({ name: board }) => (
             <span key={board} style={{
               background: 'var(--ae-surface)', border: '0.5px solid var(--ae-border)',
               borderRadius: 20, padding: '5px 14px', fontSize: 12,
@@ -288,15 +288,17 @@ export default function LandingPage() {
           Les sites surveillés
         </h2>
         <p style={{ fontSize: 15, color: 'var(--ae-text-muted)', marginBottom: 32 }}>
-          7 job boards — d'autres arrivent bientôt.
+          7 job boards — d'autres arrivent bientôt. Voir{' '}
+          <Link href="/alertes" style={{ color: 'var(--ae-primary)' }}>comment créer une alerte sur chacun</Link>.
         </p>
         <div style={{ display: 'flex', gap: 12, justifyContent: 'center', flexWrap: 'wrap' }}>
-          {JOB_BOARDS.map((board) => (
-            <div key={board} style={{
+          {BOARDS.map((board) => (
+            <Link key={board.slug} href={`/alertes/${board.slug}`} style={{
               background: 'var(--ae-surface)', border: '0.5px solid var(--ae-border)',
               borderRadius: 10, padding: '12px 24px',
               fontSize: 14, fontWeight: 500, color: 'var(--ae-text-secondary)',
-            }}>{board}</div>
+              textDecoration: 'none',
+            }}>{board.name}</Link>
           ))}
         </div>
       </section>
