@@ -107,7 +107,7 @@ export function ListJobsFeed({ listJobsResult, status, batchSize, hasLinks = fal
 
       return (
     <div>
-      <h1 className="m-4 text-2xl">{PageHeaderNameMap[status]}</h1>
+      <h1 style={{ margin: '0 16px 16px', fontSize: 22, fontWeight: 700, color: 'var(--ae-text)' }}>{PageHeaderNameMap[status]}</h1>
       {jobListing.jobs.length === 0 ? (
         <EmptyState hasLinks={hasLinks} />
       ) : (
