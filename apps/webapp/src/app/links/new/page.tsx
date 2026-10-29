@@ -1,8 +1,6 @@
 'use client';
 
 import { createLink, listSites } from '@/app/actions';
-import { SmallNavbar } from '../../components/smallNavbar';
-import { AppHeader } from '../../components/appHeader';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 
@@ -46,7 +44,8 @@ export default function NewLinkPage() {
       setDetectedSite(null);
     }
   }, [url, sites]);
-async function handleSubmit(e: React.FormEvent) {
+
+  async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     setLoading(true);
     setError(null);
@@ -66,55 +65,84 @@ async function handleSubmit(e: React.FormEvent) {
   }
 
   return (
-    <>
-    <div className="flex flex-col min-h-screen bg-background text-foreground items-center">
-      <div className="flex items-center gap-3 px-4 py-4 border-b border-border max-w-lg mx-auto w-full">
-        <h1 className="text-lg font-semibold">Nouvelle alerte emploi</h1>
+    <div style={{
+      display: 'flex', flexDirection: 'column', minHeight: '100vh',
+      background: 'var(--ae-bg)', color: 'var(--ae-text)',
+      fontFamily: 'Arial, Helvetica, sans-serif', alignItems: 'center',
+    }}>
+      <div style={{
+        display: 'flex', alignItems: 'center', gap: 12,
+        padding: '16px 16px', borderBottom: '0.5px solid var(--ae-border)',
+        maxWidth: 512, width: '100%',
+      }}>
+        <h1 style={{ fontSize: 17, fontWeight: 600, margin: 0, color: 'var(--ae-text)' }}>
+          Nouvelle alerte emploi
+        </h1>
       </div>
 
-      <form onSubmit={handleSubmit} className="flex flex-col gap-6 p-4 flex-1 max-w-lg mx-auto w-full">
-        <div className="flex flex-col gap-2">
-          <label className="text-sm font-medium">URL de recherche</label>
+      <form onSubmit={handleSubmit} style={{
+        display: 'flex', flexDirection: 'column', gap: 24,
+        padding: 16, flex: 1, maxWidth: 512, width: '100%',
+      }}>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+          <label style={{ fontSize: 13, fontWeight: 500, color: 'var(--ae-text)' }}>
+            URL de recherche
+          </label>
           <input
             type="url"
             value={url}
             onChange={(e) => setUrl(e.target.value)}
             placeholder="https://www.welcometothejungle.com/fr/jobs?query=..."
             required
-            className="w-full rounded-lg border border-border bg-card px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-primary"
+            style={{
+              width: '100%', borderRadius: 9, border: '1px solid var(--ae-border)',
+              background: 'var(--ae-surface)', color: 'var(--ae-text)',
+              padding: '11px 14px', fontSize: 13,
+              outline: 'none', boxSizing: 'border-box',
+            }}
           />
           {detectedSite && (
-            <p className="text-xs text-green-500">
-              ✓ Site détecté : <span className="font-medium">{detectedSite.name}</span>
+            <p style={{ fontSize: 12, color: 'var(--ae-green)', margin: 0 }}>
+              ✓ Site détecté : <strong>{detectedSite.name}</strong>
             </p>
           )}
           {url && !detectedSite && (
-            <p className="text-xs text-muted-foreground">
+            <p style={{ fontSize: 12, color: 'var(--ae-text-muted)', margin: 0 }}>
               Site non reconnu — seuls les sites listés ci-dessous sont pris en charge.
             </p>
           )}
         </div>
-<div className="flex flex-col gap-2">
-          <label className="text-sm font-medium">
-            Nom de l&apos;alerte <span className="text-muted-foreground">(optionnel)</span>
+
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+          <label style={{ fontSize: 13, fontWeight: 500, color: 'var(--ae-text)' }}>
+            Nom de l&apos;alerte{' '}
+            <span style={{ color: 'var(--ae-text-muted)', fontWeight: 400 }}>(optionnel)</span>
           </label>
           <input
             type="text"
             value={title}
             onChange={(e) => setTitle(e.target.value)}
             placeholder={detectedSite ? `${detectedSite.name} — ma recherche` : 'Ex: Développeur Paris CDI'}
-            className="w-full rounded-lg border border-border bg-card px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-primary"
+            style={{
+              width: '100%', borderRadius: 9, border: '1px solid var(--ae-border)',
+              background: 'var(--ae-surface)', color: 'var(--ae-text)',
+              padding: '11px 14px', fontSize: 13,
+              outline: 'none', boxSizing: 'border-box',
+            }}
           />
         </div>
 
-        <div className="flex flex-col gap-2">
-          <p className="text-sm font-medium">Sites supportés</p>
-          <div className="flex flex-wrap gap-2">
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+          <p style={{ fontSize: 13, fontWeight: 500, color: 'var(--ae-text)', margin: 0 }}>
+            Sites supportés
+          </p>
+          <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8 }}>
             {sites.map((s) => (
-              <span
-                key={s.id}
-                className="rounded-full bg-card border border-border px-3 py-1 text-xs text-muted-foreground"
-              >
+              <span key={s.id} style={{
+                borderRadius: 20, background: 'var(--ae-blue-bg)',
+                border: '0.5px solid var(--ae-border)', padding: '3px 10px',
+                fontSize: 11, color: 'var(--ae-primary-strong)', fontWeight: 500,
+              }}>
                 {s.name}
               </span>
             ))}
@@ -122,23 +150,31 @@ async function handleSubmit(e: React.FormEvent) {
         </div>
 
         {error && (
-          <div className="rounded-lg bg-destructive/10 border border-destructive/30 px-4 py-3 text-sm text-destructive">
+          <div style={{
+            borderRadius: 9, background: 'var(--ae-red-bg)',
+            border: '1px solid var(--ae-red-border)',
+            padding: '11px 14px', fontSize: 13, color: 'var(--ae-red)',
+          }}>
             {error}
           </div>
         )}
 
-        <div className="mt-2">
+        <div style={{ marginTop: 8 }}>
           <button
             type="submit"
             disabled={loading || !url}
-            className="w-full rounded-lg bg-primary text-primary-foreground py-2.5 font-medium text-sm disabled:opacity-50 disabled:cursor-not-allowed hover:opacity-90 transition-opacity"
+            style={{
+              width: '100%', borderRadius: 9,
+              background: (loading || !url) ? 'var(--ae-surface-3)' : 'var(--ae-primary-bg)',
+              color: (loading || !url) ? 'var(--ae-text-muted)' : 'white',
+              padding: '11px 0', fontWeight: 600, fontSize: 14,
+              border: 'none', cursor: (loading || !url) ? 'not-allowed' : 'pointer',
+            }}
           >
             {loading ? 'Création en cours…' : "Créer l'alerte"}
           </button>
         </div>
       </form>
     </div>
-    <SmallNavbar />
-    </>
   );
 }

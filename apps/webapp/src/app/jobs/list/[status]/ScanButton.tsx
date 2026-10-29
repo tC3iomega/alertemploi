@@ -20,7 +20,14 @@ export function ScanButton() {
     <button
       onClick={handleScan}
       disabled={scanning}
-      className="fixed bottom-20 right-4 z-50 rounded-full bg-primary text-primary-foreground px-4 py-2 text-sm font-medium shadow-lg hover:opacity-90 disabled:opacity-50"
+      style={{
+        position: 'fixed', bottom: 80, right: 16, zIndex: 50,
+        borderRadius: 9999, background: scanning ? 'var(--ae-surface-3)' : 'var(--ae-primary-bg)',
+        color: scanning ? 'var(--ae-text-muted)' : 'white',
+        padding: '8px 16px', fontSize: 13, fontWeight: 500,
+        border: 'none', cursor: scanning ? 'not-allowed' : 'pointer',
+        boxShadow: '0 4px 12px rgba(0,0,0,0.15)', opacity: scanning ? 0.6 : 1,
+      }}
     >
       {scanning ? '⏳ Scan...' : '🔄 Scanner'}
     </button>

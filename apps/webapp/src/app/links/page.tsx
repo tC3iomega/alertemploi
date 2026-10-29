@@ -2,7 +2,6 @@ import { listLinks, listSites, deleteLink } from '@/app/actions';
 export const dynamic = 'force-dynamic';
 import { revalidatePath } from 'next/cache';
 import Link from 'next/link';
-import { AppHeader } from '../components/appHeader';
 
 export default async function LinksPage() {
   const [links, sites] = await Promise.all([listLinks(), listSites()]);
