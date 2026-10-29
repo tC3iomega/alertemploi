@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 
+import { JOBS } from '../../metiers/jobs';
 import { SITE_URL } from '../../seo';
 import { BOARDS, getBoard } from '../boards';
 import { PageShell, Section } from '../shell';
@@ -29,6 +30,7 @@ export default async function BoardPage({ params }: { params: Promise<{ slug: st
   if (!board) notFound();
 
   const siblings = BOARDS.filter((b) => b.slug !== board.slug).slice(0, 3);
+  const relatedJobs = JOBS.filter((j) => j.boards.some((b) => b.slug === board.slug));
 
   const jsonLd = [
     {
@@ -105,6 +107,22 @@ export default async function BoardPage({ params }: { params: Promise<{ slug: st
           </div>
         ))}
       </Section>
+
+      {relatedJobs.length > 0 && (
+        <Section title={`Métiers qui recrutent sur ${board.name}`}>
+          <p>
+            {relatedJobs.map((job, i) => (
+              <span key={job.slug}>
+                {i > 0 && ' · '}
+                <Link href={`/metiers/${job.slug}`}>Alerte {job.name}</Link>
+              </span>
+            ))}
+          </p>
+          <p style={{ marginTop: 10 }}>
+            <Link href="/metiers">Tous les métiers</Link>
+          </p>
+        </Section>
+      )}
 
       <Section title="Autres sites surveillés">
         <p>
