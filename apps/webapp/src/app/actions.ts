@@ -252,7 +252,7 @@ export async function createTrialCheckoutSession() {
     new Date(profile.subscription_ends_at) > new Date();
   if (hasActiveSubscription) redirect('/dashboard');
 
-  const trialPriceId = process.env.STRIPE_TRIAL_PRICE_ID;
+  const trialPriceId = process.env.STRIPE_TRIAL_PRICE_ID ?? 'price_1UVotWV05CSUPvQvUIYXwcuz';
   if (!trialPriceId) throw new Error('STRIPE_TRIAL_PRICE_ID non configuré');
 
   const params: Record<string, string> = {
