@@ -1,6 +1,14 @@
 import Link from 'next/link';
+import { getProfile } from '../actions';
+import { Logo } from './Logo';
 
-export function AppHeader() {
+export async function AppHeader() {
+  let isPro = false;
+  try {
+    const profile = await getProfile();
+    isPro = profile?.plan === 'pro';
+  } catch {}
+
   return (
     <header style={{
       display: 'flex', alignItems: 'center', justifyContent: 'space-between',
@@ -8,19 +16,15 @@ export function AppHeader() {
       background: 'var(--ae-bg)', position: 'sticky', top: 0, zIndex: 50,
     }}>
       <Link href="/dashboard" style={{ textDecoration: 'none' }}>
-        <svg width="130" height="28" viewBox="0 0 130 28" xmlns="http://www.w3.org/2000/svg">
-          <circle cx="12" cy="14" r="10" fill="none" stroke="var(--ae-primary)" strokeWidth="2"/>
-          <circle cx="12" cy="14" r="3.5" fill="var(--ae-primary)"/>
-          <line x1="19" y1="7" x2="23" y2="3" stroke="var(--ae-primary)" strokeWidth="2" strokeLinecap="round"/>
-          <circle cx="24" cy="2.5" r="3" fill="var(--ae-accent)"/>
-          <text x="32" y="19" fontFamily="Arial, sans-serif" fontSize="15" fontWeight="700" fill="var(--ae-text)">alert<tspan fill="var(--ae-primary)">emploi</tspan></text>
-        </svg>
+        <Logo variant="header" />
       </Link>
-      <Link href="/upgrade" style={{
-        fontSize: 12, fontWeight: 500, color: 'var(--ae-primary)',
-        background: 'var(--ae-blue-bg)', padding: '5px 12px', borderRadius: 20,
-        textDecoration: 'none',
-      }}>Passer Pro</Link>
+      {!isPro && (
+        <Link href="/upgrade" style={{
+          fontSize: 12, fontWeight: 500, color: 'var(--ae-primary)',
+          background: 'var(--ae-blue-bg)', padding: '5px 12px', borderRadius: 20,
+          textDecoration: 'none',
+        }}>Passer Pro</Link>
+      )}
     </header>
   );
 }

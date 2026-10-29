@@ -5,23 +5,7 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { createCheckoutSession, createTrialCheckoutSession } from '@/app/actions';
 import styles from './upgrade.module.css';
-
-function Logo() {
-  return (
-    <svg width="160" height="36" viewBox="0 0 160 36" xmlns="http://www.w3.org/2000/svg">
-      <circle cx="16" cy="18" r="13" fill="none" stroke="var(--ae-primary)" strokeWidth="2.5" />
-      <circle cx="16" cy="18" r="4.5" fill="var(--ae-primary)" />
-      <line x1="25" y1="9" x2="31" y2="4" stroke="var(--ae-primary)" strokeWidth="2.5" strokeLinecap="round" />
-      <circle cx="32.5" cy="3" r="4" fill="var(--ae-accent)" />
-      <text x="44" y="23" fontFamily="Arial, sans-serif" fontSize="19" fontWeight="700" fill="var(--ae-text)" letterSpacing="-0.5">
-        alert<tspan fill="var(--ae-primary)">emploi</tspan>
-      </text>
-      <text x="45" y="33" fontFamily="Arial, sans-serif" fontSize="8" fontWeight="400" fill="var(--ae-text-subtle)" letterSpacing="1.2">
-        TROUVEZ EN PREMIER
-      </text>
-    </svg>
-  );
-}
+import { Logo } from '@/app/components/Logo';
 
 const BASIC_FEATURES = [
   { label: 'Alertes illimitées', included: true },

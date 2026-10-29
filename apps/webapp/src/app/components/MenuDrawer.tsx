@@ -4,7 +4,7 @@ import { LogOutIcon, MoonIcon, SunIcon, XIcon, FileTextIcon, ShieldIcon, MailIco
 import { useEffect, useState } from 'react';
 import { useTheme } from 'next-themes';
 import Link from 'next/link';
-import { signOut, createPortalSession } from '../actions';
+import { signOut, createPortalSession, getProfile } from '../actions';
 import { useError } from '@alertemploi/ui';
 
 export function MenuDrawer({ isOpen, onClose }: { isOpen: boolean; onClose: () => void }) {
@@ -13,8 +13,12 @@ export function MenuDrawer({ isOpen, onClose }: { isOpen: boolean; onClose: () =
   const currentTheme = resolvedTheme || theme;
   const [mounted, setMounted] = useState(false);
   const [portalLoading, setPortalLoading] = useState(false);
+  const [isPro, setIsPro] = useState(false);
 
-  useEffect(() => setMounted(true), []);
+  useEffect(() => { setMounted(true); }, []);
+  useEffect(() => {
+    getProfile().then(p => setIsPro(p?.plan === 'pro')).catch(() => {});
+  }, []);
 
   if (!mounted) return null;
 
@@ -89,9 +93,11 @@ export function MenuDrawer({ isOpen, onClose }: { isOpen: boolean; onClose: () =
             onClick={onToggleTheme}
           />
 
-          <Link href="/upgrade" onClick={onClose} style={{ textDecoration: 'none' }}>
-            <MenuRow icon={<span style={{ fontSize: 18 }}>⭐</span>} label="Passer à Pro" />
-          </Link>
+          {!isPro && (
+            <Link href="/upgrade" onClick={onClose} style={{ textDecoration: 'none' }}>
+              <MenuRow icon={<span style={{ fontSize: 18 }}>⭐</span>} label="Passer à Pro" />
+            </Link>
+          )}
 
           <Link href="/blacklist" onClick={onClose} style={{ textDecoration: 'none' }}>
             <MenuRow icon={<BanIcon className="h-5 w-5" />} label="Blacklist d'entreprises" />

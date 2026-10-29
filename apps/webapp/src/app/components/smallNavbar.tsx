@@ -2,7 +2,6 @@
 
 import { ArchiveIcon, CheckCircleIcon, HomeIcon, MenuIcon, PlusCircleIcon, SparklesIcon } from 'lucide-react';
 import { useState } from 'react';
-import clsx from 'clsx';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { MenuDrawer } from './MenuDrawer';
@@ -20,43 +19,41 @@ export function SmallNavbar() {
   ];
 
   return (
-    <nav className="h-16 w-screen">
-      <div className="border-border bg-background fixed bottom-0 z-50 flex h-16 w-screen border-t shadow-[0_-2px_8px_rgba(0,0,0,0.04)]">
+    <nav style={{ height: 64, width: '100vw' }}>
+      <div style={{
+        background: 'var(--ae-bg)', borderTop: '1px solid var(--ae-border)',
+        position: 'fixed', bottom: 0, zIndex: 50,
+        display: 'flex', height: 64, width: '100vw',
+        boxShadow: '0 -2px 8px rgba(0,0,0,0.04)',
+      }}>
         {navItems.map(({ name, path, Icon }) => {
           const isActive = pathname === path;
+          const color = isActive ? 'var(--ae-primary)' : 'var(--ae-text-muted)';
           return (
-            <Link key={name} href={path} className="flex h-full flex-1 flex-col items-center justify-center gap-1">
-              <Icon
-                className={clsx('h-[21px] w-[21px] transition-colors', isActive ? 'text-primary' : 'text-muted-foreground')}
-                strokeWidth={isActive ? 2.3 : 1.8}
-              />
-              <span
-                className={clsx(
-                  'text-[10px] font-medium transition-colors',
-                  isActive ? 'text-primary' : 'text-muted-foreground',
-                )}
-              >
-                {name}
-              </span>
+            <Link key={name} href={path} style={{
+              display: 'flex', flex: 1, flexDirection: 'column',
+              alignItems: 'center', justifyContent: 'center',
+              gap: 4, textDecoration: 'none', color,
+            }}>
+              <Icon style={{ width: 21, height: 21, color }} strokeWidth={isActive ? 2.3 : 1.8} />
+              <span style={{ fontSize: 10, fontWeight: 500, color }}>{name}</span>
             </Link>
           );
         })}
         <button
           onClick={() => setIsMenuOpen(true)}
-          className="flex h-full flex-1 flex-col items-center justify-center gap-1"
+          style={{
+            display: 'flex', flex: 1, flexDirection: 'column',
+            alignItems: 'center', justifyContent: 'center',
+            gap: 4, background: 'none', border: 'none', cursor: 'pointer',
+            color: isMenuOpen ? 'var(--ae-primary)' : 'var(--ae-text-muted)',
+          }}
         >
           <MenuIcon
-            className={clsx('h-[21px] w-[21px] transition-colors', isMenuOpen ? 'text-primary' : 'text-muted-foreground')}
+            style={{ width: 21, height: 21 }}
             strokeWidth={isMenuOpen ? 2.3 : 1.8}
           />
-          <span
-            className={clsx(
-              'text-[10px] font-medium transition-colors',
-              isMenuOpen ? 'text-primary' : 'text-muted-foreground',
-            )}
-          >
-            Menu
-          </span>
+          <span style={{ fontSize: 10, fontWeight: 500 }}>Menu</span>
         </button>
       </div>
 
@@ -64,4 +61,3 @@ export function SmallNavbar() {
     </nav>
   );
 }
-

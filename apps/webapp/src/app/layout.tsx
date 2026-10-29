@@ -1,21 +1,10 @@
 import type { Metadata, Viewport } from 'next';
-import { Geist, Geist_Mono } from 'next/font/google';
 
 import { ThemeProvider } from './components/themeProvider';
 import './globals.css';
 import { Analytics } from '@vercel/analytics/next';
 import { MatomoAnalytics } from './components/matomo';
 import { SITE_NAME, SITE_URL, buildJsonLd } from './seo';
-
-const geistSans = Geist({
-  variable: '--font-geist-sans',
-  subsets: ['latin'],
-});
-
-const geistMono = Geist_Mono({
-  variable: '--font-geist-mono',
-  subsets: ['latin'],
-});
 
 export const metadata: Metadata = {
   // metadataBase rend absolues les URL d'images et de canoniques générées par Next.
@@ -79,7 +68,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="fr" suppressHydrationWarning>
-      <body className={`${geistSans.variable} ${geistMono.variable} min-h-screen min-w-screen antialiased`}>
+      <body className="min-h-screen min-w-screen antialiased">
         <ThemeProvider>{children}</ThemeProvider>
         <script
           type="application/ld+json"

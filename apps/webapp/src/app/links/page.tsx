@@ -2,7 +2,6 @@ import { listLinks, listSites, deleteLink } from '@/app/actions';
 export const dynamic = 'force-dynamic';
 import { revalidatePath } from 'next/cache';
 import Link from 'next/link';
-import { SmallNavbar } from '../components/smallNavbar';
 import { AppHeader } from '../components/appHeader';
 
 export default async function LinksPage() {
@@ -24,7 +23,7 @@ export default async function LinksPage() {
 
 
       <div style={{ padding: '20px 16px' }}>
-        <h1 className="m-4 text-2xl">Mes alertes</h1>
+        <h1 style={{ margin: '0 0 20px', fontSize: 22, fontWeight: 700, color: 'var(--ae-text)' }}>Mes alertes</h1>
         {links.length === 0 ? (
           <div style={{ textAlign: 'center', padding: '48px 0' }}>
             <div style={{ fontSize: 40, marginBottom: 16 }}>🔔</div>
@@ -105,7 +104,6 @@ export default async function LinksPage() {
         )}
       </div>
     </div>
-    <SmallNavbar />
     </>
   );
 }
