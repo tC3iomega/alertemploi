@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { createCheckoutSession } from '@/app/actions';
+import { createCheckoutSession, createTrialCheckoutSession } from '@/app/actions';
 import styles from './upgrade.module.css';
 
 function Logo() {
@@ -28,25 +28,31 @@ const BASIC_FEATURES = [
   { label: 'Tous les job boards', included: true },
   { label: 'Scan toutes les 30 minutes', included: true },
   { label: 'Alertes email', included: true },
-  { label: 'Essai 7 jours gratuit', included: true },
 ];
 
 const PRO_FEATURES = [
   { label: 'Tout Basic, plus :', included: true },
   { label: 'Blacklist d\u2019entreprises', included: true },
   { label: 'Support prioritaire', included: true },
-  { label: 'Essai 7 jours gratuit', included: true },
 ];
 
 export default function UpgradePage() {
   const router = useRouter();
   const [loading, setLoading] = useState<string | null>(null);
+  const [trialLoading, setTrialLoading] = useState(false);
   const [isAnnual, setIsAnnual] = useState(false);
 
   const basicMonthlyPriceId = 'price_1UGQGDV05CSUPvQveeN8BJSg';
   const basicYearlyPriceId = 'price_1UGQGDV05CSUPvQvf3cJ4zwO';
   const proMonthlyPriceId = 'price_1UGQGDV05CSUPvQv1UbCvLXH';
   const proYearlyPriceId = 'price_1UGQGEV05CSUPvQvXOombR5L';
+
+  async function handleTrialCheckout() {
+    setTrialLoading(true);
+    const { url } = await createTrialCheckoutSession();
+    window.location.href = url;
+    setTrialLoading(false);
+  }
 
   async function handleCheckout(priceId: string) {
     setLoading(priceId);
@@ -84,13 +90,6 @@ export default function UpgradePage() {
 
         {/* Hero */}
         <div style={{ textAlign: 'center', marginBottom: 44 }}>
-          <div style={{
-            display: 'inline-block', background: 'var(--ae-amber-bg)', color: 'var(--ae-amber-text)',
-            fontSize: 12, fontWeight: 500, padding: '5px 16px', borderRadius: 20,
-            border: '1px solid var(--ae-amber-border)', marginBottom: 20,
-          }}>
-            Essai gratuit 7 jours — sans carte bancaire
-          </div>
           <h1 style={{
             fontSize: 34, fontWeight: 700, color: 'var(--ae-text)',
             letterSpacing: -0.8, marginBottom: 12,
@@ -100,6 +99,38 @@ export default function UpgradePage() {
           <p style={{ fontSize: 15, color: 'var(--ae-text-muted)', lineHeight: 1.6 }}>
             Annulez à tout moment, sans engagement.
           </p>
+        </div>
+
+        {/* Paid trial card */}
+        <div style={{
+          background: 'var(--ae-surface)', border: '2px solid var(--ae-accent)',
+          borderRadius: 14, padding: '24px 28px', marginBottom: 32,
+          display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 20,
+          flexWrap: 'wrap',
+        }}>
+          <div>
+            <div style={{ fontSize: 13, fontWeight: 500, color: 'var(--ae-text-muted)', marginBottom: 6 }}>
+              Pas encore prêt à vous abonner ?
+            </div>
+            <div style={{ fontSize: 20, fontWeight: 700, color: 'var(--ae-text)' }}>
+              Essai 7 jours pour 0,99€
+            </div>
+            <div style={{ fontSize: 13, color: 'var(--ae-text-muted)', marginTop: 4 }}>
+              Accès complet Basic · Paiement unique · Pas d&apos;abonnement automatique
+            </div>
+          </div>
+          <button
+            onClick={handleTrialCheckout}
+            disabled={trialLoading || !!loading}
+            style={{
+              padding: '11px 24px', background: trialLoading ? 'var(--ae-surface-3)' : 'var(--ae-accent)',
+              color: '#1E293B', fontSize: 14, fontWeight: 600,
+              border: 'none', borderRadius: 9, cursor: (trialLoading || !!loading) ? 'not-allowed' : 'pointer',
+              whiteSpace: 'nowrap', flexShrink: 0,
+            }}
+          >
+            {trialLoading ? 'Chargement...' : 'Commencer l’essai — 0,99€'}
+          </button>
         </div>
 
         {/* Toggle */}

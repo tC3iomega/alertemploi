@@ -238,6 +238,57 @@ export async function createCheckoutSession(formData: FormData) {
   if (session.error) throw new Error(session.error.message);
   return { url: session.url };
 }
+export async function createTrialCheckoutSession() {
+  const supabase = await createClient();
+  const { data: { user } } = await supabase.auth.getUser();
+  if (!user) redirect('/auth/login');
+
+  const profile = await (await buildApi()).getProfile();
+
+  // Already on an active trial — nothing to buy
+  const trialEnd = profile?.trial_ends_at ? new Date(profile.trial_ends_at) : null;
+  if (trialEnd && trialEnd > new Date()) redirect('/dashboard');
+
+  // Already subscribed — nothing to buy
+  const hasActiveSubscription =
+    !!profile?.stripe_subscription_id &&
+    !!profile.subscription_ends_at &&
+    new Date(profile.subscription_ends_at) > new Date();
+  if (hasActiveSubscription) redirect('/dashboard');
+
+  const trialPriceId = process.env.STRIPE_TRIAL_PRICE_ID;
+  if (!trialPriceId) throw new Error('STRIPE_TRIAL_PRICE_ID non configuré');
+
+  const params: Record<string, string> = {
+    'mode': 'payment',
+    'client_reference_id': user.id,
+    'line_items[0][price]': trialPriceId,
+    'line_items[0][quantity]': '1',
+    'payment_intent_data[metadata][purpose]': 'trial',
+    'payment_intent_data[metadata][trial_user_id]': user.id,
+    'success_url': `${await getBaseUrl()}/dashboard?trial=started`,
+    'cancel_url': `${await getBaseUrl()}/upgrade`,
+  };
+  if (profile?.stripe_customer_id) {
+    params['customer'] = profile.stripe_customer_id;
+  } else {
+    params['customer_email'] = user.email!;
+    params['customer_creation'] = 'always';
+  }
+
+  const res = await fetch('https://api.stripe.com/v1/checkout/sessions', {
+    method: 'POST',
+    headers: {
+      'Authorization': `Bearer ${process.env.STRIPE_SECRET_KEY}`,
+      'Content-Type': 'application/x-www-form-urlencoded',
+    },
+    body: new URLSearchParams(params).toString(),
+  });
+  const session = await res.json();
+  if (session.error) throw new Error(session.error.message);
+  return { url: session.url as string };
+}
+
 async function buildApi() {
   const supabase = await createClient();
   const api = new F2aSupabaseApi(supabase);

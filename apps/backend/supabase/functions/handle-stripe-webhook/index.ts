@@ -210,6 +210,27 @@ Deno.serve(async (req) => {
       logger.info(`successfully updated profile for customer ${customer.email}, status=${subscription.status}`);
     }
 
+    // ---- payment_intent.succeeded (essai payant 0,99€) ----
+    if (event.type === 'payment_intent.succeeded') {
+      const paymentIntent = event.data.object;
+      const metadata = (paymentIntent as Stripe.PaymentIntent).metadata ?? {};
+      if (metadata.purpose === 'trial' && metadata.trial_user_id) {
+        const userId = metadata.trial_user_id;
+        const trialEnd = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000);
+        const update: Record<string, unknown> = { trial_ends_at: trialEnd };
+        const customerId = (paymentIntent as Stripe.PaymentIntent).customer;
+        if (customerId && typeof customerId === 'string') {
+          update.stripe_customer_id = customerId;
+        }
+        const { error: updateError } = await supabaseClient
+          .from('profiles')
+          .update(update)
+          .eq('user_id', userId);
+        if (updateError) throw updateError;
+        logger.info(`trial granted to user ${userId} until ${trialEnd.toISOString()}`);
+      }
+    }
+
     // ---- customer.subscription.deleted (cancellation) ----
     if (event.type === 'customer.subscription.deleted') {
       const subscription = event.data.object;

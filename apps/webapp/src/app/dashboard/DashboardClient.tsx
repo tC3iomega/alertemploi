@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import { Job, Link as LinkType, Profile } from '@alertemploi/core';
-import { createPortalSession } from '../actions';
+import { createPortalSession, createTrialCheckoutSession } from '../actions';
 
 function daysUntil(dateStr?: string): number | null {
   if (!dateStr) return null;
@@ -74,7 +74,23 @@ export function DashboardClient({
     : false;
   const isOnTrial = trialDays !== null && trialDays > 0 && !hasActiveSubscription;
   const trialExpired = trialDays !== null && trialDays <= 0 && !hasActiveSubscription;
+  // Never paid the trial yet (brand new account)
+  const isNewUser = trialExpired && !profile?.stripe_customer_id;
+  // Paid trial expired, has Stripe customer but no active subscription
+  const needsSubscription = trialExpired && !!profile?.stripe_customer_id;
   const [portalLoading, setPortalLoading] = useState(false);
+  const [trialLoading, setTrialLoading] = useState(false);
+
+  async function handleStartTrial() {
+    setTrialLoading(true);
+    try {
+      const { url } = await createTrialCheckoutSession();
+      window.location.href = url;
+    } catch (e) {
+      setTrialLoading(false);
+      alert('Impossible de démarrer l\'essai. Veuillez réessayer.');
+    }
+  }
 
   async function handleManageBilling() {
     setPortalLoading(true);
@@ -97,7 +113,7 @@ export function DashboardClient({
         Voici un aperçu de votre activité.
       </p>
 
-      {/* Trial / Plan banner */}
+      {/* Trial / Plan banners */}
       {isOnTrial && (
         <div style={{
           display: 'flex', alignItems: 'center', gap: 10,
@@ -106,7 +122,7 @@ export function DashboardClient({
         }}>
           <ClockIcon />
           <span style={{ fontSize: 13, color: 'var(--ae-amber-text-strong)', flex: 1 }}>
-            <strong>{trialDays} jour{trialDays !== 1 ? 's' : ''}</strong> restant{trialDays !== 1 ? 's' : ''} dans votre essai gratuit.
+            <strong>{trialDays} jour{trialDays !== 1 ? 's' : ''}</strong> restant{trialDays !== 1 ? 's' : ''} dans votre essai.
           </span>
           <Link href="/upgrade" style={{
             fontSize: 12, fontWeight: 600, color: 'var(--ae-primary)', textDecoration: 'none',
@@ -117,7 +133,31 @@ export function DashboardClient({
         </div>
       )}
 
-      {trialExpired && (
+      {isNewUser && (
+        <div style={{
+          display: 'flex', alignItems: 'center', gap: 10,
+          background: 'var(--ae-blue-bg-soft)', border: '1px solid var(--ae-blue-bg)',
+          borderRadius: 10, padding: '12px 16px', marginBottom: 20,
+        }}>
+          <ClockIcon />
+          <span style={{ fontSize: 13, color: 'var(--ae-primary-strong)', flex: 1 }}>
+            <strong>Essayez Alertemploi 7 jours</strong> pour seulement 0,99€.
+          </span>
+          <button
+            onClick={handleStartTrial}
+            disabled={trialLoading}
+            style={{
+              fontSize: 12, fontWeight: 600, color: 'white', textDecoration: 'none',
+              whiteSpace: 'nowrap', background: trialLoading ? 'var(--ae-blue-border-strong)' : 'var(--ae-primary-bg)',
+              padding: '6px 12px', borderRadius: 7, border: 'none', cursor: trialLoading ? 'not-allowed' : 'pointer',
+            }}
+          >
+            {trialLoading ? 'Chargement...' : 'Démarrer à 0,99€'}
+          </button>
+        </div>
+      )}
+
+      {needsSubscription && (
         <div style={{
           display: 'flex', alignItems: 'center', gap: 10,
           background: 'var(--ae-red-bg)', border: '1px solid var(--ae-red-border)',
@@ -125,13 +165,13 @@ export function DashboardClient({
         }}>
           <ClockIcon />
           <span style={{ fontSize: 13, color: 'var(--ae-red-text)', flex: 1 }}>
-            <strong>Votre essai gratuit est terminé.</strong> Passez à l'abonnement pour continuer.
+            <strong>Votre essai est terminé.</strong> Passez à l&apos;abonnement pour continuer.
           </span>
           <Link href="/upgrade" style={{
             fontSize: 12, fontWeight: 600, color: 'white', textDecoration: 'none',
             whiteSpace: 'nowrap', background: 'var(--ae-red-bg-strong)', padding: '6px 12px', borderRadius: 7,
           }}>
-            S'abonner
+            S&apos;abonner
           </Link>
         </div>
       )}
