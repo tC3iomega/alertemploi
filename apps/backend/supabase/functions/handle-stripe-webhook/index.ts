@@ -217,7 +217,7 @@ Deno.serve(async (req) => {
       if (metadata.purpose === 'trial' && metadata.trial_user_id) {
         const userId = metadata.trial_user_id;
         const trialEnd = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000);
-        const update: Record<string, unknown> = { trial_ends_at: trialEnd };
+        const update: Record<string, unknown> = { trial_ends_at: trialEnd, plan: 'pro' };
         const customerId = (paymentIntent as Stripe.PaymentIntent).customer;
         if (customerId && typeof customerId === 'string') {
           update.stripe_customer_id = customerId;

@@ -245,10 +245,6 @@ export async function createTrialCheckoutSession() {
 
   const profile = await (await buildApi()).getProfile();
 
-  // Already on an active trial — nothing to buy
-  const trialEnd = profile?.trial_ends_at ? new Date(profile.trial_ends_at) : null;
-  if (trialEnd && trialEnd > new Date()) redirect('/dashboard');
-
   // Already subscribed — nothing to buy
   const hasActiveSubscription =
     !!profile?.stripe_subscription_id &&

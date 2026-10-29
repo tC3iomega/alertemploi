@@ -28,6 +28,7 @@ const BASIC_FEATURES = [
   { label: 'Tous les job boards', included: true },
   { label: 'Scan toutes les 30 minutes', included: true },
   { label: 'Alertes email', included: true },
+  { label: 'Essai 7 jours gratuit', included: true },
 ];
 
 const PRO_FEATURES = [
@@ -110,13 +111,13 @@ export default function UpgradePage() {
         }}>
           <div>
             <div style={{ fontSize: 13, fontWeight: 500, color: 'var(--ae-text-muted)', marginBottom: 6 }}>
-              Pas encore prêt à vous abonner ?
+              Vous voulez tester le plan Pro ?
             </div>
             <div style={{ fontSize: 20, fontWeight: 700, color: 'var(--ae-text)' }}>
               Essai 7 jours pour 0,99€
             </div>
             <div style={{ fontSize: 13, color: 'var(--ae-text-muted)', marginTop: 4 }}>
-              Accès complet Basic · Paiement unique · Pas d&apos;abonnement automatique
+              Accès complet <strong>Pro</strong> · Paiement unique · Pas d&apos;abonnement automatique
             </div>
           </div>
           <button
