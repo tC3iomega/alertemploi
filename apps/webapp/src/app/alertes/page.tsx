@@ -9,6 +9,15 @@ export const metadata: Metadata = {
   title: 'Alertes emploi par site : France Travail, Indeed, LinkedIn…',
   description:
     "Créez une alerte sur France Travail, Indeed, LinkedIn, l'APEC, HelloWork, Cadremploi ou Welcome to the Jungle, et recevez les nouvelles offres par email.",
+  keywords: [
+    'alerte emploi France Travail',
+    'alerte emploi LinkedIn',
+    'alerte emploi Indeed',
+    'alerte emploi APEC',
+    'alerte emploi HelloWork',
+    'alerte emploi Cadremploi',
+    'alerte emploi Welcome to the Jungle',
+  ],
   alternates: { canonical: '/alertes' },
   openGraph: {
     title: 'Alertes emploi par site — Alertemploi',
@@ -17,14 +26,27 @@ export const metadata: Metadata = {
   },
 };
 
-const jsonLd = {
-  '@context': 'https://schema.org',
-  '@type': 'BreadcrumbList',
-  itemListElement: [
-    { '@type': 'ListItem', position: 1, name: 'Accueil', item: SITE_URL },
-    { '@type': 'ListItem', position: 2, name: 'Alertes par site', item: `${SITE_URL}/alertes` },
-  ],
-};
+const jsonLd = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'Accueil', item: SITE_URL },
+      { '@type': 'ListItem', position: 2, name: 'Alertes par site', item: `${SITE_URL}/alertes` },
+    ],
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'ItemList',
+    name: 'Alertes emploi par site',
+    itemListElement: BOARDS.map((board, i) => ({
+      '@type': 'ListItem',
+      position: i + 1,
+      name: `Alerte emploi ${board.name}`,
+      url: `${SITE_URL}/alertes/${board.slug}`,
+    })),
+  },
+];
 
 export default function AlertesHub() {
   return (

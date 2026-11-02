@@ -46,6 +46,14 @@ export const FAQ_ITEMS = [
   },
 ];
 
+/** Coupe au dernier espace avant `max` caractères pour éviter un mot tronqué. */
+export function truncateDescription(text: string, max = 155): string {
+  if (text.length <= max) return text;
+  const cut = text.slice(0, max);
+  const lastSpace = cut.lastIndexOf(' ');
+  return (lastSpace > 0 ? cut.slice(0, lastSpace) : cut) + '…';
+}
+
 export function buildJsonLd() {
   return [
     {

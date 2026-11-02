@@ -9,6 +9,14 @@ export const metadata: Metadata = {
   title: 'Alertes emploi par métier : développeur, infirmier, commercial…',
   description:
     "Créez une alerte sur votre métier et recevez les nouvelles offres par email, dès leur publication sur les principaux job boards français.",
+  keywords: [
+    'alerte emploi développeur',
+    'alerte emploi commercial',
+    'alerte emploi infirmier',
+    'alerte emploi comptable',
+    'offres emploi par métier',
+    'notification offre emploi',
+  ],
   alternates: { canonical: '/metiers' },
   openGraph: {
     title: 'Alertes emploi par métier — Alertemploi',
@@ -17,14 +25,27 @@ export const metadata: Metadata = {
   },
 };
 
-const jsonLd = {
-  '@context': 'https://schema.org',
-  '@type': 'BreadcrumbList',
-  itemListElement: [
-    { '@type': 'ListItem', position: 1, name: 'Accueil', item: SITE_URL },
-    { '@type': 'ListItem', position: 2, name: 'Alertes par métier', item: `${SITE_URL}/metiers` },
-  ],
-};
+const jsonLd = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'Accueil', item: SITE_URL },
+      { '@type': 'ListItem', position: 2, name: 'Alertes par métier', item: `${SITE_URL}/metiers` },
+    ],
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'ItemList',
+    name: 'Alertes emploi par métier',
+    itemListElement: JOBS.map((job, i) => ({
+      '@type': 'ListItem',
+      position: i + 1,
+      name: `Alerte emploi ${job.name}`,
+      url: `${SITE_URL}/metiers/${job.slug}`,
+    })),
+  },
+];
 
 export default function MetiersHub() {
   return (

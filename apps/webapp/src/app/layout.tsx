@@ -22,6 +22,8 @@ export const metadata: Metadata = {
     'veille emploi',
     'recherche emploi automatique',
     'France Travail alerte',
+    'notification emploi',
+    'alertemploi',
   ],
   alternates: { canonical: '/' },
   openGraph: {
@@ -32,13 +34,16 @@ export const metadata: Metadata = {
     title: "Alerte emploi par email : les offres dès leur publication",
     description:
       "Alertemploi surveille vos recherches sur 7 job boards français et vous prévient dès qu'une offre correspond à vos critères. Essai gratuit 7 jours, sans carte bancaire.",
+    // og:image est généré automatiquement par opengraph-image.tsx dans ce dossier.
   },
   twitter: {
     card: 'summary_large_image',
     title: 'Alerte emploi par email — Alertemploi',
     description: "Les nouvelles offres d'emploi dans votre boîte mail, dès leur publication.",
+    // twitter:image hérite de l'og:image généré par opengraph-image.tsx.
   },
   robots: { index: true, follow: true },
+  manifest: '/favicons/site.webmanifest',
   icons: {
     icon: [
       { url: '/favicons/favicon-32x32.png', sizes: '32x32', type: 'image/png' },
@@ -46,11 +51,10 @@ export const metadata: Metadata = {
     ],
     apple: [{ url: '/favicons/apple-touch-icon.png', sizes: '76x76' }],
     shortcut: [{ url: '/favicons/favicon.ico' }],
+    other: [{ rel: 'mask-icon', url: '/favicons/safari-pinned-tab.svg' }],
   },
   other: {
-    'msapplication-TileColor': '#000000',
-    manifest: '/favicons/site.webmanifest',
-    maskIcon: '<link rel="mask-icon" href="/favicons/safari-pinned-tab.svg" color="#5bbad5" />',
+    'msapplication-TileColor': '#2563EB',
   },
 };
 

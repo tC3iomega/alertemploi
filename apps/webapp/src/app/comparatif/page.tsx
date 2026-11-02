@@ -8,6 +8,13 @@ export const metadata: Metadata = {
   title: 'Alertes natives des job boards ou Alertemploi : que choisir ?',
   description:
     "France Travail, Indeed et LinkedIn envoient déjà des alertes. Comparaison honnête : ce qu'elles font bien, leurs limites, et quand un agrégateur devient utile.",
+  keywords: [
+    'comparatif alertes emploi',
+    'alertes France Travail vs agrégateur',
+    'meilleure alerte emploi',
+    'agrégateur offres emploi',
+    'alternative alertes job boards',
+  ],
   alternates: { canonical: '/comparatif' },
   openGraph: {
     title: 'Alertes natives ou Alertemploi — comparatif',
