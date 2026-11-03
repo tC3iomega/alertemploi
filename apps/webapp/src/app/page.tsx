@@ -135,7 +135,7 @@ export default function LandingPage() {
   const ctaHref = isLoggedIn ? '/dashboard' : '/auth/register';
 
   return (
-    <div style={{ fontFamily: 'Arial, Helvetica, sans-serif', color: 'var(--ae-text)', background: 'var(--ae-bg)', overflowX: 'hidden' }}>
+    <div style={{ fontFamily: 'inherit', color: 'var(--ae-text)', background: 'var(--ae-bg)', overflowX: 'hidden' }}>
 
       {/* NAV */}
       <nav className={styles.nav}>
@@ -180,8 +180,8 @@ export default function LandingPage() {
         </div>
 
         <h1 className={styles.heroTitle}>
-          Soyez alerté en premier<br />
-          <span style={{ color: 'var(--ae-primary)' }}>dès qu'une offre apparaît</span>
+          Alerte emploi par email :<br />
+          <span style={{ color: 'var(--ae-primary)' }}>les offres avant tout le monde</span>
         </h1>
 
         <p style={{

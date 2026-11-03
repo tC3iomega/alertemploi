@@ -23,7 +23,7 @@ export function PageShell({
         minHeight: '100vh',
         background: 'var(--ae-bg)',
         color: 'var(--ae-text)',
-        fontFamily: 'Arial, Helvetica, sans-serif',
+        fontFamily: 'inherit',
         padding: '40px 20px 72px',
       }}
     >
@@ -46,9 +46,13 @@ export function PageShell({
           ))}
         </nav>
 
-        <h1 style={{ fontSize: 30, fontWeight: 700, letterSpacing: -0.6, lineHeight: 1.2, marginBottom: 14 }}>
+        <h1 style={{ fontSize: 30, fontWeight: 700, letterSpacing: -0.6, lineHeight: 1.2, marginBottom: 10 }}>
           {title}
         </h1>
+        {/* Byline E-E-A-T — signale à Google qu'un auteur identifié a produit et mis à jour le contenu. */}
+        <p style={{ fontSize: 12, color: 'var(--ae-text-subtle)', marginBottom: 20 }}>
+          Par l&apos;équipe Alertemploi · Mis à jour novembre 2026
+        </p>
         <p style={{ fontSize: 16, lineHeight: 1.7, color: 'var(--ae-text-body)', marginBottom: 32 }}>{intro}</p>
 
         {children}

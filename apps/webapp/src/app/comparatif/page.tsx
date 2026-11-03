@@ -5,19 +5,20 @@ import { PageShell, Section } from '../alertes/shell';
 import { SITE_URL } from '../seo';
 
 export const metadata: Metadata = {
-  title: 'Alertes natives des job boards ou Alertemploi : que choisir ?',
+  // "Meilleur + terme + 2026" : formule recommandée pour les AI Overviews et pour ranker sur 2 requêtes.
+  title: 'Meilleure alerte emploi 2026 : natives des job boards ou Alertemploi ?',
   description:
-    "France Travail, Indeed et LinkedIn envoient déjà des alertes. Comparaison honnête : ce qu'elles font bien, leurs limites, et quand un agrégateur devient utile.",
+    "France Travail, Indeed et LinkedIn envoient déjà des alertes. Comparaison honnête : ce qu'elles font bien, leurs limites, et quand un agrégateur devient utile en 2026.",
   keywords: [
+    'meilleure alerte emploi 2026',
     'comparatif alertes emploi',
     'alertes France Travail vs agrégateur',
-    'meilleure alerte emploi',
     'agrégateur offres emploi',
     'alternative alertes job boards',
   ],
   alternates: { canonical: '/comparatif' },
   openGraph: {
-    title: 'Alertes natives ou Alertemploi — comparatif',
+    title: 'Meilleure alerte emploi 2026 — comparatif Alertemploi',
     description: "Ce que font déjà les alertes des job boards, et quand un outil tiers apporte vraiment quelque chose.",
     url: '/comparatif',
   },
@@ -72,7 +73,7 @@ export default function ComparatifPage() {
   return (
     <PageShell
       breadcrumb={[{ label: 'Accueil', href: '/' }, { label: 'Comparatif' }]}
-      title="Alertes natives des job boards ou Alertemploi ?"
+      title="Meilleure alerte emploi en 2026 : natives ou Alertemploi ?"
       intro="France Travail, Indeed, LinkedIn, l'APEC et les autres proposent déjà leurs propres alertes, gratuitement. Autant le dire franchement : si vous ne surveillez qu'un seul site, elles suffisent. Voici où se situe la différence."
       jsonLd={jsonLd}
     >

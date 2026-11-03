@@ -18,31 +18,36 @@ export const JOB_BOARDS = [
   'Indeed',
 ];
 
-/** Questions reprises de la FAQ de la page d'accueil, pour le balisage FAQPage. */
+// Réponses rédigées pour être citables par les AI Overviews : directes, chiffrées, à la première personne.
 export const FAQ_ITEMS = [
   {
     question: 'Comment fonctionne Alertemploi ?',
     answer:
-      "Vous ajoutez l'URL de votre recherche sur un job board. Alertemploi la scanne toutes les 30 minutes et vous envoie un email dès qu'une nouvelle offre apparaît.",
+      "Alertemploi surveille les résultats de votre recherche sur un job board (France Travail, APEC, LinkedIn, Indeed…) toutes les 30 minutes, 24h/24. Dès qu'une nouvelle offre apparaît, vous recevez un email avec le titre, l'entreprise, le lieu et un lien direct vers l'annonce. Vous n'avez rien à vérifier manuellement.",
   },
   {
     question: "Faut-il une carte bancaire pour l'essai gratuit ?",
     answer:
-      "Aucune carte bancaire n'est demandée à l'inscription. Profitez de 7 jours d'essai gratuit, sans engagement.",
+      "Non. Aucune carte bancaire n'est demandée à l'inscription. L'essai dure 7 jours, sans engagement et sans pré-autorisation bancaire. L'abonnement ne démarre qu'à votre initiative.",
   },
   {
     question: 'Quels job boards sont supportés ?',
-    answer: `${JOB_BOARDS.join(', ')}. D'autres sont en cours d'intégration.`,
+    answer: `Alertemploi surveille 7 job boards français en 2026 : ${JOB_BOARDS.join(', ')}. D'autres sources sont en cours d'intégration.`,
   },
   {
     question: 'Puis-je annuler à tout moment ?',
     answer:
-      'Oui, sans engagement. Vous pouvez annuler votre abonnement depuis votre espace personnel à tout moment.',
+      'Oui, sans engagement et sans délai. Vous résiliez depuis votre espace personnel en un clic. L'accès reste actif jusqu'à la fin de la période en cours.',
   },
   {
     question: 'Quelle est la différence entre Basic et Pro ?',
     answer:
-      "Les deux plans incluent les alertes illimitées et tous les job boards. Le plan Pro ajoute un filtre de blacklist d'entreprises et un support prioritaire.",
+      "Les deux plans incluent les alertes illimitées sur les 7 job boards et le scan toutes les 30 minutes. Le plan Pro ajoute un filtre de blacklist d'entreprises (pour écarter les offres des entreprises que vous ne visez pas) et un support prioritaire.",
+  },
+  {
+    question: 'En combien de temps suis-je prévenu après la publication d'une offre ?',
+    answer:
+      'En pratique, moins d'une heure. Le scan tourne toutes les 30 minutes : une offre publiée à 9h00 vous parvient généralement avant 9h30.',
   },
 ];
 
@@ -64,22 +69,23 @@ export function buildJsonLd() {
       applicationCategory: 'BusinessApplication',
       operatingSystem: 'Web',
       inLanguage: 'fr-FR',
+      dateModified: '2026-11-01',
       description:
-        "Alertemploi surveille vos recherches sur les principaux job boards français et vous envoie un email dès qu'une nouvelle offre d'emploi correspond à vos critères.",
+        "Alertemploi surveille vos recherches sur 7 job boards français (France Travail, APEC, Indeed, LinkedIn, HelloWork, Cadremploi, Welcome to the Jungle) et vous envoie un email dès qu'une nouvelle offre correspond à vos critères. Scan toutes les 30 minutes.",
       offers: [
         {
           '@type': 'Offer',
           name: 'Basic',
           price: '4.99',
           priceCurrency: 'EUR',
-          description: 'Alertes illimitées, tous les job boards, scan toutes les 30 minutes.',
+          description: 'Alertes illimitées, 7 job boards français, scan toutes les 30 minutes. Essai 7 jours gratuit.',
         },
         {
           '@type': 'Offer',
           name: 'Pro',
           price: '14.99',
           priceCurrency: 'EUR',
-          description: "Tout Basic, plus la blacklist d'entreprises et le support prioritaire.",
+          description: "Tout le plan Basic, plus la blacklist d'entreprises et le support prioritaire. Essai 7 jours gratuit.",
         },
       ],
       publisher: {

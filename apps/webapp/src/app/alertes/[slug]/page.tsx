@@ -3,7 +3,7 @@ import Link from 'next/link';
 import { notFound } from 'next/navigation';
 
 import { JOBS } from '../../metiers/jobs';
-import { SITE_URL } from '../../seo';
+import { SITE_URL, truncateDescription } from '../../seo';
 import { BOARDS, getBoard } from '../boards';
 import { PageShell, Section } from '../shell';
 
@@ -15,12 +15,13 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   const { slug } = await params;
   const board = getBoard(slug);
   if (!board) return {};
-  const title = `Alerte emploi ${board.name} : les offres par email`;
+  // "2026" en title : signal de fraîcheur pour les AI Overviews (GEO) et pour le CTR SERP.
+  const title = `Alerte emploi ${board.name} 2026 : recevoir les nouvelles offres par email`;
   return {
     title,
-    description: board.intro.slice(0, 155),
+    description: truncateDescription(board.intro),
     alternates: { canonical: `/alertes/${board.slug}` },
-    openGraph: { title: `${title} | Alertemploi`, description: board.intro, url: `/alertes/${board.slug}` },
+    openGraph: { title, description: board.intro, url: `/alertes/${board.slug}` },
   };
 }
 
@@ -46,6 +47,7 @@ export default async function BoardPage({ params }: { params: Promise<{ slug: st
       '@context': 'https://schema.org',
       '@type': 'HowTo',
       name: `Créer une alerte emploi ${board.name}`,
+      dateModified: '2026-11-01',
       step: board.steps.map((text, i) => ({ '@type': 'HowToStep', position: i + 1, text })),
     },
     {
@@ -66,7 +68,7 @@ export default async function BoardPage({ params }: { params: Promise<{ slug: st
         { label: 'Alertes par site', href: '/alertes' },
         { label: board.shortName },
       ]}
-      title={`Alerte emploi ${board.name} : recevez les offres par email`}
+      title={`Alerte emploi ${board.name} : recevez les nouvelles offres par email`}
       intro={board.intro}
       jsonLd={jsonLd}
     >
@@ -93,6 +95,25 @@ export default async function BoardPage({ params }: { params: Promise<{ slug: st
           lien direct. Les offres restent consultables dans votre tableau de bord, où vous pouvez les marquer comme
           postulées ou les archiver.
         </p>
+        {/* CTA mid-page — le guide recommande de placer le CTA "au bon endroit", pas seulement en bas. */}
+        <div style={{ marginTop: 20, display: 'flex', alignItems: 'center', gap: 14, flexWrap: 'wrap' }}>
+          <Link
+            href="/auth/register"
+            style={{
+              display: 'inline-block',
+              background: 'var(--ae-primary-bg)',
+              color: 'white',
+              fontSize: 14,
+              fontWeight: 600,
+              padding: '10px 22px',
+              borderRadius: 8,
+              textDecoration: 'none',
+            }}
+          >
+            Créer mon alerte {board.shortName}
+          </Link>
+          <span style={{ fontSize: 13, color: 'var(--ae-text-subtle)' }}>Essai gratuit 7 jours · sans CB</span>
+        </div>
       </Section>
 
       <Section title={`Et les alertes natives de ${board.name} ?`}>
@@ -129,12 +150,21 @@ export default async function BoardPage({ params }: { params: Promise<{ slug: st
           {siblings.map((sibling, i) => (
             <span key={sibling.slug}>
               {i > 0 && ' · '}
-              <Link href={`/alertes/${sibling.slug}`}>Alerte {sibling.name}</Link>
+              {/* Ancres variées : évite la répétition "Alerte X · Alerte Y · Alerte Z" */}
+              <Link href={`/alertes/${sibling.slug}`}>
+                {i === 0
+                  ? `Alerte emploi ${sibling.name}`
+                  : i === 1
+                    ? `Offres ${sibling.shortName} par email`
+                    : `Créer une alerte ${sibling.shortName}`}
+              </Link>
             </span>
           ))}
         </p>
         <p style={{ marginTop: 10 }}>
-          <Link href="/alertes">Voir les 7 sites surveillés</Link>
+          <Link href="/alertes">Voir les 7 job boards surveillés</Link>
+          {' · '}
+          <Link href="/comparatif">Comparatif alertes emploi 2026</Link>
         </p>
       </Section>
     </PageShell>

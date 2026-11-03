@@ -6,7 +6,7 @@ import { SITE_URL } from '../seo';
 import { JOBS } from './jobs';
 
 export const metadata: Metadata = {
-  title: 'Alertes emploi par métier : développeur, infirmier, commercial…',
+  title: 'Alertes emploi par métier 2026 : développeur, infirmier, commercial…',
   description:
     "Créez une alerte sur votre métier et recevez les nouvelles offres par email, dès leur publication sur les principaux job boards français.",
   keywords: [
@@ -19,7 +19,7 @@ export const metadata: Metadata = {
   ],
   alternates: { canonical: '/metiers' },
   openGraph: {
-    title: 'Alertes emploi par métier — Alertemploi',
+    title: 'Alertes emploi par métier 2026 — Alertemploi',
     description: 'Les offres de votre métier par email, dès leur publication.',
     url: '/metiers',
   },

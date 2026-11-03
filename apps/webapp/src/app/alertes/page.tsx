@@ -6,7 +6,7 @@ import { BOARDS } from './boards';
 import { PageShell, Section } from './shell';
 
 export const metadata: Metadata = {
-  title: 'Alertes emploi par site : France Travail, Indeed, LinkedIn…',
+  title: 'Alertes emploi par site 2026 : France Travail, Indeed, LinkedIn…',
   description:
     "Créez une alerte sur France Travail, Indeed, LinkedIn, l'APEC, HelloWork, Cadremploi ou Welcome to the Jungle, et recevez les nouvelles offres par email.",
   keywords: [
@@ -20,7 +20,7 @@ export const metadata: Metadata = {
   ],
   alternates: { canonical: '/alertes' },
   openGraph: {
-    title: 'Alertes emploi par site — Alertemploi',
+    title: 'Alertes emploi par site 2026 — Alertemploi',
     description: 'Une alerte par recherche, sur les 7 principaux job boards français. Un seul email.',
     url: '/alertes',
   },

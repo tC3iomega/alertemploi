@@ -3,7 +3,7 @@ import Link from 'next/link';
 import { notFound } from 'next/navigation';
 
 import { PageShell, Section } from '../../alertes/shell';
-import { SITE_URL } from '../../seo';
+import { SITE_URL, truncateDescription } from '../../seo';
 import { JOBS, getJob } from '../jobs';
 
 export function generateStaticParams() {
@@ -14,12 +14,13 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   const { slug } = await params;
   const job = getJob(slug);
   if (!job) return {};
-  const title = `Alerte emploi ${job.name} : les offres par email`;
+  // "2026" + verbe d'action : keyword au début, signal GEO, secondaire mot-clé "recevoir".
+  const title = `Alerte emploi ${job.searchTerm} 2026 : recevoir les nouvelles offres par email`;
   return {
     title,
-    description: job.intro.slice(0, 155),
+    description: truncateDescription(job.intro),
     alternates: { canonical: `/metiers/${job.slug}` },
-    openGraph: { title: `${title} | Alertemploi`, description: job.intro, url: `/metiers/${job.slug}` },
+    openGraph: { title, description: job.intro, url: `/metiers/${job.slug}` },
   };
 }
 
@@ -58,7 +59,7 @@ export default async function JobPage({ params }: { params: Promise<{ slug: stri
         { label: 'Alertes par métier', href: '/metiers' },
         { label: job.name },
       ]}
-      title={`Alerte emploi ${job.name} : recevez les offres par email`}
+      title={`Alerte emploi ${job.searchTerm} : recevez les nouvelles offres par email`}
       intro={job.intro}
       jsonLd={jsonLd}
     >
@@ -89,6 +90,24 @@ export default async function JobPage({ params }: { params: Promise<{ slug: stri
           vue apparaît, elle part dans un email avec le titre, l&apos;entreprise, le lieu et un lien direct. Rien à
           surveiller à la main, rien à rafraîchir.
         </p>
+        <div style={{ marginTop: 20, display: 'flex', alignItems: 'center', gap: 14, flexWrap: 'wrap' }}>
+          <Link
+            href="/auth/register"
+            style={{
+              display: 'inline-block',
+              background: 'var(--ae-primary-bg)',
+              color: 'white',
+              fontSize: 14,
+              fontWeight: 600,
+              padding: '10px 22px',
+              borderRadius: 8,
+              textDecoration: 'none',
+            }}
+          >
+            Créer mon alerte {job.name}
+          </Link>
+          <span style={{ fontSize: 13, color: 'var(--ae-text-subtle)' }}>Essai gratuit 7 jours · sans CB</span>
+        </div>
       </Section>
 
       <Section title="Questions fréquentes">
@@ -105,12 +124,20 @@ export default async function JobPage({ params }: { params: Promise<{ slug: stri
           {siblings.map((sibling, i) => (
             <span key={sibling.slug}>
               {i > 0 && ' · '}
-              <Link href={`/metiers/${sibling.slug}`}>Alerte {sibling.name}</Link>
+              <Link href={`/metiers/${sibling.slug}`}>
+                {i === 0
+                  ? `Alerte emploi ${sibling.name}`
+                  : i === 1
+                    ? `Offres ${sibling.name} par email`
+                    : `Créer une alerte ${sibling.name}`}
+              </Link>
             </span>
           ))}
         </p>
         <p style={{ marginTop: 10 }}>
-          <Link href="/metiers">Tous les métiers</Link> · <Link href="/comparatif">Comparatif des alertes emploi</Link>
+          <Link href="/metiers">Tous les métiers surveillés</Link>
+          {' · '}
+          <Link href="/comparatif">Meilleure alerte emploi 2026</Link>
         </p>
       </Section>
     </PageShell>
