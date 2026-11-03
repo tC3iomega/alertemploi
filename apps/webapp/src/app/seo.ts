@@ -37,7 +37,7 @@ export const FAQ_ITEMS = [
   {
     question: 'Puis-je annuler à tout moment ?',
     answer:
-      'Oui, sans engagement et sans délai. Vous résiliez depuis votre espace personnel en un clic. L'accès reste actif jusqu'à la fin de la période en cours.',
+      "Oui, sans engagement et sans délai. Vous résiliez depuis votre espace personnel en un clic. L'accès reste actif jusqu'à la fin de la période en cours.",
   },
   {
     question: 'Quelle est la différence entre Basic et Pro ?',
@@ -45,9 +45,9 @@ export const FAQ_ITEMS = [
       "Les deux plans incluent les alertes illimitées sur les 7 job boards et le scan toutes les 30 minutes. Le plan Pro ajoute un filtre de blacklist d'entreprises (pour écarter les offres des entreprises que vous ne visez pas) et un support prioritaire.",
   },
   {
-    question: 'En combien de temps suis-je prévenu après la publication d'une offre ?',
+    question: "En combien de temps suis-je prévenu après la publication d'une offre ?",
     answer:
-      'En pratique, moins d'une heure. Le scan tourne toutes les 30 minutes : une offre publiée à 9h00 vous parvient généralement avant 9h30.',
+      "En pratique, moins d'une heure. Le scan tourne toutes les 30 minutes : une offre publiée à 9h00 vous parvient généralement avant 9h30.",
   },
 ];
 
