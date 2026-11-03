@@ -2,15 +2,11 @@ import { ImageResponse } from 'next/og';
 
 import { getBoard } from '../boards';
 
-export const runtime = 'edge';
+export const runtime = 'nodejs';
 export const size = { width: 1200, height: 630 };
 export const contentType = 'image/png';
 
-export async function generateImageMetadata({ params }: { params: Promise<{ slug: string }> }) {
-  const { slug } = await params;
-  const board = getBoard(slug);
-  return [{ id: slug, alt: `Alerte emploi ${board?.name ?? ''} — Alertemploi` }];
-}
+export const alt = "Alerte emploi par site — Alertemploi";
 
 export default async function Image({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
