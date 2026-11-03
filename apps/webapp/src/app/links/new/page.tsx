@@ -68,7 +68,7 @@ export default function NewLinkPage() {
     <div style={{
       display: 'flex', flexDirection: 'column', minHeight: '100vh',
       background: 'var(--ae-bg)', color: 'var(--ae-text)',
-      fontFamily: 'Arial, Helvetica, sans-serif', alignItems: 'center',
+      fontFamily: 'inherit', alignItems: 'center',
     }}>
       <div style={{
         display: 'flex', alignItems: 'center', gap: 12,

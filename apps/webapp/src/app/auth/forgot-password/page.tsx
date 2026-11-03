@@ -52,7 +52,7 @@ export default function ForgotPasswordPage() {
       minHeight: '100vh', background: 'var(--ae-bg)',
       display: 'flex', flexDirection: 'column',
       alignItems: 'center', justifyContent: 'center',
-      fontFamily: 'Arial, Helvetica, sans-serif', padding: '24px 16px',
+      fontFamily: 'inherit', padding: '24px 16px',
     }}>
       <div style={{ marginBottom: 36 }}>
         <Link href="/" style={{ textDecoration: 'none' }}>

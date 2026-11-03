@@ -49,7 +49,7 @@ export default function UpgradePage() {
   }
 
   return (
-    <div style={{ minHeight: '100vh', background: 'var(--ae-bg)', fontFamily: 'Arial, Helvetica, sans-serif' }}>
+    <div style={{ minHeight: '100vh', background: 'var(--ae-bg)', fontFamily: 'inherit' }}>
 
       {/* Nav */}
       <nav style={{

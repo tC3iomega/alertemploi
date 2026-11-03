@@ -17,7 +17,7 @@ export default async function LinksPage() {
 
   return (
     <>
-    <div style={{ minHeight: '100vh', background: 'var(--ae-bg)', fontFamily: 'Arial, Helvetica, sans-serif', paddingBottom: 80 }}>
+    <div style={{ minHeight: '100vh', background: 'var(--ae-bg)', fontFamily: 'inherit', paddingBottom: 80 }}>
 
 
 
@@ -44,7 +44,11 @@ export default async function LinksPage() {
                 background: 'var(--ae-surface)', borderRadius: 12,
                 border: '0.5px solid var(--ae-border)', padding: '16px 18px',
                 display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 12,
-              }}>
+                transition: 'box-shadow 0.15s, border-color 0.15s',
+              }}
+              onMouseEnter={e => { (e.currentTarget as HTMLDivElement).style.boxShadow = '0 2px 10px rgba(29,78,216,0.08)'; (e.currentTarget as HTMLDivElement).style.borderColor = 'var(--ae-border-strong)'; }}
+              onMouseLeave={e => { (e.currentTarget as HTMLDivElement).style.boxShadow = ''; (e.currentTarget as HTMLDivElement).style.borderColor = 'var(--ae-border)'; }}
+              >
                 <div style={{ flex: 1, minWidth: 0 }}>
                   <div style={{ fontSize: 14, fontWeight: 500, color: 'var(--ae-text)', marginBottom: 4 }}>
                     {link.title || link.url}

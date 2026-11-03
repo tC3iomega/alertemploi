@@ -14,7 +14,7 @@ export default function CGVPage() {
       style={{
         minHeight: '100vh',
         background: 'var(--ae-bg)',
-        fontFamily: 'Arial, Helvetica, sans-serif',
+        fontFamily: 'inherit',
         color: 'var(--ae-text)',
         padding: '48px 24px',
       }}

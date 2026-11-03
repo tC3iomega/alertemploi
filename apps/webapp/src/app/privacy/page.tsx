@@ -12,7 +12,7 @@ export default function ConfidentialitePage() {
   return (
     <main style={{
       minHeight: '100vh', background: 'var(--ae-bg)',
-      fontFamily: 'Arial, Helvetica, sans-serif', color: 'var(--ae-text)',
+      fontFamily: 'inherit', color: 'var(--ae-text)',
       padding: '48px 24px',
     }}>
       <div style={{ maxWidth: 720, margin: '0 auto' }}>

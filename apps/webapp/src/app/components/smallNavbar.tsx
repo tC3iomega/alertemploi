@@ -33,8 +33,15 @@ export function SmallNavbar() {
             <Link key={name} href={path} style={{
               display: 'flex', flex: 1, flexDirection: 'column',
               alignItems: 'center', justifyContent: 'center',
-              gap: 4, textDecoration: 'none', color,
+              gap: 4, textDecoration: 'none', color, position: 'relative',
             }}>
+              {isActive && (
+                <span style={{
+                  position: 'absolute', top: 0, left: '50%', transform: 'translateX(-50%)',
+                  width: 20, height: 3, borderRadius: 2,
+                  background: 'var(--ae-primary)',
+                }} />
+              )}
               <Icon style={{ width: 21, height: 21, color }} strokeWidth={isActive ? 2.3 : 1.8} />
               <span style={{ fontSize: 10, fontWeight: 500, color }}>{name}</span>
             </Link>
