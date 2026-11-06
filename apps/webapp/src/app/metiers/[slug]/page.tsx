@@ -4,6 +4,7 @@ import { notFound } from 'next/navigation';
 
 import { PageShell, Section } from '../../alertes/shell';
 import { SITE_URL, truncateDescription } from '../../seo';
+import { CITIES } from '../cities';
 import { JOBS, getJob } from '../jobs';
 
 export function generateStaticParams() {
@@ -117,6 +118,23 @@ export default async function JobPage({ params }: { params: Promise<{ slug: stri
             <p style={{ margin: 0 }}>{item.answer}</p>
           </div>
         ))}
+      </Section>
+
+      <Section title={`${job.name[0].toUpperCase() + job.name.slice(1)} par ville`}>
+        <p>
+          {CITIES.slice(0, 6).map((city, i) => (
+            <span key={city.slug}>
+              {i > 0 && ' · '}
+              <Link href={`/metiers/${job.slug}/${city.slug}`}>
+                {i === 0
+                  ? `Alerte ${job.name} ${city.name}`
+                  : i === 1
+                    ? `Offres ${job.name} à ${city.name}`
+                    : `${job.name[0].toUpperCase() + job.name.slice(1)} ${city.name}`}
+              </Link>
+            </span>
+          ))}
+        </p>
       </Section>
 
       <Section title="Autres métiers">
