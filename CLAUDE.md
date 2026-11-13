@@ -186,10 +186,10 @@ other subscription are ignored — otherwise cancelling a stale duplicate would 
 
 ## Dev Environment
 
-- **Mac Mini** (home) — main dev machine, all code runs here
-- **Access:** SSH via Tailscale from Windows (workplace)
-- **File editing on Mac:** nano for single files; Python scripts for multi-line replacements (avoid sed + zsh history expansion issues with `set +H`)
-- **All file modifications must happen on the Mac** — no remote sandbox edits
+- **Serveur 192.168.1.77** — tout le code tourne ici (Claude Code, git, CLI Supabase v2.117.0 à `/home/claudecode/.local/bin/supabase`)
+- L'utilisateur se connecte depuis son PC Windows — aucun outil installé dessus
+- `git push` et `supabase functions deploy` s'exécutent directement sur le serveur
+- Si `supabase functions deploy` échoue avec "Access token not provided" → lancer `supabase login` dans un terminal sur le serveur
 
 ---
 
