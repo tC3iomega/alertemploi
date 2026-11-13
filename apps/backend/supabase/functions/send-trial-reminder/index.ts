@@ -37,6 +37,7 @@ Deno.serve(async (req) => {
     const now = new Date();
     const DAY_MS = 24 * 60 * 60 * 1000;
     const todayStr = now.toISOString().slice(0, 10);
+    const in1DayStr = new Date(now.getTime() + 1 * DAY_MS).toISOString().slice(0, 10);
     const in3DaysStr = new Date(now.getTime() + 3 * DAY_MS).toISOString().slice(0, 10);
     const yesterdayStr = new Date(now.getTime() - DAY_MS).toISOString().slice(0, 10);
 
@@ -73,6 +74,21 @@ Deno.serve(async (req) => {
           hero_border: '#FCD34D',
           badge_bg: '#FEF3C7',
           badge_color: '#92400E',
+        };
+      } else if (trialDateStr === in1DayStr) {
+        payload = {
+          badge_text: '🕐 Demain, dernier jour',
+          title: 'Votre essai se termine demain',
+          subtitle: 'Choisissez votre formule pour que ça continue',
+          intro_text:
+            "Votre essai gratuit se termine demain. Jusqu'ici, Alertemploi scanne vos alertes toutes les 30 minutes et vous envoie les nouvelles offres par email dès leur publication. Choisissez une formule pour que ça continue sans interruption.",
+          show_benefits: false,
+          show_warning: true,
+          cta_text: "Choisir ma formule — dès 4,99€/mois",
+          hero_bg: '#FFF7ED',
+          hero_border: '#FED7AA',
+          badge_bg: '#FFEDD5',
+          badge_color: '#9A3412',
         };
       } else if (trialDateStr === todayStr) {
         payload = {
