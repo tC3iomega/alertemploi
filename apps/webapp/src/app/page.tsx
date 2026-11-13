@@ -94,7 +94,7 @@ const FAQS = [
   },
   {
     q: "Quelle est la différence entre Basic et Pro ?",
-    a: "Les deux plans incluent les alertes illimitées et tous les job boards. Le plan Pro ajoute un filtre de blacklist d'entreprises et un support prioritaire.",
+    a: "Les deux plans incluent les alertes illimitées, tous les job boards et le scan toutes les 30 minutes. Le plan Pro ajoute une blacklist d'entreprises (leurs offres disparaissent de vos résultats), un support prioritaire par email, et un accès en avant-première aux nouvelles sources.",
   },
 ];
 
@@ -121,7 +121,7 @@ function Logo({ size = 'md', theme = 'light' }: { size?: 'sm' | 'md'; theme?: 'l
 }
 
 export default function LandingPage() {
-  const [isAnnual, setIsAnnual] = useState(false);
+  const [isAnnual, setIsAnnual] = useState(true);
   const [openFaq, setOpenFaq] = useState<number | null>(null);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
@@ -349,13 +349,13 @@ export default function LandingPage() {
             }}>Populaire</div>
             <div style={{ fontSize: 13, fontWeight: 500, color: 'var(--ae-text-muted)', marginBottom: 10 }}>Basic</div>
             <div style={{ fontSize: 32, fontWeight: 700, marginBottom: 6 }}>
-              {isAnnual ? '41,90€' : '4,99€'}{' '}
+              {isAnnual ? '3,49€' : '4,99€'}{' '}
               <span style={{ fontSize: 13, fontWeight: 400, color: 'var(--ae-text-muted)' }}>
-                /{isAnnual ? ' an' : ' mois'}
+                /mois
               </span>
             </div>
             <div style={{ fontSize: 12, color: 'var(--ae-text-muted)', marginBottom: 18, lineHeight: 1.5 }}>
-              {isAnnual ? 'Soit 3,49€/mois.' : 'Essai gratuit 7 jours — sans CB.'}
+              {isAnnual ? '41,90€ facturé annuellement.' : 'Essai gratuit 7 jours — sans CB.'}
             </div>
             {['Alertes illimitées', 'Tous les job boards', 'Scan toutes les 30 min', 'Alertes email'].map((f) => (
               <div key={f} style={{ fontSize: 12.5, color: 'var(--ae-text-muted)', padding: '6px 0', borderBottom: '0.5px solid var(--ae-surface-3)', display: 'flex', gap: 8 }}>
@@ -371,13 +371,13 @@ export default function LandingPage() {
           <div style={{ border: '0.5px solid var(--ae-border)', borderRadius: 14, padding: 24 }}>
             <div style={{ fontSize: 13, fontWeight: 500, color: 'var(--ae-text-muted)', marginBottom: 10 }}>Pro</div>
             <div style={{ fontSize: 32, fontWeight: 700, marginBottom: 6 }}>
-              {isAnnual ? '125,90€' : '14,99€'}{' '}
+              {isAnnual ? '10,49€' : '14,99€'}{' '}
               <span style={{ fontSize: 13, fontWeight: 400, color: 'var(--ae-text-muted)' }}>
-                /{isAnnual ? ' an' : ' mois'}
+                /mois
               </span>
             </div>
             <div style={{ fontSize: 12, color: 'var(--ae-text-muted)', marginBottom: 18, lineHeight: 1.5 }}>
-              {isAnnual ? 'Soit 10,49€/mois.' : 'Essai gratuit 7 jours — sans CB.'}
+              {isAnnual ? '125,90€ facturé annuellement.' : 'Essai gratuit 7 jours — sans CB.'}
             </div>
             {['Tout Basic, plus :', 'Blacklist d\u2019entreprises', 'Support prioritaire'].map((f) => (
               <div key={f} style={{ fontSize: 12.5, color: 'var(--ae-text-muted)', padding: '6px 0', borderBottom: '0.5px solid var(--ae-surface-3)', display: 'flex', gap: 8 }}>

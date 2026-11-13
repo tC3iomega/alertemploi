@@ -9,23 +9,24 @@ import { Logo } from '@/app/components/Logo';
 
 const BASIC_FEATURES = [
   { label: 'Alertes illimitées', included: true },
-  { label: 'Tous les job boards', included: true },
+  { label: 'Tous les job boards (7 sources)', included: true },
   { label: 'Scan toutes les 30 minutes', included: true },
-  { label: 'Alertes email', included: true },
+  { label: 'Alertes email instantanées', included: true },
   { label: 'Essai 7 jours gratuit', included: true },
 ];
 
 const PRO_FEATURES = [
   { label: 'Tout Basic, plus :', included: true },
-  { label: 'Blacklist d\u2019entreprises', included: true },
-  { label: 'Support prioritaire', included: true },
+  { label: 'Blacklist entreprises — leurs offres disparaissent', included: true },
+  { label: 'Support prioritaire par email', included: true },
+  { label: 'Accès aux nouvelles sources en avant-première', included: true },
 ];
 
 export default function UpgradePage() {
   const router = useRouter();
   const [loading, setLoading] = useState<string | null>(null);
   const [trialLoading, setTrialLoading] = useState(false);
-  const [isAnnual, setIsAnnual] = useState(false);
+  const [isAnnual, setIsAnnual] = useState(true);
 
   const basicMonthlyPriceId = 'price_1UGQGDV05CSUPvQveeN8BJSg';
   const basicYearlyPriceId = 'price_1UGQGDV05CSUPvQvf3cJ4zwO';
@@ -79,10 +80,13 @@ export default function UpgradePage() {
             fontSize: 34, fontWeight: 700, color: 'var(--ae-text)',
             letterSpacing: -0.8, marginBottom: 12,
           }}>
-            Trouvez votre emploi plus vite
+            Postulez avant les autres
           </h1>
-          <p style={{ fontSize: 15, color: 'var(--ae-text-muted)', lineHeight: 1.6 }}>
-            Annulez à tout moment, sans engagement.
+          <p style={{ fontSize: 15, color: 'var(--ae-text-muted)', lineHeight: 1.7, maxWidth: 480, margin: '0 auto 8px' }}>
+            Les recruteurs lisent les premiers dossiers en priorité. Alertemploi vous avertit dès la publication — avant la plupart des candidats.
+          </p>
+          <p style={{ fontSize: 13, color: 'var(--ae-text-subtle)', lineHeight: 1.5 }}>
+            Sans engagement · Annulez à tout moment
           </p>
         </div>
 
@@ -162,16 +166,14 @@ export default function UpgradePage() {
             <div style={{ marginBottom: 18 }}>
               <div style={{ fontSize: 13, fontWeight: 500, color: 'var(--ae-text-muted)', marginBottom: 10 }}>Basic</div>
               <div style={{ fontSize: 30, fontWeight: 700, color: 'var(--ae-text)', whiteSpace: 'nowrap' }}>
-                {isAnnual ? '41,90€' : '4,99€'}{' '}
+                {isAnnual ? '3,49€' : '4,99€'}{' '}
                 <span style={{ fontSize: 13, fontWeight: 400, color: 'var(--ae-text-muted)' }}>
-                  /{isAnnual ? ' an' : ' mois'}
+                  /mois
                 </span>
               </div>
-              {isAnnual && (
-                <div style={{ fontSize: 12, color: 'var(--ae-green)', marginTop: 4 }}>
-                  Soit 3,49€/mois
-                </div>
-              )}
+              <div style={{ fontSize: 12, color: isAnnual ? 'var(--ae-text-subtle)' : 'var(--ae-green)', marginTop: 4 }}>
+                {isAnnual ? '41,90€ facturé annuellement' : 'Essai 7 jours gratuit — sans CB'}
+              </div>
             </div>
             {BASIC_FEATURES.map((f) => (
               <div key={f.label} style={{
@@ -206,16 +208,14 @@ export default function UpgradePage() {
             <div style={{ marginBottom: 18 }}>
               <div style={{ fontSize: 13, fontWeight: 500, color: 'var(--ae-text-muted)', marginBottom: 10 }}>Pro</div>
               <div style={{ fontSize: 30, fontWeight: 700, color: 'var(--ae-text)', whiteSpace: 'nowrap' }}>
-                {isAnnual ? '125,90€' : '14,99€'}{' '}
+                {isAnnual ? '10,49€' : '14,99€'}{' '}
                 <span style={{ fontSize: 13, fontWeight: 400, color: 'var(--ae-text-muted)' }}>
-                  /{isAnnual ? ' an' : ' mois'}
+                  /mois
                 </span>
               </div>
-              {isAnnual && (
-                <div style={{ fontSize: 12, color: 'var(--ae-green)', marginTop: 4 }}>
-                  Soit 10,49€/mois
-                </div>
-              )}
+              <div style={{ fontSize: 12, color: isAnnual ? 'var(--ae-text-subtle)' : 'var(--ae-green)', marginTop: 4 }}>
+                {isAnnual ? '125,90€ facturé annuellement' : 'Essai 7 jours gratuit — sans CB'}
+              </div>
             </div>
             {PRO_FEATURES.map((f) => (
               <div key={f.label} style={{
