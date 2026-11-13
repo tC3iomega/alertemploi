@@ -1,0 +1,10 @@
+{
+  "nodeModules": "auto",
+  "imports": {
+    "@alertemploi/core": "../_shared/core.ts",
+    "npm:@logdna/logger": "npm:@logdna/logger@2.6.11",
+    "mailersend": "npm:mailersend@2.6.0",
+    "@supabase/supabasefork": "npm:@supabase/supabase-js@2.48.1",
+    "openai": "npm:openai@6.7.0"
+  }
+}
