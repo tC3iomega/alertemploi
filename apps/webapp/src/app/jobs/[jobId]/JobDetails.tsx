@@ -23,12 +23,11 @@ export function JobDetails({ job: initialJob }: JobDetailsProps) {
       await sdk.updateJobStatus({ jobId, status });
       setJob((prevJob) => ({ ...prevJob, status }));
       toast({
-        title: 'Job status updated',
+        title: 'Statut mis à jour',
         variant: 'success',
-        description: `Job status has been updated to ${status}.`,
       });
     } catch (error) {
-      handleError({ error, title: 'Failed to update job status' });
+      handleError({ error, title: 'Impossible de mettre à jour le statut' });
     }
   };
 
@@ -37,7 +36,7 @@ export function JobDetails({ job: initialJob }: JobDetailsProps) {
       await sdk.updateJobLabels({ jobId, labels });
       setJob((prevJob) => ({ ...prevJob, labels }));
     } catch (error) {
-      handleError({ error, title: 'Failed to update job labels' });
+      handleError({ error, title: 'Impossible de mettre à jour le label' });
     }
   };
 

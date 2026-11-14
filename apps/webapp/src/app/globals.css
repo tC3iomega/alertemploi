@@ -212,3 +212,8 @@
 .ae-prose p + p {
   margin-top: 12px;
 }
+
+.link-card:hover {
+  box-shadow: 0 2px 10px rgba(29, 78, 216, 0.08);
+  border-color: var(--ae-border-strong) !important;
+}
