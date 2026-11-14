@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { createClient } from '@/lib/supabase/client';
@@ -43,6 +43,28 @@ export default function RegisterPage() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
+  const [captchaToken, setCaptchaToken] = useState<string | null>(null);
+  const turnstileRef = useRef<HTMLDivElement>(null);
+  const widgetId = useRef<string | null>(null);
+
+  useEffect(() => {
+    const render = () => {
+      if (!turnstileRef.current || !(window as any).turnstile || widgetId.current) return;
+      widgetId.current = (window as any).turnstile.render(turnstileRef.current, {
+        sitekey: process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY,
+        size: 'invisible',
+        callback: (token: string) => setCaptchaToken(token),
+        'error-callback': () => setCaptchaToken(null),
+        'expired-callback': () => setCaptchaToken(null),
+      });
+    };
+    if ((window as any).turnstile) { render(); return; }
+    const script = document.createElement('script');
+    script.src = 'https://challenges.cloudflare.com/turnstile/v0/api.js';
+    script.async = true;
+    script.onload = render;
+    document.head.appendChild(script);
+  }, []);
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -55,12 +77,15 @@ export default function RegisterPage() {
       password,
       options: {
         emailRedirectTo: `${window.location.origin}/auth/callback`,
+        captchaToken: captchaToken ?? undefined,
       },
     });
 
     if (error) {
       setError(error.message);
       setIsSubmitting(false);
+      if (widgetId.current) (window as any).turnstile?.reset(widgetId.current);
+      setCaptchaToken(null);
       return;
     }
 
@@ -200,18 +225,20 @@ export default function RegisterPage() {
             </div>
           )}
 
+          <div ref={turnstileRef} style={{ display: 'none' }} />
+
           <button
             type="submit"
-            disabled={isSubmitting}
+            disabled={isSubmitting || !captchaToken}
             style={{
               width: '100%', padding: '12px 0',
-              background: isSubmitting ? 'var(--ae-blue-border-strong)' : 'var(--ae-primary-bg)',
+              background: (isSubmitting || !captchaToken) ? 'var(--ae-blue-border-strong)' : 'var(--ae-primary-bg)',
               color: 'white', fontSize: 15, fontWeight: 600,
               border: 'none', borderRadius: 9,
-              cursor: isSubmitting ? 'not-allowed' : 'pointer',
+              cursor: (isSubmitting || !captchaToken) ? 'not-allowed' : 'pointer',
             }}
           >
-            {isSubmitting ? 'Création...' : 'Créer mon compte'}
+            {isSubmitting ? 'Création...' : !captchaToken ? 'Vérification…' : 'Créer mon compte'}
           </button>
         </form>
 

@@ -81,6 +81,7 @@ export default function ConfidentialitePage() {
             <li><strong>Vercel</strong> — hébergement application</li>
             <li><strong>Stripe</strong> — paiements en ligne</li>
             <li><strong>MailerSend</strong> — envoi d'emails</li>
+            <li><strong>Cloudflare Turnstile</strong> — protection anti-spam des formulaires d'inscription et de connexion (<a href="https://www.cloudflare.com/privacypolicy/" target="_blank" rel="noopener noreferrer" style={{ color: 'var(--ae-primary)' }}>politique de confidentialité Cloudflare</a>)</li>
           </ul>
         </section>
 
