@@ -42,7 +42,7 @@ export const FAQ_ITEMS = [
   {
     question: 'Quelle est la différence entre Basic et Pro ?',
     answer:
-      "Les deux plans incluent les alertes illimitées sur les 7 job boards et le scan toutes les 30 minutes. Le plan Pro ajoute un filtre de blacklist d'entreprises (pour écarter les offres des entreprises que vous ne visez pas) et un support prioritaire.",
+      "Les deux plans incluent les alertes illimitées sur les 7 job boards et le scan toutes les 30 minutes. Le plan Pro ajoute une blacklist d'entreprises (leurs offres disparaissent de vos résultats), un support prioritaire par email, et un accès en avant-première aux nouvelles sources.",
   },
   {
     question: "En combien de temps suis-je prévenu après la publication d'une offre ?",
@@ -69,7 +69,7 @@ export function buildJsonLd() {
       applicationCategory: 'BusinessApplication',
       operatingSystem: 'Web',
       inLanguage: 'fr-FR',
-      dateModified: '2026-11-01',
+      dateModified: '2026-11-14',
       description:
         "Alertemploi surveille vos recherches sur 7 job boards français (France Travail, APEC, Indeed, LinkedIn, HelloWork, Cadremploi, Welcome to the Jungle) et vous envoie un email dès qu'une nouvelle offre correspond à vos critères. Scan toutes les 30 minutes.",
       offers: [

@@ -65,11 +65,13 @@ export function buildNewJobsAlertHtml({
       const meta = [job.companyName, job.location].filter((v): v is string => !!v).map(escapeHtml).join(' · ');
       return `
         <tr>
-          <td style="padding:14px 0;border-bottom:1px solid #E2E8F0;">
+          <td style="padding:14px 0;border-bottom:1px solid #F1F5F9;">
             <a href="${new URL(`/jobs/${job.id}`, webappUrl).href}"
-               style="color:#1E293B;font-size:15px;font-weight:600;text-decoration:none;">${escapeHtml(job.title)}</a>
-            <div style="color:#64748B;font-size:13px;margin-top:4px;">${meta}</div>
-            <div style="color:#94A3B8;font-size:12px;margin-top:2px;">${escapeHtml(site)}</div>
+               style="color:#1E293B;font-size:14px;font-weight:600;text-decoration:none;line-height:1.4;">${escapeHtml(job.title)}</a>
+            <div style="color:#475569;font-size:13px;margin-top:3px;">${meta}</div>
+            <div style="margin-top:5px;">
+              <span style="display:inline-block;background:#EFF6FF;color:#1D4ED8;font-size:11px;font-weight:500;padding:2px 8px;border-radius:10px;">${escapeHtml(site)}</span>
+            </div>
           </td>
         </tr>`;
     })
@@ -79,36 +81,67 @@ export function buildNewJobsAlertHtml({
     jobs.length === 1 ? '1 nouvelle offre correspond à votre alerte' : `${jobs.length} nouvelles offres pour vous`;
 
   return `<!doctype html>
-<html lang="fr"><body style="margin:0;padding:0;background:#F1EFE8;font-family:Arial,Helvetica,sans-serif;">
-  <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:#F1EFE8;padding:24px 12px;">
-    <tr><td align="center">
-      <table role="presentation" width="100%" cellpadding="0" cellspacing="0"
-             style="max-width:560px;background:#FFFFFF;border-radius:12px;padding:28px 24px;">
-        <tr><td>
-          <div style="font-size:18px;font-weight:700;color:#1E293B;">alert<span style="color:#2563EB;">emploi</span></div>
-          <h1 style="font-size:20px;color:#1E293B;margin:20px 0 6px;">${title}</h1>
-          <p style="font-size:14px;color:#64748B;margin:0 0 8px;">
-            Publiées depuis notre dernier scan. Postulez avant les autres.
+<html lang="fr">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>${title}</title>
+</head>
+<body style="margin:0;padding:0;background:#F1EFE8;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Arial,sans-serif;">
+  <table width="100%" cellpadding="0" cellspacing="0" role="presentation" style="background:#F1EFE8;">
+    <tr><td align="center" style="padding:40px 16px;">
+      <table width="100%" cellpadding="0" cellspacing="0" role="presentation"
+             style="max-width:580px;background:#ffffff;border-radius:12px;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,0.08);">
+
+        <!-- Header -->
+        <tr><td style="background:#1E293B;padding:24px 32px;">
+          <div style="font-size:20px;font-weight:700;letter-spacing:-0.5px;">
+            <span style="color:#ffffff;">alert</span><span style="color:#2563EB;">emploi</span>
+          </div>
+        </td></tr>
+
+        <!-- Badge + titre -->
+        <tr><td style="padding:28px 32px 0;">
+          <span style="display:inline-block;background:#DBEAFE;color:#1D4ED8;font-size:12px;font-weight:600;padding:4px 12px;border-radius:20px;">
+            🔔 ${jobs.length === 1 ? 'Nouvelle offre' : `${jobs.length} nouvelles offres`}
+          </span>
+          <h1 style="margin:14px 0 6px;font-size:22px;font-weight:700;color:#1E293B;line-height:1.3;">${title}</h1>
+          <p style="margin:0;font-size:14px;color:#64748B;line-height:1.5;">
+            Publiées depuis notre dernier scan. Postulez avant les autres candidats.
           </p>
+        </td></tr>
+
+        <!-- Offres -->
+        <tr><td style="padding:20px 32px 0;">
           <table role="presentation" width="100%" cellpadding="0" cellspacing="0">${rows}</table>
           ${
             remaining > 0
-              ? `<p style="font-size:13px;color:#64748B;margin:16px 0 0;">+ ${remaining} autre${
-                  remaining > 1 ? 's' : ''
-                } offre${remaining > 1 ? 's' : ''} dans votre tableau de bord.</p>`
+              ? `<p style="font-size:13px;color:#64748B;margin:14px 0 0;">
+                   + ${remaining} autre${remaining > 1 ? 's' : ''} offre${remaining > 1 ? 's' : ''} dans votre tableau de bord.
+                 </p>`
               : ''
           }
-          <div style="margin:26px 0 8px;">
-            <a href="${feedUrl}"
-               style="display:inline-block;background:#2563EB;color:#FFFFFF;font-size:15px;font-weight:600;
-                      padding:12px 26px;border-radius:9px;text-decoration:none;">Voir les offres</a>
-          </div>
-          <p style="font-size:12px;color:#94A3B8;margin:22px 0 0;line-height:1.6;">
-            Vous recevez cet email parce que vous avez une alerte active sur
-            <a href="${new URL('/', webappUrl).href}" style="color:#64748B;">alertemploi.com</a>.
-            Vous pouvez désactiver les alertes email depuis votre tableau de bord.
+        </td></tr>
+
+        <!-- CTA -->
+        <tr><td style="padding:28px 32px 0;text-align:center;">
+          <a href="${feedUrl}"
+             style="display:inline-block;background:#2563EB;color:#FFFFFF;font-size:15px;font-weight:600;
+                    padding:13px 28px;border-radius:8px;text-decoration:none;letter-spacing:0.2px;">
+            Voir les offres →
+          </a>
+        </td></tr>
+
+        <!-- Footer -->
+        <tr><td style="background:#F8FAFC;padding:16px 32px;margin-top:28px;border-top:1px solid #E2E8F0;">
+          <p style="margin:0;font-size:12px;color:#94A3B8;line-height:1.5;">
+            Alertemploi · <a href="${new URL('/', webappUrl).href}" style="color:#94A3B8;">alertemploi.com</a><br />
+            Vous recevez cet email car vous avez une alerte active.
+            Désactivez les alertes email depuis votre
+            <a href="${new URL('/dashboard', webappUrl).href}" style="color:#64748B;">tableau de bord</a>.
           </p>
         </td></tr>
+
       </table>
     </td></tr>
   </table>

@@ -186,11 +186,28 @@ export default function LandingPage() {
 
         <p style={{
           fontSize: 18, color: 'var(--ae-text-muted)', lineHeight: 1.65,
-          maxWidth: 540, margin: '0 auto 36px',
+          maxWidth: 540, margin: '0 auto 28px',
         }}>
           Alertemploi surveille France Travail, APEC, LinkedIn, Indeed et d'autres en continu.
           Recevez un email dès qu'une offre correspond à vos critères.
         </p>
+
+        <div style={{ display: 'flex', gap: 20, justifyContent: 'center', flexWrap: 'wrap', marginBottom: 36 }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 7 }}>
+            <span style={{ fontSize: 18, fontWeight: 700, color: 'var(--ae-primary)' }}>1 200+</span>
+            <span style={{ fontSize: 13, color: 'var(--ae-text-muted)' }}>offres détectées ce mois</span>
+          </div>
+          <div style={{ width: 1, background: 'var(--ae-border)', alignSelf: 'stretch' }} />
+          <div style={{ display: 'flex', alignItems: 'center', gap: 7 }}>
+            <span style={{ fontSize: 18, fontWeight: 700, color: 'var(--ae-primary)' }}>7</span>
+            <span style={{ fontSize: 13, color: 'var(--ae-text-muted)' }}>job boards surveillés</span>
+          </div>
+          <div style={{ width: 1, background: 'var(--ae-border)', alignSelf: 'stretch' }} />
+          <div style={{ display: 'flex', alignItems: 'center', gap: 7 }}>
+            <span style={{ fontSize: 18, fontWeight: 700, color: 'var(--ae-primary)' }}>30 min</span>
+            <span style={{ fontSize: 13, color: 'var(--ae-text-muted)' }}>entre chaque scan</span>
+          </div>
+        </div>
 
         <div className={styles.heroCta}>
           <Link href={ctaHref} style={{

@@ -14,6 +14,7 @@ export default function NewLinkPage() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [detectedSite, setDetectedSite] = useState<Site | null>(null);
+  const [success, setSuccess] = useState(false);
 
   useEffect(() => {
     // custom = parsing IA non proposé ; deprecated = aucun contenu n'est récupéré pour ce
@@ -60,8 +61,43 @@ export default function NewLinkPage() {
     if (result.error) {
       setError(result.error);
     } else {
-      router.push('/jobs/list/new');
+      setSuccess(true);
+      setTimeout(() => router.push('/jobs/list/new'), 2500);
     }
+  }
+
+  if (success) {
+    return (
+      <div style={{
+        display: 'flex', flexDirection: 'column', minHeight: '100vh',
+        background: 'var(--ae-bg)', color: 'var(--ae-text)',
+        fontFamily: 'inherit', alignItems: 'center', justifyContent: 'center',
+        padding: '0 16px',
+      }}>
+        <div style={{
+          maxWidth: 420, width: '100%', textAlign: 'center',
+          background: 'var(--ae-surface)', border: '1px solid var(--ae-border)',
+          borderRadius: 14, padding: '40px 32px',
+        }}>
+          <div style={{
+            width: 52, height: 52, borderRadius: '50%',
+            background: 'var(--ae-green-bg)', display: 'flex',
+            alignItems: 'center', justifyContent: 'center', margin: '0 auto 20px',
+            fontSize: 24,
+          }}>✓</div>
+          <h2 style={{ fontSize: 20, fontWeight: 700, marginBottom: 10, color: 'var(--ae-text)' }}>
+            Alerte créée !
+          </h2>
+          <p style={{ fontSize: 14, color: 'var(--ae-text-muted)', lineHeight: 1.6, marginBottom: 6 }}>
+            Le premier scan démarre dans <strong>moins de 30 minutes</strong>.
+            Vous recevrez un email dès qu'une nouvelle offre correspond à vos critères.
+          </p>
+          <p style={{ fontSize: 12, color: 'var(--ae-text-subtle)', marginTop: 16 }}>
+            Redirection vers vos offres…
+          </p>
+        </div>
+      </div>
+    );
   }
 
   return (
