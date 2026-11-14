@@ -80,52 +80,52 @@ export const WELCOME_HTML = `<!DOCTYPE html>
 
     <div class="hero">
       <h2>Bienvenue sur Alertemploi !</h2>
-      <p>Vous etes maintenant pret a trouver votre emploi avant tout le monde.</p>
+      <p>Vous êtes maintenant prêt à trouver votre emploi avant tout le monde.</p>
     </div>
 
     <div class="body">
       <p class="intro">
-        Merci de nous rejoindre ! Alertemploi surveille France Travail, APEC, LinkedIn, Indeed et d'autres job boards pour vous alerter des nouvelles offres en temps reel.
+        Merci de nous rejoindre ! Alertemploi surveille France Travail, APEC, LinkedIn, Indeed et d'autres job boards pour vous alerter des nouvelles offres en temps réel.
       </p>
 
       <div class="steps">
         <div class="step">
           <div class="step-num">1</div>
           <div class="step-content">
-            <p class="step-title">Creez votre premiere alerte</p>
-            <p class="step-desc">Rendez-vous dans l'onglet "Alertes" et ajoutez l'URL de votre recherche sur votre job board prefere.</p>
+            <p class="step-title">Créez votre première alerte</p>
+            <p class="step-desc">Rendez-vous dans l'onglet "Alertes" et ajoutez l'URL de votre recherche sur votre job board préféré.</p>
           </div>
         </div>
         <div class="step">
           <div class="step-num">2</div>
           <div class="step-content">
-            <p class="step-title">Scannez ou attendez le scan automatique</p>
-            <p class="step-desc">Alertemploi scanne vos alertes toutes les heures. Vous pouvez aussi lancer un scan manuel depuis votre tableau de bord.</p>
+            <p class="step-title">Le scan démarre automatiquement</p>
+            <p class="step-desc">Alertemploi scanne vos alertes <strong>toutes les 30 minutes</strong>, 24h/24 et 7j/7.</p>
           </div>
         </div>
         <div class="step">
           <div class="step-num">3</div>
           <div class="step-content">
             <p class="step-title">Recevez vos alertes par email</p>
-            <p class="step-desc">Des qu'une nouvelle offre correspond a vos criteres, vous recevez un email avec toutes les details.</p>
+            <p class="step-desc">Dès qu'une nouvelle offre correspond à vos critères, vous recevez un email avec tous les détails.</p>
           </div>
         </div>
       </div>
 
       <div class="cta">
-        <a href="https://alertemploi.com/links/new">Creer ma premiere alerte</a>
+        <a href="https://www.alertemploi.com/links/new">Créer ma première alerte</a>
       </div>
 
       <div class="trial-badge">
-        <p>Vous beneficiez d'un <strong>essai gratuit de 7 jours</strong> sur le plan Pro. Profitez-en pour tester toutes les fonctionnalites !</p>
+        <p>Vous bénéficiez d'un <strong>essai gratuit de 7 jours</strong>. Profitez-en pour explorer toutes les fonctionnalités !</p>
       </div>
     </div>
 
     <div class="footer">
       <p>
-        Vous recevez cet email car vous venez de creer un compte sur
-        <a href="https://alertemploi.com">alertemploi.com</a>.<br>
-        Des questions ? Repondez a cet email ou contactez-nous a <a href="mailto:contact@alertemploi.com">contact@alertemploi.com</a>.
+        Vous recevez cet email car vous venez de créer un compte sur
+        <a href="https://www.alertemploi.com">alertemploi.com</a>.<br>
+        Des questions ? Répondez à cet email ou contactez-nous à <a href="mailto:contact@alertemploi.com">contact@alertemploi.com</a>.
       </p>
     </div>
 
