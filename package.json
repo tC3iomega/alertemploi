@@ -1,7 +1,7 @@
 {
-  "name": "@beastx/first2apply",
+  "name": "@alertemploi/root",
   "version": "2.4.0",
-  "description": "",
+  "description": "Alertes emploi — TROUVEZ EN PREMIER",
   "packageManager": "pnpm@10.32.1",
   "scripts": {
     "up": "docker compose up -d",
@@ -19,7 +19,7 @@
     "publish": "npx nx run-many -t publish",
     "release": "npx release-it --ci"
   },
-  "author": "BeastX Industries",
+  "author": "Quentin Brugeille",
   "license": "MIT",
   "workspaces": [
     "apps/*",

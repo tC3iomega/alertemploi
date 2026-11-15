@@ -61,7 +61,7 @@ export const createLoggerWithMeta = (meta: Record<string, string>): ILogger => {
   }
   const mezmoLogger = createLogger(mezmoApiKey, {
     level: 'info',
-    app: 'first2apply',
+    app: 'alertemploi',
     env: 'all',
     hostname: 'edge-functions',
     meta,
