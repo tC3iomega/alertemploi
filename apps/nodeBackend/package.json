@@ -1,5 +1,5 @@
 {
-  "name": "@first2apply/node-backend",
+  "name": "@alertemploi/node-backend",
   "version": "0.0.0",
   "description": "",
   "main": "build/index.js",
@@ -9,7 +9,7 @@
     "build": "tsc -p tsconfig.json"
   },
   "keywords": [],
-  "author": "BeastX Industries",
+  "author": "Quentin Brugeille",
   "license": "MIT",
   "packageManager": "pnpm@10.19.0"
 }

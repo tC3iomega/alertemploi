@@ -45,7 +45,7 @@ export interface ListJobsParams {
  * This interface defines all API methods that can be implemented by different
  * platforms (Electron IPC for desktop, server actions for webapp).
  */
-export interface First2ApplyApiSdk {
+export interface AlertemploiApiSdk {
   // ─────────────────────────────────────────────────────────────────────────────
   // Auth
   // ─────────────────────────────────────────────────────────────────────────────

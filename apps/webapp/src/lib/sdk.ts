@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import type {
   AdvancedMatchingConfig,
-  First2ApplyApiSdk,
+  AlertemploiApiSdk,
   Job,
   JobLabel,
   JobSite,
@@ -19,7 +19,7 @@ import type { User } from '@supabase/supabase-js';
 
 import { getJobById, listJobs, listLinks, listSites, updateJobLabels, updateJobStatus } from '../app/actions';
 
-export class WebappApiSdk implements First2ApplyApiSdk {
+export class WebappApiSdk implements AlertemploiApiSdk {
   // Auth
   async getUser(): Promise<User | null> {
     throw new Error('getUser not implemented');

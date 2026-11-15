@@ -1,9 +1,9 @@
 "use client"
 
 import { createContext, useContext } from "react"
-import type { First2ApplyApiSdk } from "@alertemploi/core"
+import type { AlertemploiApiSdk } from "@alertemploi/core"
 
-const SdkContext = createContext<First2ApplyApiSdk | null>(null)
+const SdkContext = createContext<AlertemploiApiSdk | null>(null)
 
 /**
  * Provider component to inject the SDK into the React tree.
@@ -14,7 +14,7 @@ export function SdkProvider({
   sdk,
   children,
 }: {
-  sdk: First2ApplyApiSdk
+  sdk: AlertemploiApiSdk
   children: React.ReactNode
 }) {
   return <SdkContext.Provider value={sdk}>{children}</SdkContext.Provider>
@@ -24,7 +24,7 @@ export function SdkProvider({
  * Hook to access the First2Apply SDK from any component.
  * Must be used within a SdkProvider.
  */
-export function useSdk(): First2ApplyApiSdk {
+export function useSdk(): AlertemploiApiSdk {
   const sdk = useContext(SdkContext)
   if (!sdk) {
     throw new Error("useSdk must be used within a SdkProvider")

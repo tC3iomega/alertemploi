@@ -1,4 +1,4 @@
-name: first2apply-monorepo
+name: alertemploi-monorepo
 
 services:
   nginx:

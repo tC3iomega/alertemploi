@@ -2,7 +2,7 @@ import { throwError } from '@alertemploi/core';
 
 import { AzureFoundryConfig } from './openAI.ts';
 
-export type First2ApplyBackendEnv = {
+export type AlertemploiBackendEnv = {
   supabaseUrl: string;
   supabaseServiceRoleKey: string;
   azureFoundryConfig: AzureFoundryConfig;
@@ -17,7 +17,7 @@ export type First2ApplyBackendEnv = {
   jobspyWorkerSecret?: string;
 };
 
-export function parseEnv(): First2ApplyBackendEnv {
+export function parseEnv(): AlertemploiBackendEnv {
   return {
     supabaseUrl: Deno.env.get('SUPABASE_URL') ?? '',
     supabaseServiceRoleKey: Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') ?? '',

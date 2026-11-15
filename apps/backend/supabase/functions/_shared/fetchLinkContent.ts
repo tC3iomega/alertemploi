@@ -1,6 +1,6 @@
 import { JobSite, Link } from '@alertemploi/core';
 
-import { First2ApplyBackendEnv } from './env.ts';
+import { AlertemploiBackendEnv } from './env.ts';
 import { ILogger } from './logger.ts';
 import { ParsedJob } from './parsers/parserTypes.ts';
 import { assertUrlIsPubliclyReachable } from './urlSafety.ts';
@@ -30,7 +30,7 @@ export async function fetchLinkContent({
   link: Link;
   site: JobSite;
   existingHtml?: string;
-  env: First2ApplyBackendEnv;
+  env: AlertemploiBackendEnv;
   logger: ILogger;
 }): Promise<FetchLinkContentResult> {
   const needsJobSpy = ['linkedin', 'indeed'].includes(site.provider ?? '');

@@ -1,7 +1,7 @@
 {
   "name": "@alertemploi/ui",
   "version": "1.0.0",
-  "description": "Shared UI components for First2Apply applications",
+  "description": "Shared UI components for Alertemploi",
   "main": "build/index.js",
   "types": "build/index.d.ts",
   "scripts": {
