@@ -225,8 +225,12 @@ cancelled without affecting access.
   with `sql=select timestamp, event_message from function_logs ...` (the CLI has no `functions logs`).
 - **SQL without `supabase link`**: `POST api.supabase.com/v1/projects/{ref}/database/query` with a
   personal access token. No local migration history — schema/grant changes are applied to the remote DB.
-- **pg_cron jobs**: `cron-scan` every 30 min, `send-trial-reminder` daily 9:00. `cron.job` stores
-  `F2A_WEBHOOK_SECRET` in plaintext in its command (standard pg_cron + pg_net pattern, not API-exposed).
+- **pg_cron jobs** (4 active):
+  - `auto-scan-jobs` every 30 min → `cron-scan`
+  - `daily-health-check` daily 05:00 UTC → `health-check` (checks jobs inserted + emails sent in last 24h, emails report to founder)
+  - `daily-trial-reminders` daily 09:00 → `send-trial-reminder`
+  - `send-onboarding-reminder` every hour → `send-onboarding-reminder` (email J+1 aux nouveaux inscrits)
+  `cron.job` stores `F2A_WEBHOOK_SECRET` in plaintext in its command (standard pg_cron + pg_net pattern, not API-exposed).
 - **Postgres grants gotcha**: new functions get `EXECUTE` for `PUBLIC`; revoking from `anon`/`authenticated`
   alone does nothing — revoke from `PUBLIC`.
 - **Service-role inserts**: column defaults like `user_id = auth.uid()` are NULL under `service_role`;

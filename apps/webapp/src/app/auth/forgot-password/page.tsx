@@ -58,7 +58,7 @@ export default function ForgotPasswordPage() {
     const { error } = await supabase.auth.resetPasswordForEmail(email, {
       redirectTo: `${window.location.origin}/auth/reset-password`,
       captchaToken: captchaToken ?? undefined,
-    } as any);
+    });
 
     if (error) {
       setError(error.message);
