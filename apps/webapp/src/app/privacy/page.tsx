@@ -21,7 +21,7 @@ export default function ConfidentialitePage() {
         <h1 style={{ fontSize: 28, fontWeight: 700, marginTop: 24, marginBottom: 8, letterSpacing: -0.5 }}>
           Politique de confidentialité
         </h1>
-        <p style={{ fontSize: 13, color: 'var(--ae-text-muted)', marginBottom: 40 }}>Dernière mise à jour : juin 2025</p>
+        <p style={{ fontSize: 13, color: 'var(--ae-text-muted)', marginBottom: 40 }}>Dernière mise à jour : novembre 2026</p>
 
         <section style={{ marginBottom: 36 }}>
           <h2 style={{ fontSize: 18, fontWeight: 600, marginBottom: 12 }}>1. Responsable du traitement</h2>

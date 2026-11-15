@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
 import { createClient } from '@/lib/supabase/client';
 
@@ -26,6 +26,28 @@ export default function ForgotPasswordPage() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [sent, setSent] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [captchaToken, setCaptchaToken] = useState<string | null>(null);
+  const turnstileRef = useRef<HTMLDivElement>(null);
+  const widgetId = useRef<string | null>(null);
+
+  useEffect(() => {
+    const render = () => {
+      if (!turnstileRef.current || !(window as any).turnstile || widgetId.current) return;
+      widgetId.current = (window as any).turnstile.render(turnstileRef.current, {
+        sitekey: process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY,
+        size: 'invisible',
+        callback: (token: string) => setCaptchaToken(token),
+        'error-callback': () => setCaptchaToken(null),
+        'expired-callback': () => setCaptchaToken(null),
+      });
+    };
+    if ((window as any).turnstile) { render(); return; }
+    const script = document.createElement('script');
+    script.src = 'https://challenges.cloudflare.com/turnstile/v0/api.js';
+    script.async = true;
+    script.onload = render;
+    document.head.appendChild(script);
+  }, []);
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -35,11 +57,14 @@ export default function ForgotPasswordPage() {
     const supabase = createClient();
     const { error } = await supabase.auth.resetPasswordForEmail(email, {
       redirectTo: `${window.location.origin}/auth/reset-password`,
-    });
+      captchaToken: captchaToken ?? undefined,
+    } as any);
 
     if (error) {
       setError(error.message);
       setIsSubmitting(false);
+      if (widgetId.current) (window as any).turnstile?.reset(widgetId.current);
+      setCaptchaToken(null);
       return;
     }
 
@@ -120,18 +145,20 @@ export default function ForgotPasswordPage() {
                 </div>
               )}
 
+              <div ref={turnstileRef} style={{ display: 'none' }} />
+
               <button
                 type="submit"
-                disabled={isSubmitting}
+                disabled={isSubmitting || !captchaToken}
                 style={{
                   width: '100%', padding: '12px 0',
-                  background: isSubmitting ? 'var(--ae-blue-border-strong)' : 'var(--ae-primary-bg)',
+                  background: (isSubmitting || !captchaToken) ? 'var(--ae-blue-border-strong)' : 'var(--ae-primary-bg)',
                   color: 'white', fontSize: 15, fontWeight: 600,
                   border: 'none', borderRadius: 9,
-                  cursor: isSubmitting ? 'not-allowed' : 'pointer',
+                  cursor: (isSubmitting || !captchaToken) ? 'not-allowed' : 'pointer',
                 }}
               >
-                {isSubmitting ? 'Envoi...' : 'Envoyer le lien'}
+                {isSubmitting ? 'Envoi...' : !captchaToken ? 'Vérification…' : 'Envoyer le lien'}
               </button>
             </form>
 
@@ -146,4 +173,3 @@ export default function ForgotPasswordPage() {
     </main>
   );
 }
-
