@@ -52,7 +52,7 @@ export async function listSites() {
     const api = await buildApi();
     return api.listSites();
   } catch (error) {
-    throw new Error(`failed to list sites: ${getExceptionMessage(error, true)}`);
+    throw new Error(`Impossible de récupérer les sites : ${getExceptionMessage(error, true)}`);
   }
 }
 
@@ -61,7 +61,7 @@ export async function listLinks() {
     const api = await buildApi();
     return api.listLinks();
   } catch (error) {
-    throw new Error(`failed to list links: ${getExceptionMessage(error, true)}`);
+    throw new Error(`Impossible de récupérer les alertes : ${getExceptionMessage(error, true)}`);
   }
 }
 
@@ -79,7 +79,7 @@ export async function listJobs(formData: FormData) {
     };
     return api.listJobs(params);
   } catch (error) {
-    throw new Error(`failed to list jobs: ${getExceptionMessage(error, true)}`);
+    throw new Error(`Impossible de récupérer les offres : ${getExceptionMessage(error, true)}`);
   }
 }
 
@@ -117,7 +117,7 @@ export async function updateJobLabels(formData: FormData) {
     const api = await buildApi();
     await api.updateJobLabels({ jobId, labels: labels as JobLabel[] });
   } catch (error) {
-    throw new Error(`failed to update job labels: ${getExceptionMessage(error, true)}`);
+    throw new Error(`Impossible de mettre à jour les labels : ${getExceptionMessage(error, true)}`);
   }
 }
 
@@ -297,7 +297,7 @@ export async function deleteLink(linkId: number) {
     await api.deleteLink(linkId);
     revalidatePath('/links');
   } catch (error) {
-    throw new Error(`failed to delete link: ${getExceptionMessage(error, true)}`);
+    throw new Error(`Impossible de supprimer l'alerte : ${getExceptionMessage(error, true)}`);
   }
 }
 
@@ -306,7 +306,7 @@ export async function getProfile() {
     const api = await buildApi();
     return await api.getProfile();
   } catch (error) {
-    throw new Error(`failed to get profile: ${getExceptionMessage(error, true)}`);
+    throw new Error(`Impossible de récupérer le profil : ${getExceptionMessage(error, true)}`);
   }
 }
 
@@ -339,7 +339,7 @@ export async function getCompanyBlacklist(): Promise<string[]> {
     const config = await api.getAdvancedMatchingConfig();
     return config?.blacklisted_companies ?? [];
   } catch (error) {
-    throw new Error(`failed to get company blacklist: ${getExceptionMessage(error, true)}`);
+    throw new Error(`Impossible de récupérer la liste noire : ${getExceptionMessage(error, true)}`);
   }
 }
 

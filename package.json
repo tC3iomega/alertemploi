@@ -8,7 +8,7 @@
     "debug:edge": "npx supabase functions serve --inspect-mode run",
     "gitPreCommit": "npx lint-staged --relative",
     "gitCommitMessage": "npx commitlint",
-    "gitPrePush": "npx nx run-many -t typecheck --exclude=@first2apply/backend",
+    "gitPrePush": "npx nx run-many -t typecheck --exclude=@alertemploi/backend",
     "dev": "npx nx run-many -t dev",
     "build": "npx nx run-many -t build",
     "typecheck": "npx nx run-many -t typecheck",
