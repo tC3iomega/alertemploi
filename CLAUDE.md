@@ -211,13 +211,13 @@ cancelled without affecting access.
 - **MailerSend**: domain verified + paid plan done by founder, but no signup has happened since — the
   welcome email has **not** been observed succeeding yet. Check `send-welcome-email` logs on the next signup.
 - **Company blacklist** exclusion not yet observed on a real scan (code path deployed, `cron-scan` works).
-- **Auth hardening** (not done): no CAPTCHA on signup/login (needs Turnstile/hCaptcha keys + widget in
-  `auth/{register,login}/page.tsx` *before* enabling it in Auth config), `password_min_length: 6`,
-  `security_update_password_require_reauthentication: false`.
-- **Local checks**: this repo has been deployed without `pnpm typecheck`/lint/Husky actually running
-  (no `node_modules` on the machine used) — Vercel's build is the only type check the webapp got.
+- **Auth hardening** (partial): Cloudflare Turnstile (invisible) déployé sur register, login, forgot-password
+  (2026-11-15). Reste à faire dans Supabase Dashboard → Authentication :
+  `password_min_length` → 8 (actuellement 6), `security_update_password_require_reauthentication` → true.
+- **Local checks**: `pnpm typecheck` confirmé sans erreur sur webapp + core (2026-11-15) via `npx tsc --noEmit`.
+  Husky/lint-staged ne tourne pas sur le serveur (pnpm non dans PATH système) — Vercel build reste le garde-fou.
 - Unused Vercel env vars: `NEXT_PUBLIC_STRIPE_MONTHLY_PRICE_ID`, `NEXT_PUBLIC_STRIPE_YEARLY_PRICE_ID`,
-  `NEXT_PUBLIC_STRIPE_PORTAL_LINK` (not referenced in code).
+  `NEXT_PUBLIC_STRIPE_PORTAL_LINK` (not referenced in code — à supprimer manuellement dans Vercel Settings).
 - `scan_queue` table: unused, locked down (RLS, no policies), deliberately left in place.
 
 ### Operational notes
