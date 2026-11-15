@@ -21,7 +21,7 @@ export function SdkProvider({
 }
 
 /**
- * Hook to access the First2Apply SDK from any component.
+ * Hook to access the Alertemploi SDK from any component.
  * Must be used within a SdkProvider.
  */
 export function useSdk(): AlertemploiApiSdk {

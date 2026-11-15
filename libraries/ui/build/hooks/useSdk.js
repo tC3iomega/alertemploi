@@ -15,7 +15,7 @@ function SdkProvider({ sdk, children, }) {
     return (0, jsx_runtime_1.jsx)(SdkContext.Provider, { value: sdk, children: children });
 }
 /**
- * Hook to access the First2Apply SDK from any component.
+ * Hook to access the Alertemploi SDK from any component.
  * Must be used within a SdkProvider.
  */
 function useSdk() {

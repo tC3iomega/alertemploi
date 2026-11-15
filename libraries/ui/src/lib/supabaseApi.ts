@@ -20,7 +20,7 @@ import * as luxon from "luxon"
 /**
  * Class used to interact with our Supabase API.
  */
-export class F2aSupabaseApi {
+export class AlertemploiSupabaseApi {
   constructor(private _supabase: SupabaseClient<DbSchema>) {}
 
   /**

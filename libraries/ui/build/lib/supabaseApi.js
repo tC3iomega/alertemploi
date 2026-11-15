@@ -33,13 +33,13 @@ var __importStar = (this && this.__importStar) || (function () {
     };
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.F2aSupabaseApi = void 0;
+exports.AlertemploiSupabaseApi = void 0;
 const exponential_backoff_1 = require("exponential-backoff");
 const luxon = __importStar(require("luxon"));
 /**
  * Class used to interact with our Supabase API.
  */
-class F2aSupabaseApi {
+class AlertemploiSupabaseApi {
     constructor(_supabase) {
         this._supabase = _supabase;
     }
@@ -425,5 +425,5 @@ class F2aSupabaseApi {
             .eq("id", linkId));
     }
 }
-exports.F2aSupabaseApi = F2aSupabaseApi;
+exports.AlertemploiSupabaseApi = AlertemploiSupabaseApi;
 //# sourceMappingURL=supabaseApi.js.map

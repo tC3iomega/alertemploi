@@ -40,7 +40,7 @@ export interface ListJobsParams {
 }
 
 /**
- * First2Apply API SDK interface.
+ * Alertemploi API SDK interface.
  *
  * This interface defines all API methods that can be implemented by different
  * platforms (Electron IPC for desktop, server actions for webapp).

@@ -11,7 +11,7 @@ const useToast_1 = require("./useToast");
 function useError() {
     const { toast } = (0, useToast_1.useToast)();
     const [error, setError] = (0, react_1.useState)(null);
-    const handleError = ({ error, title = "Oops, something went wrong!", silent = false, }) => {
+    const handleError = ({ error, title = "Une erreur est survenue", silent = false, }) => {
         console.error((0, core_1.getExceptionMessage)(error));
         if (!silent) {
             toast({

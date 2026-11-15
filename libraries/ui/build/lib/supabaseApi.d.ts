@@ -3,7 +3,7 @@ import { SupabaseClient, User } from "@supabase/supabase-js";
 /**
  * Class used to interact with our Supabase API.
  */
-export declare class F2aSupabaseApi {
+export declare class AlertemploiSupabaseApi {
     private _supabase;
     constructor(_supabase: SupabaseClient<DbSchema>);
     /**
