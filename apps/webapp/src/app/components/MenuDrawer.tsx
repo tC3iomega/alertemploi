@@ -33,7 +33,7 @@ export function MenuDrawer({ isOpen, onClose }: { isOpen: boolean; onClose: () =
       if (error instanceof Error && error.message === 'NEXT_REDIRECT') {
         throw error;
       }
-      handleError({ error, title: 'Failed to logout' });
+      handleError({ error, title: 'Impossible de se déconnecter' });
     }
   };
 

@@ -16,7 +16,7 @@ export function useError() {
 
   const handleError = ({
     error,
-    title = "Oops, something went wrong!",
+    title = "Une erreur est survenue",
     silent = false,
   }: {
     error: unknown

@@ -62,7 +62,7 @@ export function ListJobsFeed({ listJobsResult, status, batchSize, hasLinks = fal
         nextPageToken: jobsResult.nextPageToken,
       });
     } catch (error) {
-      handleError({ error, title: 'Failed to load more jobs' });
+      handleError({ error, title: "Impossible de charger plus d'offres" });
     }
   };
 
@@ -90,18 +90,18 @@ export function ListJobsFeed({ listJobsResult, status, batchSize, hasLinks = fal
   const onArchive = async (job: Job) => {
     try {
       await updateListedJobStatus(job.id, 'archived');
-      toast({ title: 'Offre archivée', description: `Job ${job.title} has been archived.`, variant: 'success' });
+      toast({ title: 'Offre archivée', variant: 'success' });
     } catch (error) {
-      handleError({ error, title: 'Failed to archive job' });
+      handleError({ error, title: "Impossible d'archiver l'offre" });
     }
   };
 
   const onDelete = async (job: Job) => {
     try {
       await updateListedJobStatus(job.id, 'deleted');
-      toast({ title: 'Offre supprimée', description: `Job ${job.title} has been deleted.`, variant: 'success' });
+      toast({ title: 'Offre supprimée', variant: 'success' });
     } catch (error) {
-      handleError({ error, title: 'Failed to delete job' });
+      handleError({ error, title: "Impossible de supprimer l'offre" });
     }
   };
 
