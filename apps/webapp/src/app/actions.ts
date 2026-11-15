@@ -86,12 +86,12 @@ export async function listJobs(formData: FormData) {
 export async function getJobById(formData: FormData) {
   try {
     const jobId = Number(formData.get('jobId'));
-    if (isNaN(jobId)) throw new Error('invalid job id');
+    if (isNaN(jobId)) throw new Error('Identifiant offre invalide');
 
     const api = await buildApi();
     return api.getJob(jobId);
   } catch (error) {
-    throw new Error(`failed to get job by id: ${getExceptionMessage(error, true)}`);
+    throw new Error(`Impossible de récupérer l'offre : ${getExceptionMessage(error, true)}`);
   }
 }
 
@@ -99,12 +99,12 @@ export async function updateJobStatus(formData: FormData) {
   try {
     const jobId = Number(formData.get('jobId'));
     const status = formData.get('status') as JobStatus;
-    if (isNaN(jobId)) throw new Error('invalid job id');
+    if (isNaN(jobId)) throw new Error('Identifiant offre invalide');
 
     const api = await buildApi();
     await api.updateJobStatus({ jobId, status });
   } catch (error) {
-    throw new Error(`failed to update job status: ${getExceptionMessage(error, true)}`);
+    throw new Error(`Impossible de mettre à jour le statut : ${getExceptionMessage(error, true)}`);
   }
 }
 
@@ -112,7 +112,7 @@ export async function updateJobLabels(formData: FormData) {
   try {
     const jobId = Number(formData.get('jobId'));
     const labels = (formData.get('labels') as string)?.split(',').map((label) => label.trim()) || [];
-    if (isNaN(jobId)) throw new Error('invalid job id');
+    if (isNaN(jobId)) throw new Error('Identifiant offre invalide');
 
     const api = await buildApi();
     await api.updateJobLabels({ jobId, labels: labels as JobLabel[] });
@@ -125,7 +125,7 @@ export async function createLink(formData: FormData) {
   try {
     const url = formData.get('url') as string;
     const title = formData.get('title') as string;
-    if (!url) throw new Error('URL is required');
+    if (!url) throw new Error("L'URL est requise");
 
     const api = await buildApi();
     const link = await api.createLink({ title: title || url, url, html: '', webPageRuntimeData: {} as any, force: false });
@@ -159,7 +159,7 @@ export async function scanLinks() {
     revalidatePath('/jobs/list/new');
     return data;
   } catch (error) {
-    throw new Error(`failed to scan links: ${getExceptionMessage(error, true)}`);
+    throw new Error(`Échec du scan : ${getExceptionMessage(error, true)}`);
   }
 }
 export async function createCheckoutSession(formData: FormData) {
@@ -314,7 +314,7 @@ export async function createPortalSession() {
   const api = await buildApi();
   const profile = await api.getProfile();
   if (!profile?.stripe_customer_id) {
-    throw new Error('No Stripe customer found for this account');
+    throw new Error('Aucun compte Stripe associé à ce profil');
   }
 
   const res = await fetch('https://api.stripe.com/v1/billing_portal/sessions', {
