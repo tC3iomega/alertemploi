@@ -53,10 +53,23 @@ Deno.serve(async (req) => {
     const links = (await db('links?select=user_id')) as { user_id: string }[];
     const activeLinks = links.filter((l) => activeIds.includes(l.user_id));
 
-    const recentJobs = (await db(`jobs?select=id&created_at=gte.${since}`)) as unknown[];
+    const recentJobs = activeIds.length > 0
+      ? (await db(`jobs?select=id&created_at=gte.${since}&user_id=in.(${activeIds.join(',')})`)) as unknown[]
+      : [];
+
+    // Last job ever inserted for any active user (to detect real scan outage vs. normal "0 new")
+    const lastJobRows = activeIds.length > 0
+      ? (await db(`jobs?select=created_at&user_id=in.(${activeIds.join(',')})&order=created_at.desc&limit=1`)) as { created_at: string }[]
+      : [];
+    const lastJobAt = lastJobRows[0]?.created_at ? new Date(lastJobRows[0].created_at) : null;
+    const hoursSinceLastJob = lastJobAt ? (Date.now() - lastJobAt.getTime()) / 3600000 : Infinity;
+
+    const lastJobStr = lastJobAt
+      ? `dernière offre il y a ${Math.round(hoursSinceLastJob)}h`
+      : 'aucune offre en base';
 
     facts.push(`${activeIds.length} compte(s) actif(s), ${activeLinks.length} alerte(s) scannée(s)`);
-    facts.push(`${recentJobs.length} offre(s) trouvée(s) en 24h`);
+    facts.push(`${recentJobs.length} offre(s) nouvelles en 24h (${lastJobStr})`);
 
     // --- what MailerSend actually did -----------------------------------------------------
     const domains = (await mailerSend('domains')) as { status: number; body: Record<string, unknown> };
@@ -90,7 +103,11 @@ Deno.serve(async (req) => {
       problems.push(`${recentJobs.length} offres trouvées mais aucun email envoyé`);
     }
     if (activeLinks.length > 0 && recentJobs.length === 0) {
-      problems.push('Aucune offre trouvée en 24h alors que des alertes sont actives (scan en panne ?)');
+      if (hoursSinceLastJob > 72) {
+        // No new job in 3 days despite active links → real outage
+        problems.push(`Aucune offre insérée depuis ${Math.round(hoursSinceLastJob)}h avec ${activeLinks.length} alerte(s) active(s) — scan en panne ?`);
+      }
+      // If < 72h: normal (JobSpy returned duplicates only). Already reported in facts.
     }
 
     verdict = problems.length === 0 ? 'ok' : 'alert';
@@ -113,7 +130,7 @@ Deno.serve(async (req) => {
   }).catch(() => {});
 
   // --- report by email --------------------------------------------------------------------
-  const subject = verdict === 'ok' ? '[alertemploi] Tout va bien' : '[alertemploi] ⚠️ Les alertes ne partent pas';
+  const subject = verdict === 'ok' ? '[alertemploi] ✅ Tout va bien' : '[alertemploi] ⚠️ Problème détecté';
   const lines = [
     verdict === 'ok' ? 'Les emails d\'alerte partent normalement.' : 'PROBLÈME DÉTECTÉ :',
     ...problems.map((p) => `- ${p}`),
