@@ -1,5 +1,3 @@
-import { parseEnv } from './env.ts';
-
 import { getExceptionMessage } from '@alertemploi/core';
 import { SupabaseClient } from '@supabase/supabasefork';
 import { AzureOpenAI } from 'openai';
@@ -14,7 +12,8 @@ type OpenAIResponse = {
   };
 };
 
-const env = parseEnv();
+const AZURE_ENDPOINT = Deno.env.get('AZURE_AI_FOUNDRY_ENDPOINT') ?? '';
+const AZURE_API_KEY = Deno.env.get('AZURE_AI_FOUNDRY_API_KEY') ?? '';
 
 // o3* classes seems to have been superseded by gpt-5* models.
 const SUPPORTED_MODELS = ['gpt-5.5', 'gpt-5.4', 'gpt-5-mini'] as const;
@@ -33,18 +32,13 @@ const COST_PER_MODEL: Record<SupportedModel, { input: number; output: number }> 
   // 'o3-mini': { input: 1.1, output: 4.4 },
 };
 
-export type AzureFoundryConfig = {
-  apiEndpoint: string;
-  apiKey: string;
-};
-
 /**
  * Build a new Azure OpenAI client.
  */
 export function buildOpenAiClient({ modelName }: { modelName?: SupportedModel }) {
   const openAi = new AzureOpenAI({
-    apiKey: env.azureFoundryConfig.apiKey,
-    endpoint: env.azureFoundryConfig.apiEndpoint,
+    apiKey: AZURE_API_KEY,
+    endpoint: AZURE_ENDPOINT,
     apiVersion: '2025-04-01-preview',
   });
 
