@@ -123,8 +123,11 @@ export async function parseApecJobs({
 
   const response = await fetch(apiUrl, {
     headers: {
-      Accept: 'application/json',
-      'User-Agent': 'Mozilla/5.0 (compatible; alertemploi/1.0)',
+      'Accept': 'application/json, text/plain, */*',
+      'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130.0.0.0 Safari/537.36',
+      'Referer': 'https://www.apec.fr/candidat/recherche-emploi.html/emploi',
+      'Origin': 'https://www.apec.fr',
+      'X-Requested-With': 'XMLHttpRequest',
     },
   });
 

@@ -58,10 +58,11 @@ export function parseCadremploiJobs({
   }
 
   // Last fallback: any element containing a link to an offer
+  // Note: :has() is not supported by deno-dom's nwsapi — use manual filter instead
   if (!jobElements.length) {
-    jobElements = Array.from(
-      document.querySelectorAll('li:has(a[href*="/offres/detail/"])')
-    ) as Element[];
+    jobElements = (Array.from(document.querySelectorAll('li')) as Element[]).filter(
+      (el) => el.querySelector('a[href*="/offres/detail/"]') !== null
+    );
   }
 
   if (!jobElements.length) {

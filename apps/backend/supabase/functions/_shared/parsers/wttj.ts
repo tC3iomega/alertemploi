@@ -179,8 +179,9 @@ function parseWTTJJobsFromDom({
   });
 
   if (!uniqueLinks.length) {
-    logger.error('WTTJ: no job links found in DOM (page may not have loaded yet)');
-    return { jobs: [], listFound: false, elementsCount: 0 };
+    // Next.js App Router: jobs are loaded client-side, but URL slugs may appear
+    // in inline script tags (self.__next_f flight data)
+    return parseWTTJJobsFromFlightData({ siteId, document, logger });
   }
 
   logger.info(`WTTJ DOM: found ${uniqueLinks.length} unique job links`);
@@ -224,4 +225,51 @@ function parseWTTJJobsFromDom({
 
   logger.info(`WTTJ DOM: mapped ${jobs.length} valid jobs`);
   return { jobs, listFound: jobs.length > 0, elementsCount: uniqueLinks.length };
+}
+
+function parseWTTJJobsFromFlightData({
+  siteId,
+  document,
+  logger,
+}: {
+  siteId: number;
+  document: ReturnType<DOMParser['parseFromString']>;
+  logger: ILogger;
+}): JobSiteParseResult {
+  // Next.js App Router pushes RSC payload via self.__next_f.push([...]) scripts.
+  // Job offer URLs (/fr/companies/{co}/jobs/{slug}) appear as plain strings inside
+  // these chunks even before hydration, so a regex pass is enough.
+  const scripts = Array.from(document!.querySelectorAll('script')) as import('deno-dom-wasm').Element[];
+  const jobUrlRe = /\/fr\/companies\/([a-z0-9_-]+)\/jobs\/([a-z0-9_-]+)/g;
+  const seen = new Set<string>();
+  const jobs: ParsedJob[] = [];
+
+  for (const script of scripts) {
+    const text = script.textContent ?? '';
+    if (!text.includes('__next_f') && !text.includes('/fr/companies/')) continue;
+    let m: RegExpExecArray | null;
+    while ((m = jobUrlRe.exec(text)) !== null) {
+      const [path, companySlug, jobSlug] = m;
+      if (seen.has(path)) continue;
+      seen.add(path);
+      jobs.push({
+        siteId,
+        externalId: jobSlug,
+        externalUrl: `https://www.welcometothejungle.com${path}`,
+        title: jobSlug.replace(/-/g, ' '),
+        companyName: companySlug.replace(/-/g, ' ').replace(/\b\w/g, (c) => c.toUpperCase()),
+        tags: [],
+        labels: [],
+      });
+    }
+    jobUrlRe.lastIndex = 0;
+  }
+
+  if (jobs.length > 0) {
+    logger.info(`WTTJ flight: found ${jobs.length} jobs from Next.js script data`);
+    return { jobs, listFound: true, elementsCount: jobs.length };
+  }
+
+  logger.error('WTTJ: no jobs found — page needs Browserless to load client-side content');
+  return { jobs: [], listFound: false, elementsCount: 0 };
 }
