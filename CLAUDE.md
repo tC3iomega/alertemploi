@@ -174,6 +174,10 @@ other subscription are ignored — otherwise cancelling a stale duplicate would 
 - Custom parsers: France Travail, WTTJ, HelloWork, Cadremploi, APEC
 - Browserless: JS-heavy job board pages
 - France Travail API is blocked by SonicWall at Quentin's workplace — works fine from home/Mac Mini
+- **SMTP MailerSend** (2026-11-17) : Supabase Auth configuré avec SMTP custom `smtp.mailersend.net:587`
+  (credentials dans Supabase Dashboard → Authentication → SMTP Settings, ne pas stocker ici) —
+  fix pour l'erreur `535 Authentication failed` du relay Supabase natif.
+  Le relay natif Supabase échouait pour les nouveaux inscrits (pbon92, toffogris) avant ce fix.
 
 ### Stripe
 - Use `window.location.href` for Stripe Checkout redirects (Safari blocks `window.open()`)
@@ -207,9 +211,19 @@ Live end-to-end verified 2026-09-17 with the founder's own account: Checkout →
 updated (Pro, trial), `cron-scan` inserted 50 real jobs (LinkedIn + Indeed), duplicate subscription
 cancelled without affecting access.
 
+### Funnel test (2026-11-17) — résultats
+Testé end-to-end avec compte `+test2` (supprimé après test) :
+- **Email confirmation** : reçu via MailerSend SMTP ✅ (fix SMTP appliqué ce jour)
+- **Connexion** : OK ✅
+- **Création d'alerte** : OK ✅
+- **Scan immédiat** (`after()`) : 151 offres France Travail insérées en ~6 secondes ✅
+- **Affichage des offres** : liste bien chargée après reload ✅
+- **Page /upgrade** : plans affichés, toggle mensuel/annuel, essai 7j Pro 0,99€ ✅
+- **Stripe Checkout** : redirection OK, "Essayez alertemploi Basic — 7 jours gratuits, puis 41,90€/an" ✅
+  (essai depuis signup bien relayé via `subscription_data[trial_end]`)
+- **welcome email** : `send-welcome-email` → 200 at 21:45:03 UTC ✅ (confirmé dans les logs)
+
 ### Still open
-- **MailerSend**: domain verified + paid plan done by founder, but no signup has happened since — the
-  welcome email has **not** been observed succeeding yet. Check `send-welcome-email` logs on the next signup.
 - **Company blacklist** exclusion not yet observed on a real scan (code path deployed, `cron-scan` works).
 - **Auth hardening** (partial): Cloudflare Turnstile (invisible) déployé sur register, login, forgot-password
   (2026-11-15). Reste à faire dans Supabase Dashboard → Authentication :
