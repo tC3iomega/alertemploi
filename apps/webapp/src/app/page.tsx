@@ -52,8 +52,8 @@ const FEATURES = [
     ),
   },
   {
-    title: 'Aucune offre manquée',
-    desc: 'Les offres publiées le matin sont détectées avant même votre réveil. Postulez en premier.',
+    title: 'Postulez dans les 2 premières heures',
+    desc: 'Les recruteurs lisent rarement au-delà des 50 premiers CVs. Être parmi les premiers candidats n\'est pas un avantage marginal — c\'est décisif.',
     icon: (
       <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
         <circle cx="10" cy="10" r="8" stroke="var(--ae-primary)" strokeWidth="1.5" />
@@ -186,10 +186,12 @@ export default function LandingPage() {
 
         <p style={{
           fontSize: 18, color: 'var(--ae-text-muted)', lineHeight: 1.65,
-          maxWidth: 540, margin: '0 auto 28px',
+          maxWidth: 560, margin: '0 auto 28px',
         }}>
-          Alertemploi surveille France Travail, APEC, LinkedIn, Indeed et d'autres en continu.
-          Recevez un email dès qu'une offre correspond à vos critères.
+          Une offre CDI reçoit en moyenne 200 candidatures en 48h.{' '}
+          Les recruteurs s'arrêtent souvent aux 50 premiers CVs.{' '}
+          Alertemploi scanne 7 job boards toutes les 30 minutes —{' '}
+          <strong style={{ color: 'var(--ae-text)' }}>vous postulez avant les autres.</strong>
         </p>
 
         <div style={{ display: 'flex', gap: 20, justifyContent: 'center', flexWrap: 'wrap', marginBottom: 36 }}>
@@ -206,6 +208,25 @@ export default function LandingPage() {
           <div style={{ display: 'flex', alignItems: 'center', gap: 7 }}>
             <span style={{ fontSize: 18, fontWeight: 700, color: 'var(--ae-primary)' }}>0€</span>
             <span style={{ fontSize: 13, color: 'var(--ae-text-muted)' }}>pour démarrer</span>
+          </div>
+        </div>
+
+        <div style={{
+          display: 'inline-flex', alignItems: 'flex-start', gap: 12,
+          background: 'var(--ae-surface)', border: '0.5px solid var(--ae-border)',
+          borderRadius: 12, padding: '14px 20px', maxWidth: 520,
+          textAlign: 'left', marginBottom: 28,
+        }}>
+          <span style={{ fontSize: 20, flexShrink: 0, marginTop: 1 }}>⏱</span>
+          <div>
+            <div style={{ fontSize: 13, fontWeight: 600, color: 'var(--ae-text)', marginBottom: 4 }}>
+              Pourquoi arriver en premier change tout
+            </div>
+            <div style={{ fontSize: 12.5, color: 'var(--ae-text-muted)', lineHeight: 1.65 }}>
+              Les recruteurs traitent les candidatures dans l'ordre d'arrivée. Passé un certain seuil,
+              beaucoup ne lisent plus. Être dans les <strong>2 premières heures</strong> après la publication
+              d'une offre est un avantage concret — et c'est exactement ce qu'Alertemploi vous donne.
+            </div>
           </div>
         </div>
 
@@ -256,8 +277,8 @@ export default function LandingPage() {
             },
             {
               step: '3',
-              title: 'Recevez les offres',
-              desc: 'Toutes les 30 minutes, on vérifie si de nouvelles offres correspondent. Vous recevez un email dès qu\'il y en a.',
+              title: 'Postulez en premier',
+              desc: 'Toutes les 30 minutes, on vérifie. Dès qu\'une offre apparaît, vous recevez un email — avant que la plupart des candidats aient ouvert le site.',
             },
           ].map((item) => (
             <div key={item.step} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 14 }}>
@@ -493,10 +514,10 @@ export default function LandingPage() {
       {/* CTA FINAL */}
       <section style={{ background: 'var(--ae-primary-bg)', padding: '80px 48px', textAlign: 'center' }}>
         <h2 style={{ fontSize: 32, fontWeight: 700, color: 'white', marginBottom: 14, letterSpacing: -0.5 }}>
-          Commencez votre recherche maintenant
+          La prochaine offre qui vous correspond est peut-être déjà en ligne
         </h2>
         <p style={{ fontSize: 16, color: 'rgba(255,255,255,0.92)', marginBottom: 32 }}>
-          Rejoignez les candidats qui reçoivent les offres en premier.
+          Pendant que vous lisez ceci, des candidats postulent. Soyez dans les premiers.
         </p>
         <Link href={ctaHref} style={{
           display: 'inline-block', background: 'white', color: '#2563EB',
