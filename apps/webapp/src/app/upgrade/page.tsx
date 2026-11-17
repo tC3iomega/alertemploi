@@ -53,11 +53,7 @@ export default function UpgradePage() {
     <div style={{ minHeight: '100vh', background: 'var(--ae-bg)', fontFamily: 'inherit' }}>
 
       {/* Nav */}
-      <nav style={{
-        display: 'flex', alignItems: 'center', justifyContent: 'space-between',
-        padding: '14px 48px', borderBottom: '0.5px solid var(--ae-border)',
-        background: 'var(--ae-bg)',
-      }}>
+      <nav className={styles.nav}>
         <Link href="/" style={{ textDecoration: 'none' }}>
           <Logo />
         </Link>
