@@ -93,8 +93,8 @@ Git hooks (Husky, already wired — do not bypass with `--no-verify`):
 
 ## Key Features (Implemented)
 
-- 5 French job board parsers: France Travail, WTTJ, HelloWork, Cadremploi, APEC
-- LinkedIn & Indeed via JobSpy worker (Fly.io)
+- 7 French job board parsers: France Travail, WTTJ, HelloWork, Cadremploi, APEC, Meteojob (HTML/Angular SSR), Google Jobs (JobSpy)
+- LinkedIn & Indeed via JobSpy worker (Fly.io); Google Jobs also via JobSpy (site='google')
 - Cron auto-scan every 30 minutes
 - Google OAuth + email auth (Supabase Auth)
 - Email templates: welcome, newJobAlert, trialReminder (J-3 / J-0)
@@ -221,6 +221,9 @@ cancelled without affecting access.
 - `scan_queue` table: unused, locked down (RLS, no policies), deliberately left in place.
 - **Parsers/Browserless** (2026-11-17): `cron-scan` + `scan-urls` redéployées avec les fixes Cadremploi,
   APEC et WTTJ Browserless. Vérifier les logs au prochain scan (30 min) pour confirmer le bon fonctionnement.
+- **Meteojob + Google Jobs** (2026-11-17): 2 nouveaux job boards ajoutés. Sites DB: id=15 (meteojob),
+  id=16 (google). `cron-scan` + `scan-urls` redéployées. Meteojob: parser HTML Angular SSR. Google Jobs:
+  route via JobSpy (site='google'), URL google.fr/search?q=...&ibp=htl;jobs. À valider au prochain scan.
 
 ### Bundle optimizations (2026-11-17)
 - `sideEffects: false` dans `@alertemploi/ui/package.json`
