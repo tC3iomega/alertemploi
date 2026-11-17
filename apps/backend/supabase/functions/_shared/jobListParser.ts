@@ -15,6 +15,7 @@ import { parseWTTJJobs } from './parsers/wttj.ts';
 import { parseHelloWorkJobs } from './parsers/hellowork.ts';
 import { parseCadremploiJobs } from './parsers/cadremploi.ts';
 import { parseApecJobs } from './parsers/apec.ts';
+import { parseMeteojobJobs } from './parsers/meteojob.ts';
 import { parseHiringCafeJobs } from './parsers/hiringCafe.ts';
 import { parseLinkedInJobs } from './parsers/linkedin.ts';
 import { JobSiteParseResult, ParsedJob } from './parsers/parserTypes.ts';
@@ -248,6 +249,11 @@ async function parseSiteJobsList({
       return parseApecJobs({ siteId: site.id, url, ...context });
     case SiteProvider.hellowork:
       return parseHelloWorkJobs({ siteId: site.id, html, ...context });
+    case SiteProvider.meteojob:
+      return parseMeteojobJobs({ siteId: site.id, html });
+    case SiteProvider.google:
+      // Google Jobs uses the JobSpy worker; this code path is never reached
+      return { jobs: [], listFound: false, elementsCount: 0 };
     case SiteProvider.custom:
       return parseCustomJobs({ siteId: site.id, html, url, ...context });
   }

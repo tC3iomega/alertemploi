@@ -33,7 +33,7 @@ export async function fetchLinkContent({
   env: AlertemploiBackendEnv;
   logger: ILogger;
 }): Promise<FetchLinkContentResult> {
-  const needsJobSpy = ['linkedin', 'indeed'].includes(site.provider ?? '');
+  const needsJobSpy = ['linkedin', 'indeed', 'google'].includes(site.provider ?? '');
   if (needsJobSpy && env.jobspyWorkerUrl && env.jobspyWorkerSecret) {
     logger.info(`fetching via JobSpy worker: ${link.url}`);
     const siteProvider = site.provider ?? 'indeed';
@@ -67,7 +67,7 @@ export async function fetchLinkContent({
     return { jobs };
   }
 
-  const needsBrowser = ['hellowork', 'wttj', 'cadremploi'].includes(site.provider ?? '');
+  const needsBrowser = ['hellowork', 'wttj', 'cadremploi', 'meteojob'].includes(site.provider ?? '');
   let htmlContent = existingHtml ?? '';
   if ((!htmlContent || htmlContent.trim().length === 0) && needsBrowser) {
     // Re-validated right before the actual fetch (not just at link-creation time in

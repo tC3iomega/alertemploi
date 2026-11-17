@@ -211,6 +211,60 @@ export const BOARDS: Board[] = [
       },
     ],
   },
+  {
+    slug: 'meteojob',
+    name: 'Meteojob',
+    shortName: 'Meteojob',
+    searchUrl: 'https://www.meteojob.com/jobs',
+    intro:
+      "Meteojob couvre un large spectre d'offres françaises, des grandes entreprises aux PME régionales. Alertemploi surveille votre recherche et vous envoie les nouvelles offres par email.",
+    steps: [
+      'Faites votre recherche sur meteojob.com avec votre métier et votre ville.',
+      "Affinez avec les filtres : type de contrat, secteur, niveau d'expérience.",
+      "Copiez l'adresse de la page de résultats dans votre navigateur.",
+      'Collez-la dans Alertemploi.',
+    ],
+    native:
+      "Meteojob propose ses propres alertes. L'intérêt d'Alertemploi est de fusionner vos recherches sur Meteojob, France Travail, LinkedIn et les autres dans un seul email, sans multiplier les abonnements.",
+    faq: [
+      {
+        question: 'Meteojob nécessite-t-il un compte pour accéder aux offres ?',
+        answer: 'Non, les résultats de recherche sont publics. Alertemploi lit ces résultats sans accès à votre compte.',
+      },
+      {
+        question: 'Puis-je filtrer par région ou département ?',
+        answer: "Oui : appliquez vos filtres géographiques sur Meteojob, l'URL contiendra ces critères et Alertemploi les respectera.",
+      },
+    ],
+  },
+  {
+    slug: 'google-jobs',
+    name: 'Google Jobs',
+    shortName: 'Google Jobs',
+    searchUrl: 'https://www.google.fr/search?ibp=htl;jobs',
+    intro:
+      "Google Jobs agrège des offres de centaines de sites en un seul endroit. Alertemploi surveille votre recherche Google Jobs et vous alerte par email dès qu'une offre apparaît.",
+    steps: [
+      "Sur Google, tapez votre métier suivi de \"offres d'emploi\" (ex : \"développeur React Paris offres d'emploi\").",
+      "Cliquez sur l'onglet \"Emplois\" dans les résultats.",
+      "Copiez l'adresse de la page (elle contient `ibp=htl;jobs`).",
+      'Collez-la dans Alertemploi.',
+    ],
+    native:
+      "Google Jobs n'envoie pas d'alertes email. C'est l'une des sources les plus larges disponibles, avec des offres de centaines de sites. Alertemploi vous donne donc accès à ce volume sans avoir à revenir manuellement sur Google.",
+    faq: [
+      {
+        question: 'Quels sites sont couverts par Google Jobs ?',
+        answer:
+          "Google Jobs agrège des offres de France Travail, Indeed, HelloWork, Apec, et de centaines d'autres sites. La couverture varie selon la popularité de votre recherche.",
+      },
+      {
+        question: "Comment savoir si l'URL copiée est correcte ?",
+        answer:
+          "L'URL doit contenir `ibp=htl;jobs` et votre recherche dans le paramètre `q`. Alertemploi vous indique si l'URL n'est pas reconnue.",
+      },
+    ],
+  },
 ];
 
 export function getBoard(slug: string): Board | undefined {

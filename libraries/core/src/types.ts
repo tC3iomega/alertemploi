@@ -22,6 +22,8 @@ export enum SiteProvider {
   cadremploi = 'cadremploi',
   hellowork = 'hellowork',
   apec = 'apec',
+  meteojob = 'meteojob',
+  google = 'google',
   custom = 'custom',
 }
 export const JOB_LABELS = {
