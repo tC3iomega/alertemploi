@@ -44,16 +44,20 @@ export default function RegisterPage() {
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [captchaToken, setCaptchaToken] = useState<string | null>(null);
+  const [captchaTimedOut, setCaptchaTimedOut] = useState(false);
   const turnstileRef = useRef<HTMLDivElement>(null);
   const widgetId = useRef<string | null>(null);
 
   useEffect(() => {
+    // After 5s without a token, show a hint for ad-blocker users
+    const timeout = setTimeout(() => setCaptchaTimedOut(true), 5000);
+
     const render = () => {
       if (!turnstileRef.current || !(window as any).turnstile || widgetId.current) return;
       widgetId.current = (window as any).turnstile.render(turnstileRef.current, {
         sitekey: process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY,
         size: 'invisible',
-        callback: (token: string) => setCaptchaToken(token),
+        callback: (token: string) => { clearTimeout(timeout); setCaptchaToken(token); },
         'error-callback': () => setCaptchaToken(null),
         'expired-callback': () => setCaptchaToken(null),
       });
@@ -64,6 +68,8 @@ export default function RegisterPage() {
     script.async = true;
     script.onload = render;
     document.head.appendChild(script);
+
+    return () => clearTimeout(timeout);
   }, []);
 
   async function handleSubmit(e: React.FormEvent) {
@@ -238,8 +244,13 @@ export default function RegisterPage() {
               cursor: (isSubmitting || !captchaToken) ? 'not-allowed' : 'pointer',
             }}
           >
-            {isSubmitting ? 'Création...' : !captchaToken ? 'Vérification…' : 'Créer mon compte'}
+            {isSubmitting ? 'Création...' : !captchaToken ? 'Vérification en cours…' : 'Créer mon compte'}
           </button>
+          {captchaTimedOut && !captchaToken && (
+            <p style={{ fontSize: 12, color: 'var(--ae-text-subtle)', marginTop: 10, textAlign: 'center', lineHeight: 1.5 }}>
+              Le bouton reste inactif ? Désactivez votre bloqueur de publicités et rechargez la page.
+            </p>
+          )}
         </form>
 
         <p style={{ fontSize: 12, color: 'var(--ae-text-subtle)', marginTop: 20, textAlign: 'center', lineHeight: 1.6 }}>

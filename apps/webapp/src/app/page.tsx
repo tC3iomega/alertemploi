@@ -194,11 +194,6 @@ export default function LandingPage() {
 
         <div style={{ display: 'flex', gap: 20, justifyContent: 'center', flexWrap: 'wrap', marginBottom: 36 }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: 7 }}>
-            <span style={{ fontSize: 18, fontWeight: 700, color: 'var(--ae-primary)' }}>1 200+</span>
-            <span style={{ fontSize: 13, color: 'var(--ae-text-muted)' }}>offres détectées ce mois</span>
-          </div>
-          <div style={{ width: 1, background: 'var(--ae-border)', alignSelf: 'stretch' }} />
-          <div style={{ display: 'flex', alignItems: 'center', gap: 7 }}>
             <span style={{ fontSize: 18, fontWeight: 700, color: 'var(--ae-primary)' }}>7</span>
             <span style={{ fontSize: 13, color: 'var(--ae-text-muted)' }}>job boards surveillés</span>
           </div>
@@ -206,6 +201,11 @@ export default function LandingPage() {
           <div style={{ display: 'flex', alignItems: 'center', gap: 7 }}>
             <span style={{ fontSize: 18, fontWeight: 700, color: 'var(--ae-primary)' }}>30 min</span>
             <span style={{ fontSize: 13, color: 'var(--ae-text-muted)' }}>entre chaque scan</span>
+          </div>
+          <div style={{ width: 1, background: 'var(--ae-border)', alignSelf: 'stretch' }} />
+          <div style={{ display: 'flex', alignItems: 'center', gap: 7 }}>
+            <span style={{ fontSize: 18, fontWeight: 700, color: 'var(--ae-primary)' }}>0€</span>
+            <span style={{ fontSize: 13, color: 'var(--ae-text-muted)' }}>pour démarrer</span>
           </div>
         </div>
 
@@ -231,6 +231,53 @@ export default function LandingPage() {
               color: 'var(--ae-text-secondary)', fontWeight: 500,
             }}>{board}</span>
           ))}
+        </div>
+      </section>
+
+      {/* HOW IT WORKS */}
+      <section className={styles.sectionBeige} style={{ textAlign: 'center' }}>
+        <h2 style={{ fontSize: 26, fontWeight: 700, marginBottom: 10, letterSpacing: -0.3 }}>
+          Prêt en 2 minutes
+        </h2>
+        <p style={{ fontSize: 15, color: 'var(--ae-text-muted)', marginBottom: 44 }}>
+          Pas d'extension, pas d'application. Juste une URL.
+        </p>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: 24, maxWidth: 720, margin: '0 auto' }}>
+          {[
+            {
+              step: '1',
+              title: 'Faites votre recherche',
+              desc: 'Allez sur France Travail, LinkedIn, WTTJ… et filtrez selon vos critères (métier, lieu, type de contrat).',
+            },
+            {
+              step: '2',
+              title: 'Copiez l\'URL',
+              desc: 'Copiez l\'adresse de la page de résultats et collez-la dans Alertemploi en un clic.',
+            },
+            {
+              step: '3',
+              title: 'Recevez les offres',
+              desc: 'Toutes les 30 minutes, on vérifie si de nouvelles offres correspondent. Vous recevez un email dès qu\'il y en a.',
+            },
+          ].map((item) => (
+            <div key={item.step} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 14 }}>
+              <div style={{
+                width: 44, height: 44, borderRadius: '50%',
+                background: 'var(--ae-primary-bg)', color: 'white',
+                display: 'flex', alignItems: 'center', justifyContent: 'center',
+                fontSize: 18, fontWeight: 700, flexShrink: 0,
+              }}>{item.step}</div>
+              <div style={{ fontSize: 15, fontWeight: 600, color: 'var(--ae-text)' }}>{item.title}</div>
+              <div style={{ fontSize: 13, color: 'var(--ae-text-muted)', lineHeight: 1.65 }}>{item.desc}</div>
+            </div>
+          ))}
+        </div>
+        <div style={{ marginTop: 40 }}>
+          <Link href={ctaHref} style={{
+            display: 'inline-block', fontSize: 15, fontWeight: 600, color: 'white',
+            padding: '12px 28px', borderRadius: 9, background: 'var(--ae-primary-bg)',
+            textDecoration: 'none',
+          }}>Essayer gratuitement — sans CB</Link>
         </div>
       </section>
 
@@ -372,14 +419,14 @@ export default function LandingPage() {
               </span>
             </div>
             <div style={{ fontSize: 12, color: 'var(--ae-text-muted)', marginBottom: 18, lineHeight: 1.5 }}>
-              {isAnnual ? '41,90€ facturé annuellement.' : 'Essai gratuit 7 jours — sans CB.'}
+              Essai gratuit 7 jours — sans CB.{isAnnual ? ' · 41,90€/an.' : ''}
             </div>
             {['Alertes illimitées', 'Tous les job boards', 'Scan toutes les 30 min', 'Alertes email'].map((f) => (
               <div key={f} style={{ fontSize: 12.5, color: 'var(--ae-text-muted)', padding: '6px 0', borderBottom: '0.5px solid var(--ae-surface-3)', display: 'flex', gap: 8 }}>
                 <span style={{ color: 'var(--ae-primary)', fontWeight: 700 }}>✓</span> {f}
               </div>
             ))}
-            <Link href="/upgrade" style={{
+            <Link href={isLoggedIn ? '/upgrade' : '/auth/register'} style={{
               display: 'block', textAlign: 'center', marginTop: 20,
               padding: '10px 0', borderRadius: 9, fontSize: 13, fontWeight: 600,
               border: '1.5px solid var(--ae-primary)', color: 'var(--ae-primary)', textDecoration: 'none',
@@ -394,14 +441,14 @@ export default function LandingPage() {
               </span>
             </div>
             <div style={{ fontSize: 12, color: 'var(--ae-text-muted)', marginBottom: 18, lineHeight: 1.5 }}>
-              {isAnnual ? '125,90€ facturé annuellement.' : 'Essai gratuit 7 jours — sans CB.'}
+              Essai gratuit 7 jours — sans CB.{isAnnual ? ' · 125,90€/an.' : ''}
             </div>
             {['Tout Basic, plus :', 'Blacklist d\u2019entreprises', 'Support prioritaire'].map((f) => (
               <div key={f} style={{ fontSize: 12.5, color: 'var(--ae-text-muted)', padding: '6px 0', borderBottom: '0.5px solid var(--ae-surface-3)', display: 'flex', gap: 8 }}>
                 <span style={{ color: 'var(--ae-primary)', fontWeight: 700 }}>✓</span> {f}
               </div>
             ))}
-            <Link href="/upgrade" style={{
+            <Link href={isLoggedIn ? '/upgrade' : '/auth/register'} style={{
               display: 'block', textAlign: 'center', marginTop: 20,
               padding: '10px 0', borderRadius: 9, fontSize: 13, fontWeight: 600,
               background: 'var(--ae-primary-bg)', color: 'white', textDecoration: 'none',
