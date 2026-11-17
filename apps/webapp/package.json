@@ -16,6 +16,7 @@
     "@vercel/analytics": "^2.0.1"
   },
   "devDependencies": {
+    "@next/bundle-analyzer": "^16.4.6",
     "@tailwindcss/postcss": "^4",
     "tailwindcss": "^4"
   }

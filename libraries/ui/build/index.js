@@ -23,7 +23,6 @@ __exportStar(require("./components/ui/avatar"), exports);
 __exportStar(require("./components/ui/badge"), exports);
 __exportStar(require("./components/ui/button"), exports);
 __exportStar(require("./components/ui/card"), exports);
-__exportStar(require("./components/ui/carousel"), exports);
 __exportStar(require("./components/ui/checkbox"), exports);
 __exportStar(require("./components/ui/collapsible"), exports);
 __exportStar(require("./components/ui/dialog"), exports);
