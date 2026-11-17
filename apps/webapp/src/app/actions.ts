@@ -4,6 +4,7 @@ import { createClient } from '@/lib/supabase/server';
 import { JobLabel, JobStatus, ListJobsParams, getExceptionMessage } from '@alertemploi/core';
 import { AlertemploiSupabaseApi } from '@alertemploi/ui';
 import { headers } from 'next/headers';
+import { after } from 'next/server';
 import { redirect } from 'next/navigation';
 import { revalidatePath } from 'next/cache';
 
@@ -128,7 +129,26 @@ export async function createLink(formData: FormData) {
     if (!url) throw new Error("L'URL est requise");
 
     const api = await buildApi();
-    const link = await api.createLink({ title: title || url, url, html: '', webPageRuntimeData: {} as any, force: false });
+    const { link } = await api.createLink({ title: title || url, url, html: '', webPageRuntimeData: {} as any, force: false });
+
+    // Scan immédiat en background — sans bloquer la réponse à l'utilisateur.
+    // Si le scan échoue, le cron de 30 min prend le relais.
+    const linkId = link.id;
+    after(async () => {
+      try {
+        const supabase = await createClient();
+        const { data, error } = await supabase.functions.invoke('scan-urls', {
+          body: { htmls: [{ linkId, content: '', webPageRuntimeData: {}, maxRetries: 0, retryCount: 0 }] },
+        });
+        if (!error && data?.newJobs?.length > 0) {
+          const jobIds = data.newJobs.map((j: any) => j.id);
+          await (supabase.from('jobs') as any).update({ status: 'new' }).in('id', jobIds);
+        }
+      } catch {
+        // scan immédiat échoue silencieusement — le cron prend le relais
+      }
+    });
+
     return { link };
   } catch (error) {
     return { error: getExceptionMessage(error, true) };

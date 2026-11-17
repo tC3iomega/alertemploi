@@ -89,8 +89,8 @@ export default function NewLinkPage() {
             Alerte créée !
           </h2>
           <p style={{ fontSize: 14, color: 'var(--ae-text-muted)', lineHeight: 1.6, marginBottom: 6 }}>
-            Le premier scan démarre dans <strong>moins de 30 minutes</strong>.
-            Vous recevrez un email dès qu'une nouvelle offre correspond à vos critères.
+            Scan en cours — les premières offres arrivent <strong>dans quelques instants</strong>.
+            Vous recevrez un email dès que de nouvelles offres correspondent à vos critères.
           </p>
           <p style={{ fontSize: 12, color: 'var(--ae-text-subtle)', marginTop: 16 }}>
             Redirection vers vos offres…
