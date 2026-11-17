@@ -79,14 +79,16 @@ export async function fetchLinkContent({
     if (browserlessApiKey) {
       logger.info(`fetching via Browserless: ${link.url}`);
       const isWTTJ = site.provider === 'wttj';
-      // WTTJ loads jobs client-side (Algolia), needs more time + waits for job links
+      // WTTJ loads jobs client-side via Algolia; waitForSelector fails if Algolia hasn't
+      // responded yet, causing Browserless to return a JSON error instead of HTML.
+      // bestAttempt:true returns the page as-is on timeout instead of an error response.
       const browserlessBody = isWTTJ
         ? {
             url: link.url,
-            waitForTimeout: 10000,
-            waitForSelector: 'a[href*="/fr/companies/"][href*="/jobs/"]',
+            waitFor: 8000,
+            bestAttempt: true,
           }
-        : { url: link.url, waitForTimeout: 3000 };
+        : { url: link.url, waitFor: 3000 };
       const response = await fetch(`https://production-sfo.browserless.io/content?token=${browserlessApiKey}`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
