@@ -219,9 +219,8 @@ cancelled without affecting access.
 - Unused Vercel env vars: `NEXT_PUBLIC_STRIPE_MONTHLY_PRICE_ID`, `NEXT_PUBLIC_STRIPE_YEARLY_PRICE_ID`,
   `NEXT_PUBLIC_STRIPE_PORTAL_LINK` (not referenced in code — à supprimer manuellement dans Vercel Settings).
 - `scan_queue` table: unused, locked down (RLS, no policies), deliberately left in place.
-- **Parsers/Browserless** (2026-11-17): fixes commitées et pushées mais `cron-scan` + `scan-urls` pas
-  encore redéployées (token Supabase expiré). Lancer `supabase login` puis déployer les deux fonctions.
-  Vérifier les logs au prochain scan pour confirmer Cadremploi, APEC et WTTJ.
+- **Parsers/Browserless** (2026-11-17): `cron-scan` + `scan-urls` redéployées avec les fixes Cadremploi,
+  APEC et WTTJ Browserless. Vérifier les logs au prochain scan (30 min) pour confirmer le bon fonctionnement.
 
 ### Bundle optimizations (2026-11-17)
 - `sideEffects: false` dans `@alertemploi/ui/package.json`
