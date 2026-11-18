@@ -363,6 +363,32 @@ export async function getCompanyBlacklist(): Promise<string[]> {
   }
 }
 
+export async function submitReview(formData: FormData) {
+  try {
+    const supabase = await createClient();
+    const { data: { user } } = await supabase.auth.getUser();
+    if (!user) return { error: 'Vous devez être connecté pour laisser un avis.' };
+
+    const rating = Number(formData.get('rating'));
+    const name = (formData.get('name') as string)?.trim();
+    const body = (formData.get('body') as string)?.trim();
+    const jobTitle = (formData.get('jobTitle') as string)?.trim() || null;
+
+    if (!name || !body || !rating || rating < 1 || rating > 5) {
+      return { error: 'Données invalides.' };
+    }
+
+    const { error } = await (supabase as any)
+      .from('reviews')
+      .insert({ user_id: user.id, name, rating, body, job_title: jobTitle });
+
+    if (error) throw new Error(error.message);
+    return { success: true };
+  } catch (error) {
+    return { error: getExceptionMessage(error, true) };
+  }
+}
+
 export async function updateCompanyBlacklist(companies: string[]) {
   try {
     const cleaned = Array.from(new Set(companies.map((c) => c.trim()).filter(Boolean)));
