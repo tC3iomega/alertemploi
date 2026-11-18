@@ -33,7 +33,7 @@ export const metadata: Metadata = {
     siteName: SITE_NAME,
     title: "Alerte emploi par email 2026 : les offres dès leur publication",
     description:
-      "Alertemploi surveille vos recherches sur 7 job boards français et vous prévient dès qu'une offre correspond à vos critères. Essai gratuit 7 jours, sans carte bancaire.",
+      "Alertemploi surveille vos recherches sur 9 job boards français et vous prévient dès qu'une offre correspond à vos critères. Essai gratuit 7 jours, sans carte bancaire.",
     // og:image est généré automatiquement par opengraph-image.tsx dans ce dossier.
   },
   twitter: {

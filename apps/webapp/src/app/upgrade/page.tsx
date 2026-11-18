@@ -9,7 +9,7 @@ import { Logo } from '@/app/components/Logo';
 
 const BASIC_FEATURES = [
   { label: 'Alertes illimitées', included: true },
-  { label: 'Tous les job boards (7 sources)', included: true },
+  { label: 'Tous les job boards (9 sources)', included: true },
   { label: 'Scan toutes les 30 minutes', included: true },
   { label: 'Alertes email instantanées', included: true },
   { label: 'Essai 7 jours gratuit', included: true },

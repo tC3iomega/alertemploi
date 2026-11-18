@@ -17,7 +17,7 @@ export const metadata: Metadata = {
   alternates: { canonical: '/upgrade' },
   openGraph: {
     title: 'Tarifs Alertemploi 2026 — à partir de 3,49€/mois',
-    description: "Essai gratuit 7 jours, sans carte bancaire. Alertes illimitées sur 7 job boards français.",
+    description: "Essai gratuit 7 jours, sans carte bancaire. Alertes illimitées sur 9 job boards français.",
     url: '/upgrade',
   },
 };

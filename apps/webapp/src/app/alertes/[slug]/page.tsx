@@ -162,7 +162,7 @@ export default async function BoardPage({ params }: { params: Promise<{ slug: st
           ))}
         </p>
         <p style={{ marginTop: 10 }}>
-          <Link href="/alertes">Voir les 7 job boards surveillés</Link>
+          <Link href="/alertes">Voir les 9 job boards surveillés</Link>
           {' · '}
           <Link href="/comparatif">Comparatif alertes emploi 2026</Link>
         </p>

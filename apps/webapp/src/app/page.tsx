@@ -31,8 +31,8 @@ const FEATURES = [
     ),
   },
   {
-    title: '7 job boards',
-    desc: `France Travail, APEC, Cadremploi, HelloWork, Welcome to the Jungle, LinkedIn et Indeed. D'autres arrivent bientôt.`,
+    title: '9 job boards',
+    desc: `France Travail, APEC, Cadremploi, HelloWork, Welcome to the Jungle, LinkedIn, Indeed, Meteojob et Google Jobs.`,
     icon: (
       <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
         <rect x="2" y="2" width="16" height="16" rx="3" stroke="var(--ae-primary)" strokeWidth="1.5" />
@@ -86,7 +86,7 @@ const FAQS = [
   },
   {
     q: "Quels job boards sont supportés ?",
-    a: "France Travail, APEC, Cadremploi, HelloWork, Welcome to the Jungle, LinkedIn et Indeed. D'autres sont en cours d'intégration.",
+    a: "France Travail, APEC, Cadremploi, HelloWork, Welcome to the Jungle, LinkedIn, Indeed, Meteojob et Google Jobs.",
   },
   {
     q: "Puis-je annuler à tout moment ?",
@@ -190,13 +190,13 @@ export default function LandingPage() {
         }}>
           Une offre CDI reçoit en moyenne 200 candidatures en 48h.{' '}
           Les recruteurs s'arrêtent souvent aux 50 premiers CVs.{' '}
-          Alertemploi scanne 7 job boards toutes les 30 minutes —{' '}
+          Alertemploi scanne 9 job boards toutes les 30 minutes —{' '}
           <strong style={{ color: 'var(--ae-text)' }}>vous postulez avant les autres.</strong>
         </p>
 
         <div style={{ display: 'flex', gap: 20, justifyContent: 'center', flexWrap: 'wrap', marginBottom: 36 }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: 7 }}>
-            <span style={{ fontSize: 18, fontWeight: 700, color: 'var(--ae-primary)' }}>7</span>
+            <span style={{ fontSize: 18, fontWeight: 700, color: 'var(--ae-primary)' }}>9</span>
             <span style={{ fontSize: 13, color: 'var(--ae-text-muted)' }}>job boards surveillés</span>
           </div>
           <div style={{ width: 1, background: 'var(--ae-border)', alignSelf: 'stretch' }} />
@@ -373,7 +373,7 @@ export default function LandingPage() {
           Les sites surveillés
         </h2>
         <p style={{ fontSize: 15, color: 'var(--ae-text-muted)', marginBottom: 32 }}>
-          7 job boards — d'autres arrivent bientôt. Voir{' '}
+          9 job boards. Voir{' '}
           <Link href="/alertes" style={{ color: 'var(--ae-primary)' }}>comment créer une alerte sur chacun</Link>, les{' '}
           <Link href="/metiers" style={{ color: 'var(--ae-primary)' }}>conseils par métier</Link> ou le{' '}
           <Link href="/comparatif" style={{ color: 'var(--ae-primary)' }}>comparatif avec les alertes natives</Link>.

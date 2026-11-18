@@ -16,6 +16,8 @@ export const JOB_BOARDS = [
   'Welcome to the Jungle',
   'LinkedIn',
   'Indeed',
+  'Meteojob',
+  'Google Jobs',
 ];
 
 // Réponses rédigées pour être citables par les AI Overviews : directes, chiffrées, à la première personne.
@@ -32,7 +34,7 @@ export const FAQ_ITEMS = [
   },
   {
     question: 'Quels job boards sont supportés ?',
-    answer: `Alertemploi surveille 7 job boards français en 2026 : ${JOB_BOARDS.join(', ')}. D'autres sources sont en cours d'intégration.`,
+    answer: `Alertemploi surveille 9 job boards français en 2026 : ${JOB_BOARDS.join(', ')}.`,
   },
   {
     question: 'Puis-je annuler à tout moment ?',
@@ -42,7 +44,7 @@ export const FAQ_ITEMS = [
   {
     question: 'Quelle est la différence entre Basic et Pro ?',
     answer:
-      "Les deux plans incluent les alertes illimitées sur les 7 job boards et le scan toutes les 30 minutes. Le plan Pro ajoute une blacklist d'entreprises (leurs offres disparaissent de vos résultats), un support prioritaire par email, et un accès en avant-première aux nouvelles sources.",
+      "Les deux plans incluent les alertes illimitées sur les 9 job boards et le scan toutes les 30 minutes. Le plan Pro ajoute une blacklist d'entreprises (leurs offres disparaissent de vos résultats), un support prioritaire par email, et un accès en avant-première aux nouvelles sources.",
   },
   {
     question: "En combien de temps suis-je prévenu après la publication d'une offre ?",
@@ -71,14 +73,14 @@ export function buildJsonLd() {
       inLanguage: 'fr-FR',
       dateModified: '2026-11-14',
       description:
-        "Alertemploi surveille vos recherches sur 7 job boards français (France Travail, APEC, Indeed, LinkedIn, HelloWork, Cadremploi, Welcome to the Jungle) et vous envoie un email dès qu'une nouvelle offre correspond à vos critères. Scan toutes les 30 minutes.",
+        "Alertemploi surveille vos recherches sur 9 job boards français (France Travail, APEC, Indeed, LinkedIn, HelloWork, Cadremploi, Welcome to the Jungle, Meteojob, Google Jobs) et vous envoie un email dès qu'une nouvelle offre correspond à vos critères. Scan toutes les 30 minutes.",
       offers: [
         {
           '@type': 'Offer',
           name: 'Basic',
           price: '4.99',
           priceCurrency: 'EUR',
-          description: 'Alertes illimitées, 7 job boards français, scan toutes les 30 minutes. Essai 7 jours gratuit.',
+          description: 'Alertes illimitées, 9 job boards français, scan toutes les 30 minutes. Essai 7 jours gratuit.',
         },
         {
           '@type': 'Offer',
