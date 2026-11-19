@@ -524,7 +524,7 @@ export default function LandingPage() {
             Alertemploi vous donne la priorité sur les offres. <a href="https://www.passelefiltre.fr" target="_blank" rel="noopener noreferrer" style={{ color: 'var(--ae-primary)', textDecoration: 'none', fontWeight: 500 }}>PasseLeFiltre</a> analyse votre CV par rapport à une offre et détecte ce que le filtre ATS va bloquer — score, mots-clés manquants, sections à réécrire. Résultat en 2 min, 2,99€.
           </p>
           <a
-            href="https://www.passelefiltre.fr"
+            href="https://www.passelefiltre.fr/analyse"
             target="_blank"
             rel="noopener noreferrer"
             style={{

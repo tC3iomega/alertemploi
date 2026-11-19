@@ -52,7 +52,7 @@ export function JobDetails({ job: initialJob }: JobDetailsProps) {
 
       {/* CTA passelefiltre.fr — au bon moment : l'utilisateur a vu l'offre, va décider de postuler */}
       <a
-        href="https://www.passelefiltre.fr"
+        href="https://www.passelefiltre.fr/analyse"
         target="_blank"
         rel="noopener noreferrer"
         className="mt-4 flex items-start gap-3 rounded-lg border border-dashed border-blue-200 bg-blue-50/60 px-4 py-3 text-sm no-underline transition-colors hover:bg-blue-50 dark:border-blue-900 dark:bg-blue-950/30 dark:hover:bg-blue-950/50"
