@@ -100,19 +100,25 @@ export function DashboardClient({
       {/* Trial / Plan banner */}
       {isOnTrial && (
         <div style={{
-          display: 'flex', alignItems: 'center', gap: 10,
           background: 'var(--ae-amber-bg)', border: '1px solid var(--ae-amber-border)',
-          borderRadius: 10, padding: '12px 16px', marginBottom: 20,
+          borderRadius: 10, padding: '14px 16px', marginBottom: 20,
         }}>
-          <ClockIcon />
-          <span style={{ fontSize: 13, color: 'var(--ae-amber-text-strong)', flex: 1 }}>
-            <strong>{trialDays} jour{trialDays !== 1 ? 's' : ''}</strong> restant{trialDays !== 1 ? 's' : ''} dans votre essai gratuit.
-          </span>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 10 }}>
+            <ClockIcon />
+            <span style={{ fontSize: 13, color: 'var(--ae-amber-text-strong)', flex: 1 }}>
+              <strong>{trialDays} jour{trialDays !== 1 ? 's' : ''}</strong> restant{trialDays !== 1 ? 's' : ''} sur votre essai gratuit.
+            </span>
+          </div>
+          <div style={{ background: 'var(--ae-amber-border)', borderRadius: 4, height: 4, marginBottom: 12, overflow: 'hidden' }}>
+            <div style={{ background: 'var(--ae-amber-icon)', height: '100%', width: `${Math.max(0, Math.min(100, (trialDays / 7) * 100))}%`, borderRadius: 4, transition: 'width 0.3s' }} />
+          </div>
           <Link href="/upgrade" style={{
-            fontSize: 12, fontWeight: 600, color: 'var(--ae-primary)', textDecoration: 'none',
-            whiteSpace: 'nowrap',
+            display: 'block', textAlign: 'center',
+            fontSize: 13, fontWeight: 600, color: '#1E293B',
+            background: 'var(--ae-accent)', padding: '9px 0', borderRadius: 8,
+            textDecoration: 'none',
           }}>
-            Voir les plans
+            S&apos;abonner — sans CB pendant l&apos;essai →
           </Link>
         </div>
       )}

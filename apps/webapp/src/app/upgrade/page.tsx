@@ -167,8 +167,8 @@ export default function UpgradePage() {
                   /mois
                 </span>
               </div>
-              <div style={{ fontSize: 12, color: isAnnual ? 'var(--ae-text-subtle)' : 'var(--ae-green)', marginTop: 4 }}>
-                {isAnnual ? '41,90€ facturé annuellement' : 'Essai 7 jours gratuit — sans CB'}
+              <div style={{ fontSize: 12, color: 'var(--ae-text-subtle)', marginTop: 4 }}>
+                {isAnnual ? '41,90€/an · Essai 7 jours gratuit — sans CB' : 'Essai 7 jours gratuit — sans CB'}
               </div>
             </div>
             {BASIC_FEATURES.map((f) => (
@@ -186,13 +186,13 @@ export default function UpgradePage() {
               disabled={!!loading}
               style={{
                 width: '100%', padding: '11px 0', marginTop: 20,
-                background: loading ? 'var(--ae-surface-3)' : 'var(--ae-surface)',
-                color: 'var(--ae-primary)', fontSize: 13, fontWeight: 600,
-                border: '1.5px solid var(--ae-primary)', borderRadius: 9,
+                background: loading ? 'var(--ae-surface-3)' : 'var(--ae-primary-bg)',
+                color: 'white', fontSize: 13, fontWeight: 600,
+                border: 'none', borderRadius: 9,
                 cursor: loading ? 'not-allowed' : 'pointer',
               }}
             >
-              {loading === (isAnnual ? basicYearlyPriceId : basicMonthlyPriceId) ? 'Chargement...' : "Démarrer l'essai"}
+              {loading === (isAnnual ? basicYearlyPriceId : basicMonthlyPriceId) ? 'Chargement...' : "Démarrer l'essai gratuit"}
             </button>
           </div>
 
@@ -209,8 +209,8 @@ export default function UpgradePage() {
                   /mois
                 </span>
               </div>
-              <div style={{ fontSize: 12, color: isAnnual ? 'var(--ae-text-subtle)' : 'var(--ae-green)', marginTop: 4 }}>
-                {isAnnual ? '125,90€ facturé annuellement' : 'Essai 7 jours gratuit — sans CB'}
+              <div style={{ fontSize: 12, color: 'var(--ae-text-subtle)', marginTop: 4 }}>
+                {isAnnual ? '125,90€/an · Essai 7 jours gratuit — sans CB' : 'Essai 7 jours gratuit — sans CB'}
               </div>
             </div>
             {PRO_FEATURES.map((f) => (
@@ -228,13 +228,13 @@ export default function UpgradePage() {
               disabled={!!loading}
               style={{
                 width: '100%', padding: '11px 0', marginTop: 20,
-                background: loading ? 'var(--ae-blue-border-strong)' : 'var(--ae-primary-bg)',
-                color: 'white', fontSize: 13, fontWeight: 600,
-                border: 'none', borderRadius: 9,
+                background: 'var(--ae-surface)',
+                color: 'var(--ae-primary)', fontSize: 13, fontWeight: 600,
+                border: '1.5px solid var(--ae-primary)', borderRadius: 9,
                 cursor: loading ? 'not-allowed' : 'pointer',
               }}
             >
-              {loading === (isAnnual ? proYearlyPriceId : proMonthlyPriceId) ? 'Chargement...' : "Démarrer l'essai"}
+              {loading === (isAnnual ? proYearlyPriceId : proMonthlyPriceId) ? 'Chargement...' : "Démarrer l'essai gratuit"}
             </button>
           </div>
         </div>

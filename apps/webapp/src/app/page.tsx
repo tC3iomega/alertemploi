@@ -206,8 +206,8 @@ export default function LandingPage() {
           </div>
           <div style={{ width: 1, background: 'var(--ae-border)', alignSelf: 'stretch' }} />
           <div style={{ display: 'flex', alignItems: 'center', gap: 7 }}>
-            <span style={{ fontSize: 18, fontWeight: 700, color: 'var(--ae-primary)' }}>0€</span>
-            <span style={{ fontSize: 13, color: 'var(--ae-text-muted)' }}>pour démarrer</span>
+            <span style={{ fontSize: 18, fontWeight: 700, color: 'var(--ae-primary)' }}>3,49€</span>
+            <span style={{ fontSize: 13, color: 'var(--ae-text-muted)' }}>par mois en annuel</span>
           </div>
         </div>
 
@@ -440,7 +440,7 @@ export default function LandingPage() {
               </span>
             </div>
             <div style={{ fontSize: 12, color: 'var(--ae-text-muted)', marginBottom: 18, lineHeight: 1.5 }}>
-              Essai gratuit 7 jours — sans CB.{isAnnual ? ' · 41,90€/an.' : ''}
+              Essai gratuit 7 jours — sans CB.{isAnnual ? ' · 41,90€/an (économisez 18€).' : ''}
             </div>
             {['Alertes illimitées', 'Tous les job boards', 'Scan toutes les 30 min', 'Alertes email'].map((f) => (
               <div key={f} style={{ fontSize: 12.5, color: 'var(--ae-text-muted)', padding: '6px 0', borderBottom: '0.5px solid var(--ae-surface-3)', display: 'flex', gap: 8 }}>
@@ -509,6 +509,32 @@ export default function LandingPage() {
             </div>
           ))}
         </div>
+      </section>
+
+      {/* SOCIAL PROOF — STATS */}
+      <section className={styles.sectionBeige} style={{ textAlign: 'center' }}>
+        <p style={{ fontSize: 11, fontWeight: 600, letterSpacing: 1.5, color: 'var(--ae-text-muted)', textTransform: 'uppercase', marginBottom: 24 }}>
+          En chiffres
+        </p>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(160px, 1fr))', gap: 16, maxWidth: 640, margin: '0 auto 32px' }}>
+          {[
+            { value: '+1 500', label: 'offres détectées' },
+            { value: '9', label: 'job boards surveillés' },
+            { value: '30 min', label: 'fréquence de scan' },
+            { value: '7 jours', label: "d'essai gratuit, sans CB" },
+          ].map((s, i) => (
+            <div key={i} style={{
+              background: 'var(--ae-surface)', border: '0.5px solid var(--ae-border)',
+              borderRadius: 12, padding: '20px 16px',
+            }}>
+              <div style={{ fontSize: 26, fontWeight: 700, color: 'var(--ae-primary)', marginBottom: 6 }}>{s.value}</div>
+              <div style={{ fontSize: 12, color: 'var(--ae-text-muted)', lineHeight: 1.5 }}>{s.label}</div>
+            </div>
+          ))}
+        </div>
+        <Link href="/avis" style={{ fontSize: 13, color: 'var(--ae-primary)', textDecoration: 'none', fontWeight: 500 }}>
+          Laisser un avis →
+        </Link>
       </section>
 
       {/* SECTION PASSELEFILTRE */}
