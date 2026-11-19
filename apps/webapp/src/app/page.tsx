@@ -511,6 +511,38 @@ export default function LandingPage() {
         </div>
       </section>
 
+      {/* SECTION PASSELEFILTRE */}
+      <section style={{ background: 'var(--ae-bg)', padding: '56px 24px', textAlign: 'center', borderTop: '0.5px solid var(--ae-border)' }}>
+        <div style={{ maxWidth: 560, margin: '0 auto' }}>
+          <p style={{ fontSize: 11, fontWeight: 600, letterSpacing: 1.5, color: 'var(--ae-text-muted)', textTransform: 'uppercase', marginBottom: 12 }}>
+            Allez plus loin
+          </p>
+          <h2 style={{ fontSize: 24, fontWeight: 700, color: 'var(--ae-text)', marginBottom: 12, letterSpacing: -0.4 }}>
+            Trouvez en premier. Postulez avec un CV optimisé.
+          </h2>
+          <p style={{ fontSize: 14, color: 'var(--ae-text-muted)', lineHeight: 1.7, marginBottom: 24 }}>
+            Alertemploi vous donne la priorité sur les offres. <a href="https://www.passelefiltre.fr" target="_blank" rel="noopener noreferrer" style={{ color: 'var(--ae-primary)', textDecoration: 'none', fontWeight: 500 }}>PasseLeFiltre</a> analyse votre CV par rapport à une offre et détecte ce que le filtre ATS va bloquer — score, mots-clés manquants, sections à réécrire. Résultat en 2 min, 2,99€.
+          </p>
+          <a
+            href="https://www.passelefiltre.fr"
+            target="_blank"
+            rel="noopener noreferrer"
+            style={{
+              display: 'inline-block',
+              border: '1.5px solid var(--ae-primary)',
+              color: 'var(--ae-primary)',
+              fontSize: 14,
+              fontWeight: 600,
+              padding: '10px 24px',
+              borderRadius: 9,
+              textDecoration: 'none',
+            }}
+          >
+            Analyser mon CV sur PasseLeFiltre →
+          </a>
+        </div>
+      </section>
+
       {/* CTA FINAL */}
       <section style={{ background: 'var(--ae-primary-bg)', padding: '80px 48px', textAlign: 'center' }}>
         <h2 style={{ fontSize: 32, fontWeight: 700, color: 'white', marginBottom: 14, letterSpacing: -0.5 }}>
@@ -536,6 +568,8 @@ export default function LandingPage() {
           <a href="/cgv" style={{ color: '#CBD5E1', textDecoration: 'none' }}>CGV</a>
           {' · '}
           <a href="/privacy" style={{ color: '#CBD5E1', textDecoration: 'none' }}>Confidentialité</a>
+          {' · '}
+          <a href="https://www.passelefiltre.fr" target="_blank" rel="noopener noreferrer" style={{ color: '#CBD5E1', textDecoration: 'none' }}>PasseLeFiltre</a>
         </div>
       </footer>
 
